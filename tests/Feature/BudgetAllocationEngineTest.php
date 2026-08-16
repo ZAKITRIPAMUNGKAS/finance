@@ -92,4 +92,59 @@ class BudgetAllocationEngineTest extends TestCase
             ->call('applyEmaSuggestions')
             ->call('saveConfiguration');
     }
+
+    public function test_universal_personas_preset_application()
+    {
+        $personas = $this->service->getAvailablePersonas();
+        $this->assertCount(6, $personas);
+        $this->assertArrayHasKey('creative_media', $personas);
+        $this->assertArrayHasKey('it_tech', $personas);
+        $this->assertArrayHasKey('consultant_pro', $personas);
+        $this->assertArrayHasKey('umkm_business', $personas);
+        $this->assertArrayHasKey('employee_salary', $personas);
+        $this->assertArrayHasKey('hybrid_sidehustle', $personas);
+
+        // Test applying Employee Salary persona
+        $result = $this->service->applyPersonaPreset($this->user->id, 'employee_salary', 'stable', 'investment');
+        $this->assertEquals('Karyawan / Pegawai Gaji Tetap', $result['profile']->name);
+        $this->assertEquals('average', $result['profile']->method);
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'name' => 'Gaji Pokok Bulanan',
+        ]);
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'name' => 'Tabungan & Investasi Rutin',
+        ]);
+
+        // Test applying UMKM persona
+        $resUmkm = $this->service->applyPersonaPreset($this->user->id, 'umkm_business', 'volatile', 'emergency');
+        $this->assertEquals('UMKM, Toko Online & Usaha Mandiri', $resUmkm['profile']->name);
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'name' => 'HPP & Stok Barang Dagang',
+        ]);
+    }
+
+    public function test_livewire_survey_modal_flow()
+    {
+        $this->actingAs($this->user);
+
+        Livewire::test(BudgetsIndex::class)
+            ->call('openSurveyModal')
+            ->assertSet('isSurveyModalOpen', true)
+            ->assertSet('surveyStep', 1)
+            ->call('selectSurveyPersona', 'umkm_business')
+            ->assertSet('selectedPersona', 'umkm_business')
+            ->assertSet('surveyStep', 2)
+            ->call('selectSurveyStability', 'volatile')
+            ->assertSet('selectedStability', 'volatile')
+            ->assertSet('surveyStep', 3)
+            ->call('selectSurveyPriority', 'emergency')
+            ->assertSet('selectedPriority', 'emergency')
+            ->call('submitSurvey')
+            ->assertSet('isSurveyModalOpen', false)
+            ->assertSee('UMKM, Toko Online & Usaha Mandiri');
+    }
 }
+

@@ -21,6 +21,13 @@ class Index extends Component
     public array $zScores = []; // [category_id => [status, badge, message]]
     public string $configTab = 'overview'; // 'overview' | 'config'
 
+    // Smart Financial Persona Survey Modal
+    public bool $isSurveyModalOpen = false;
+    public int $surveyStep = 1; // 1: Persona, 2: Stability, 3: Priority
+    public string $selectedPersona = 'creative_media';
+    public string $selectedStability = 'volatile'; // 'volatile' | 'semi' | 'stable'
+    public string $selectedPriority = 'emergency'; // 'emergency' | 'wishlist' | 'investment' | 'separate'
+
     protected BudgetAllocationService $budgetService;
 
     public function boot(BudgetAllocationService $budgetService)
@@ -78,52 +85,30 @@ class Index extends Component
         }
     }
 
-    public function openConfigModal()
-    {
-        $this->loadConfiguration();
-        $this->isConfigModalOpen = true;
-    }
-
     public function applyEmaSuggestions()
     {
         $userId = auth()->id();
         $ema = $this->budgetService->calculateEmaSuggestions($userId);
-        foreach ($ema as $catId => $suggestedPct) {
+        foreach ($ema as $catId => $item) {
             if (isset($this->categoryConfigs[$catId])) {
-                $this->categoryConfigs[$catId]['target_percentage'] = $suggestedPct;
+                $this->categoryConfigs[$catId]['target_percentage'] = is_array($item) ? (float)($item['suggested_pct'] ?? 0) : (float)$item;
             }
         }
         $this->calculateAllZScores();
-        session()->flash('config_message', '✨ Saran persentase berbasis EMA historis 6 bulan berhasil diterapkan!');
     }
 
-    public function updatedCategoryConfigs()
+    public function openConfigModal()
     {
-        $this->calculateAllZScores();
-    }
-
-    public function setMethod(string $method)
-    {
-        $userId = auth()->id();
-        $this->method = in_array($method, ['floor', 'average']) ? $method : 'floor';
-        $activeProfile = BudgetProfile::where('user_id', $userId)->where('is_active', true)->first();
-        if ($activeProfile) {
-            $activeProfile->update(['method' => $this->method]);
-        }
-        $this->dispatch('refresh-data');
+        $this->loadConfiguration();
+        $this->configTab = 'overview';
+        $this->isConfigModalOpen = true;
     }
 
     public function saveConfiguration()
     {
         $userId = auth()->id();
-        $totalPct = array_sum(array_column($this->categoryConfigs, 'target_percentage'));
-        
-        if (abs($totalPct - 100.0) > 0.5) {
-            $this->addError('total_percentage', "Total persentase seluruh kategori harus 100%. Saat ini: {$totalPct}%");
-            return;
-        }
-
         $activeProfile = BudgetProfile::where('user_id', $userId)->where('is_active', true)->first();
+        
         if ($activeProfile) {
             $activeProfile->update([
                 'name' => $this->profileName,
@@ -139,7 +124,7 @@ class Index extends Component
                     [
                         'budget_group_id' => $cfg['budget_group_id'],
                         'priority_tier' => $cfg['priority_tier'],
-                        'target_percentage' => (float) $cfg['target_percentage'],
+                        'target_percentage' => $cfg['target_percentage'],
                     ]
                 );
             }
@@ -149,17 +134,71 @@ class Index extends Component
         session()->flash('message', 'Konfigurasi Budget Allocation Engine berhasil disimpan!');
     }
 
+    // ── SURVEY & PERSONA METHODS ────────────────────────────────
+    public function openSurveyModal()
+    {
+        $this->surveyStep = 1;
+        $this->isSurveyModalOpen = true;
+    }
+
+    public function setSurveyStep(int $step)
+    {
+        $this->surveyStep = $step;
+    }
+
+    public function selectSurveyPersona(string $personaKey)
+    {
+        $this->selectedPersona = $personaKey;
+        $this->surveyStep = 2;
+    }
+
+    public function selectSurveyStability(string $stability)
+    {
+        $this->selectedStability = $stability;
+        $this->surveyStep = 3;
+    }
+
+    public function selectSurveyPriority(string $priority)
+    {
+        $this->selectedPriority = $priority;
+    }
+
+    public function submitSurvey()
+    {
+        $userId = auth()->id();
+        $this->budgetService->applyPersonaPreset(
+            $userId, 
+            $this->selectedPersona, 
+            $this->selectedStability, 
+            $this->selectedPriority
+        );
+
+        $this->isSurveyModalOpen = false;
+        $this->loadConfiguration();
+        session()->flash('message', 'Profil Finansial & Alokasi Budget berhasil disesuaikan dengan profesi Anda!');
+    }
+
+    public function applyPersonaDirectly(string $personaKey)
+    {
+        $userId = auth()->id();
+        $this->budgetService->applyPersonaPreset($userId, $personaKey);
+        $this->isSurveyModalOpen = false;
+        $this->loadConfiguration();
+        session()->flash('message', 'Preset Alokasi Budget berhasil diterapkan!');
+    }
+
     public function render()
     {
         $userId = auth()->id();
         $budgetData = $this->budgetService->getBudgetDashboardData($userId, $this->selectedMonth);
         $groups = BudgetGroup::all();
         $categories = Category::where('user_id', $userId)->where('type', 'expense')->get();
+        $personas = $this->budgetService->getAvailablePersonas();
 
-        return view('livewire.budgets.index', compact('budgetData', 'groups', 'categories'))
+        return view('livewire.budgets.index', compact('budgetData', 'groups', 'categories', 'personas'))
             ->layout('components.layouts.app', [
                 'headerTitle' => 'Budget Allocation Engine',
-                'headerSubtitle' => 'Floor Baseline Method & Adaptive Zero-Based Budgeting (PRD v1.2)'
+                'headerSubtitle' => 'Floor Baseline Method & Adaptive Zero-Based Budgeting (Universal Engine)',
             ]);
     }
 }

@@ -1,32 +1,57 @@
 <div class="space-y-4 sm:space-y-6">
     
+    <!-- Flash Notification Banner -->
+    @if (session()->has('message'))
+    <div class="p-3 sm:p-4 bg-emerald-50 border-2 border-emerald-200 rounded-2xl flex items-center justify-between gap-3 text-xs text-emerald-900 font-bold shadow-xs anim-fade-up">
+        <div class="flex items-center gap-2">
+            <x-icon name="check" class="w-4 h-4 text-emerald-600 shrink-0" strokeWidth="3" />
+            <span>{{ session('message') }}</span>
+        </div>
+        <button type="button" @click="$el.parentElement.remove()" class="text-emerald-500 hover:text-emerald-800 p-1 cursor-pointer">
+            <x-icon name="x" class="w-3.5 h-3.5" />
+        </button>
+    </div>
+    @endif
+
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  1. TOP BANNER: INCOME FLOOR & VOLATILITY ENGINE (PRD v1.2) -->
+    <!--  1. TOP BANNER: INCOME FLOOR & VOLATILITY ENGINE (UNIVERSAL)-->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div class="bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-7 shadow-xs space-y-4 sm:space-y-6">
         
         <!-- Header & Action Row -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 border-b border-slate-100 pb-4 sm:pb-5">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 border-b border-slate-100 pb-4 sm:pb-5">
             <div>
-                <div class="flex items-center gap-2 mb-1">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
                     <span class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-[#EBFAD2] text-slate-900 border border-[#D4F66C]">
-                        PRD v1.2 Engine
+                        Universal Engine
                     </span>
-                    <h2 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">Adaptive Budget Allocation</h2>
+                    <span class="px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-black uppercase bg-slate-950 text-[#C6F24D]">
+                        Profil: {{ $profileName }}
+                    </span>
                 </div>
+                <h2 class="text-base sm:text-xl font-extrabold text-slate-900 tracking-tight">Adaptive Budget Allocation</h2>
                 <p class="text-[11px] sm:text-xs text-slate-400">Baseline Income Floor (P25) & Zero-Based Surplus Waterfall</p>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 sm:flex sm:items-center shrink-0">
-                <input type="month" wire:model.live="selectedMonth" 
-                    class="w-full sm:w-auto bg-[#F8F9FA] border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-slate-900">
-                
+            <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 shrink-0">
+                <button wire:click="openSurveyModal" 
+                    type="button"
+                    class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs active-tap">
+                    <x-icon name="sparkles" class="w-3.5 h-3.5 text-teal-600" />
+                    <span>Survei Profesi</span>
+                </button>
+
                 <button wire:click="openConfigModal" 
                     type="button"
                     class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-extrabold shadow-2xs active-tap transition-all flex items-center justify-center gap-1.5 cursor-pointer">
                     <x-icon name="settings" class="w-3.5 h-3.5" />
-                    <span>Atur Tier</span>
+                    <span>Atur Pos</span>
                 </button>
+
+                <div class="col-span-2 sm:col-span-1">
+                    <input type="month" wire:model.live="selectedMonth" 
+                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-slate-900 cursor-pointer">
+                </div>
             </div>
         </div>
 
@@ -160,29 +185,35 @@
                     </div>
 
                     <!-- Progress Bar -->
-                    <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
-                        <div class="h-full rounded-full transition-all {{ $group['progress_percentage'] > 100 ? 'bg-rose-500' : 'bg-slate-950' }}" 
+                    <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden mb-3">
+                        <div class="h-2 rounded-full transition-all duration-500 {{ $group['progress_percentage'] > 100 ? 'bg-rose-500' : ($group['progress_percentage'] > 85 ? 'bg-amber-500' : 'bg-slate-950') }}" 
                             style="width: {{ min(100, $group['progress_percentage']) }}%"></div>
                     </div>
 
-                    <!-- Sub Categories in this Group -->
-                    <div class="space-y-1.5 pt-0.5">
-                        @foreach($group['categories'] as $cat)
-                        <div class="p-2 sm:p-2.5 bg-[#F8F9FA] rounded-xl border border-slate-100 flex items-center justify-between text-xs">
-                            <div class="flex items-center gap-1.5 sm:gap-2 min-w-0 pr-2">
-                                <span class="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] font-bold shrink-0 {{ $cat['priority_tier'] === 1 ? 'bg-rose-100 text-rose-800' : ($cat['priority_tier'] === 2 ? 'bg-amber-100 text-amber-800' : 'bg-slate-200 text-slate-700') }}">
-                                    T{{ $cat['priority_tier'] }}
-                                </span>
-                                <span class="font-bold text-[11px] sm:text-xs text-slate-900 truncate">{{ $cat['name'] }}</span>
-                                <span class="text-[9px] sm:text-[10px] font-mono text-slate-400 shrink-0">({{ $cat['target_percentage'] }}%)</span>
+                    <!-- Categories list within this group -->
+                    <div class="space-y-1.5 pt-1">
+                        @foreach($group['categories'] as $catItem)
+                        <div class="flex items-center justify-between text-xs py-1 px-2 rounded-lg hover:bg-slate-50 transition-colors">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-1.5 h-1.5 rounded-full {{ $catItem['priority_tier'] == 1 ? 'bg-rose-500' : ($catItem['priority_tier'] == 2 ? 'bg-amber-500' : 'bg-emerald-500') }}"></span>
+                                <span class="font-medium text-slate-800 truncate">{{ $catItem['name'] }}</span>
+                                <span class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600">T{{ $catItem['priority_tier'] }}</span>
                             </div>
-                            <div class="text-right font-mono shrink-0">
-                                <span class="font-extrabold text-slate-900 block text-[10px] sm:text-[11px]">Rp {{ number_format($cat['actual_spent'], 0, ',', '.') }}</span>
-                                <span class="text-[8px] sm:text-[9px] text-slate-400">Cap: Rp {{ number_format($cat['budget_cap'], 0, ',', '.') }}</span>
+                            <div class="text-right font-mono text-[11px] shrink-0">
+                                <span class="font-bold text-slate-950">Rp {{ number_format($catItem['actual_spent'], 0, ',', '.') }}</span>
+                                <span class="text-slate-400">/ Rp {{ number_format($catItem['budget_cap'] ?? 0, 0, ',', '.') }} ({{ $catItem['target_percentage'] }}%)</span>
                             </div>
                         </div>
                         @endforeach
                     </div>
+                </div>
+
+                <!-- Footer Summary of Group -->
+                <div class="pt-2.5 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                    <span>Sisa Limit: <strong class="font-mono text-slate-700">Rp {{ number_format(max(0, $group['budget_cap'] - $group['actual_spent']), 0, ',', '.') }}</strong></span>
+                    <span class="font-bold {{ $group['progress_percentage'] > 100 ? 'text-rose-600' : 'text-emerald-700' }}">
+                        {{ $group['progress_percentage'] > 100 ? 'Overbudget' : 'Terkendali' }}
+                    </span>
                 </div>
 
             </div>
@@ -191,58 +222,254 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  4. CONFIGURATION & WIZARD MODAL (PRD Addendum v1.2)        -->
+    <!--  MODAL: SMART FINANCIAL PERSONA SURVEY (3-STEP WIZARD)     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div x-data="{ open: @entangle('isConfigModalOpen') }" x-show="open" 
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+    <div x-data="{ open: @entangle('isSurveyModalOpen') }" x-show="open" 
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
+        x-cloak>
         
-        <div @click.outside="$wire.set('isConfigModalOpen', false)" 
-            class="relative w-full max-w-3xl bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div @click.outside="$wire.set('isSurveyModalOpen', false)" 
+            class="relative w-full max-w-2xl bg-white border-t sm:border border-slate-200/90 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col anim-scale-up">
             
-            <!-- Drag indicator (mobile only) -->
+            <!-- Drag bar (mobile) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
 
-            <!-- Modal Header -->
-            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
-                <div>
-                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Setting Budget Engine</h3>
-                    <p class="text-[11px] sm:text-xs text-slate-400">Atur mapping Group, Priority Tier, dan Target (%)</p>
+            <!-- Survey Header -->
+            <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-bold shadow-2xs">
+                        <x-icon name="sparkles" class="w-4 h-4" strokeWidth="2.5" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-950">Survei Persona & Alokasi Budget</h3>
+                        <p class="text-[10px] sm:text-xs text-slate-400">Langkah {{ $surveyStep }} dari 3: Otomatisasi kategori & persentase ideal</p>
+                    </div>
                 </div>
-                <button wire:click="$set('isConfigModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
+                <button wire:click="$set('isSurveyModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
                     <x-icon name="x" class="w-4 h-4" />
                 </button>
             </div>
 
-            <!-- Modal Body Form -->
-            <div class="p-4 sm:p-6 overflow-y-auto space-y-4">
+            <!-- Step Indicators -->
+            <div class="grid grid-cols-3 gap-1 px-5 sm:px-6 py-2.5 bg-slate-50 border-b border-slate-100 text-center text-[10px] font-bold">
+                <div class="py-1 rounded-lg {{ $surveyStep >= 1 ? 'bg-slate-950 text-[#C6F24D]' : 'bg-slate-200 text-slate-500' }}">
+                    1. Profesi
+                </div>
+                <div class="py-1 rounded-lg {{ $surveyStep >= 2 ? 'bg-slate-950 text-[#C6F24D]' : 'bg-slate-200 text-slate-500' }}">
+                    2. Stabilitas Income
+                </div>
+                <div class="py-1 rounded-lg {{ $surveyStep >= 3 ? 'bg-slate-950 text-[#C6F24D]' : 'bg-slate-200 text-slate-500' }}">
+                    3. Prioritas 6 Bln
+                </div>
+            </div>
+
+            <!-- Survey Body -->
+            <div class="p-5 sm:p-6 overflow-y-auto space-y-4">
                 
-                @if (session()->has('config_message'))
-                    <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800 flex items-center gap-2">
-                        <x-icon name="check-circle" class="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>{{ session('config_message') }}</span>
+                <!-- STEP 1: PILIH PROFESI -->
+                @if($surveyStep === 1)
+                <div class="space-y-3">
+                    <div>
+                        <h4 class="text-sm font-extrabold text-slate-950">Apa Bidang / Profesi Utama Anda?</h4>
+                        <p class="text-xs text-slate-500">Pilih persona yang paling menggambarkan sumber penghasilan utama Anda:</p>
                     </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        @foreach($personas as $key => $p)
+                        <button type="button" 
+                            wire:click="selectSurveyPersona('{{ $key }}')"
+                            class="p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer group flex items-start gap-3 {{ $selectedPersona === $key ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200/90 hover:border-slate-400 bg-white hover:bg-slate-50' }}">
+                            <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-2xs {{ $selectedPersona === $key ? 'bg-slate-950 text-[#C6F24D]' : 'bg-slate-100 text-slate-700' }}">
+                                <x-icon :name="$p['icon']" class="w-4 h-4" strokeWidth="2.5" />
+                            </div>
+                            <div class="min-w-0">
+                                <span class="text-xs font-black text-slate-950 block group-hover:text-teal-700 transition-colors">{{ $p['name'] }}</span>
+                                <span class="text-[10px] text-slate-500 leading-tight block mt-0.5">{{ $p['description'] }}</span>
+                                <span class="inline-block mt-1 px-1.5 py-0.2 rounded text-[8px] font-mono font-bold bg-white border border-slate-200 text-slate-600">
+                                    {{ $p['badge'] }}
+                                </span>
+                            </div>
+                        </button>
+                        @endforeach
+                    </div>
+                </div>
                 @endif
 
-                @error('total_percentage')
-                    <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs font-bold text-rose-800 flex items-center gap-2">
-                        <x-icon name="alert-circle" class="w-4 h-4 text-rose-600 shrink-0" />
-                        <span>{{ $message }}</span>
+                <!-- STEP 2: STABILITAS INCOME -->
+                @if($surveyStep === 2)
+                <div class="space-y-3">
+                    <div>
+                        <h4 class="text-sm font-extrabold text-slate-950">Bagaimana Karakter / Stabilitas Income Anda?</h4>
+                        <p class="text-xs text-slate-500">Menentukan apakah sistem mengaktifkan P25 Floor Method atau Standard Average:</p>
                     </div>
-                @enderror
 
-                <!-- Profile Name & Method Controls -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 bg-[#F8F9FA] rounded-xl sm:rounded-2xl border border-slate-100">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Profil Budget</label>
-                        <input type="text" wire:model.defer="profileName" 
-                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                    <div class="space-y-2.5 pt-1">
+                        <!-- Option 1: Volatile -->
+                        <button type="button" 
+                            wire:click="selectSurveyStability('volatile')"
+                            class="w-full p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3.5 {{ $selectedStability === 'volatile' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-900 flex items-center justify-center shrink-0 font-bold">
+                                🌊
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold text-slate-950 block">Sangat Fluktuatif (Variable / Project-Based)</span>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Pendapatan naik-turun tergantung proyek/omset. Mengaktifkan <strong>P25 Income Floor</strong> untuk mencegah krisis saat bulan sepi.</p>
+                            </div>
+                        </button>
+
+                        <!-- Option 2: Semi-stable -->
+                        <button type="button" 
+                            wire:click="selectSurveyStability('semi')"
+                            class="w-full p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3.5 {{ $selectedStability === 'semi' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-900 flex items-center justify-center shrink-0 font-bold">
+                                ⚖️
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold text-slate-950 block">Kombinasi Retainer & Bonus Proyek</span>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Ada pendapatan minimum tiap bulan ditambah komisi proyek. Mengaktifkan <strong>Hybrid Smoothing</strong>.</p>
+                            </div>
+                        </button>
+
+                        <!-- Option 3: Stable -->
+                        <button type="button" 
+                            wire:click="selectSurveyStability('stable')"
+                            class="w-full p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3.5 {{ $selectedStability === 'stable' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-900 flex items-center justify-center shrink-0 font-bold">
+                                📅
+                            </div>
+                            <div>
+                                <span class="text-xs font-extrabold text-slate-950 block">Stabil / Gaji Bulanan Teratur</span>
+                                <p class="text-[11px] text-slate-500 mt-0.5">Menerima gaji tanggal tetap setiap bulan. Mengaktifkan <strong>50/30/20 Standard Zero-Based</strong>.</p>
+                            </div>
+                        </button>
                     </div>
+                </div>
+                @endif
+
+                <!-- STEP 3: PRIORITAS 6 BULAN -->
+                @if($surveyStep === 3)
+                <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Metode Perhitungan</label>
+                        <h4 class="text-sm font-extrabold text-slate-950">Apa Fokus Utama Finansial Anda 6 Bulan Kedepan?</h4>
+                        <p class="text-xs text-slate-500">Sistem akan menyesuaikan alokasi persentase pos terkait secara optimal:</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                        <!-- Priority 1 -->
+                        <button type="button" 
+                            wire:click="selectSurveyPriority('emergency')"
+                            class="p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3 {{ $selectedPriority === 'emergency' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-sm">🛡️</div>
+                            <div>
+                                <span class="text-xs font-bold text-slate-950 block">Dana Darurat & Pajak</span>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Amankan cadangan kas 3-6 bulan</span>
+                            </div>
+                        </button>
+
+                        <!-- Priority 2 -->
+                        <button type="button" 
+                            wire:click="selectSurveyPriority('wishlist')"
+                            class="p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3 {{ $selectedPriority === 'wishlist' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-8 h-8 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center shrink-0 font-bold text-sm">🎯</div>
+                            <div>
+                                <span class="text-xs font-bold text-slate-950 block">Wishlist & Beli Alat</span>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Fokus akselerasi target barang impian</span>
+                            </div>
+                        </button>
+
+                        <!-- Priority 3 -->
+                        <button type="button" 
+                            wire:click="selectSurveyPriority('investment')"
+                            class="p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3 {{ $selectedPriority === 'investment' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-8 h-8 rounded-xl bg-teal-100 text-teal-800 flex items-center justify-center shrink-0 font-bold text-sm">📈</div>
+                            <div>
+                                <span class="text-xs font-bold text-slate-950 block">Investasi & Tabungan</span>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Kembangkan portofolio aset</span>
+                            </div>
+                        </button>
+
+                        <!-- Priority 4 -->
+                        <button type="button" 
+                            wire:click="selectSurveyPriority('separate')"
+                            class="p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer flex items-start gap-3 {{ $selectedPriority === 'separate' ? 'border-slate-950 bg-[#F4FCE3] shadow-xs' : 'border-slate-200 hover:border-slate-400 bg-white' }}">
+                            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0 font-bold text-sm">⚖️</div>
+                            <div>
+                                <span class="text-xs font-bold text-slate-950 block">Pemisahan Kas Bisnis</span>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Disiplin margin laba vs pribadi</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                @endif
+
+            </div>
+
+            <!-- Survey Modal Footer -->
+            <div class="px-5 sm:px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0">
+                <div>
+                    @if($surveyStep > 1)
+                    <button type="button" wire:click="setSurveyStep({{ $surveyStep - 1 }})" class="text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer flex items-center gap-1">
+                        &larr; Kembali
+                    </button>
+                    @endif
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <button type="button" wire:click="$set('isSurveyModalOpen', false)" class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">
+                        Batal
+                    </button>
+
+                    @if($surveyStep < 3)
+                    <button type="button" wire:click="setSurveyStep({{ $surveyStep + 1 }})" class="px-4 py-2 rounded-xl bg-slate-950 text-white text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-xs">
+                        Lanjut &rarr;
+                    </button>
+                    @else
+                    <button type="button" wire:click="submitSurvey" class="px-5 py-2 rounded-xl bg-[#C6F24D] hover:bg-[#B5E63B] text-slate-950 text-xs font-black cursor-pointer shadow-md active-tap">
+                        ✓ Terapkan & Buat Anggaran Otomatis
+                    </button>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  MODAL: MANUAL TIER & POS CONFIGURATION                     -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div x-data="{ open: @entangle('isConfigModalOpen') }" x-show="open" 
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
+        x-cloak>
+        
+        <div @click.outside="$wire.set('isConfigModalOpen', false)" 
+            class="relative w-full max-w-xl bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            
+            <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
+
+            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
+                <div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Atur Pos & Priority Tier</h3>
+                    <p class="text-[10px] text-slate-400">Sesuaikan persentase target dan mapping tier kategori</p>
+                </div>
+                <button wire:click="$set('isConfigModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100"><x-icon name="x" class="w-4 h-4" /></button>
+            </div>
+
+            <div class="p-5 space-y-4 overflow-y-auto">
+                
+                <!-- Profile Name & Method -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Nama Profil Anggaran</label>
+                        <input type="text" wire:model="profileName" 
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                    </div>
+
+                    <div>
+                        <label class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Metode Baseline</label>
                         <select wire:model="method" 
-                            class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                            <option value="floor">Floor Method (Freelance CV ≥ 0.3)</option>
-                            <option value="average">Average Method (Income Stabil)</option>
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                            <option value="floor">Floor Baseline (P25) — Untuk Income Fluktuatif</option>
+                            <option value="average">Rolling Average — Untuk Income Stabil</option>
                         </select>
                     </div>
                 </div>

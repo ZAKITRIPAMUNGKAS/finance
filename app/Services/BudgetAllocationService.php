@@ -450,13 +450,237 @@ class BudgetAllocationService
     }
 
     /**
-     * Inisialisasi Konfigurasi Budget Standar untuk Akun Baru / Seeder
+     * Daftar 6 Persona Finansial Universal
      */
-    public function seedInitialBudgetConfiguration(?int $userId = null): void
+    public function getAvailablePersonas(): array
     {
-        $userId = $userId ?? User::first()?->id;
+        return [
+            'creative_media' => [
+                'name' => 'Freelance Kreatif & Media',
+                'description' => 'Fotografer, videografer, desainer grafis, editor, animator, konten kreator.',
+                'icon' => 'camera',
+                'badge' => 'Creative & Gear Amortization',
+                'method' => 'floor',
+                'incomes' => [
+                    ['name' => 'Project Foto & Video', 'is_business' => true, 'color' => '#10B981', 'icon' => 'camera'],
+                    ['name' => 'Design & Creative Fee', 'is_business' => true, 'color' => '#059669', 'icon' => 'briefcase'],
+                    ['name' => 'Royalti / Lisensi Karya', 'is_business' => true, 'color' => '#14B8A6', 'icon' => 'trending-up'],
+                ],
+                'expenses' => [
+                    ['name' => 'Sewa Kamera & Gear', 'group' => 'business_cost', 'tier' => 1, 'pct' => 15.0, 'is_business' => true, 'color' => '#E11D48', 'icon' => 'camera'],
+                    ['name' => 'Fee Kru & Asisten', 'group' => 'business_cost', 'tier' => 1, 'pct' => 15.0, 'is_business' => true, 'color' => '#475569', 'icon' => 'users'],
+                    ['name' => 'Software Adobe/Figma', 'group' => 'self_dev', 'tier' => 2, 'pct' => 10.0, 'is_business' => true, 'color' => '#8B5CF6', 'icon' => 'laptop'],
+                    ['name' => 'Makan & Kebutuhan Pokok', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 20.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Listrik, Wifi & Studio', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 15.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'zap'],
+                    ['name' => 'Kopi & Lifestyle', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#F97316', 'icon' => 'coffee'],
+                    ['name' => 'Tabungan Sinking Fund Gear', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 10.0, 'is_business' => true, 'color' => '#059669', 'icon' => 'piggy-bank'],
+                    ['name' => 'Cadangan Pajak & Darurat', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+            'it_tech' => [
+                'name' => 'Freelance IT, Developer & Digital',
+                'description' => 'Software developer, tech consultant, UI/UX, digital ads, DevOps.',
+                'icon' => 'laptop',
+                'badge' => 'Tech Retainer & Cloud Costs',
+                'method' => 'floor',
+                'incomes' => [
+                    ['name' => 'Project Dev & Coding', 'is_business' => true, 'color' => '#10B981', 'icon' => 'laptop'],
+                    ['name' => 'Monthly Retainer Klien', 'is_business' => true, 'color' => '#059669', 'icon' => 'repeat'],
+                    ['name' => 'Maintenance / SLA Contract', 'is_business' => true, 'color' => '#14B8A6', 'icon' => 'server'],
+                ],
+                'expenses' => [
+                    ['name' => 'Server Cloud & API (AWS/Vercel)', 'group' => 'business_cost', 'tier' => 1, 'pct' => 15.0, 'is_business' => true, 'color' => '#F97316', 'icon' => 'server'],
+                    ['name' => 'Internet High-Speed & Wifi', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'zap'],
+                    ['name' => 'Makan & Kebutuhan Pokok', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 25.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Sewa Tempat / Co-working', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 15.0, 'is_business' => false, 'color' => '#E11D48', 'icon' => 'home'],
+                    ['name' => 'Tools Dev & Lisensi IDE', 'group' => 'self_dev', 'tier' => 2, 'pct' => 10.0, 'is_business' => true, 'color' => '#8B5CF6', 'icon' => 'book-open'],
+                    ['name' => 'Lifestyle & Gaming/Hobi', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'film'],
+                    ['name' => 'Tabungan Hardware/Laptop', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 10.0, 'is_business' => true, 'color' => '#059669', 'icon' => 'piggy-bank'],
+                    ['name' => 'Cadangan Pajak & Darurat', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+            'consultant_pro' => [
+                'name' => 'Jasa Profesional, Konsultan & Penulis',
+                'description' => 'Konsultan bisnis, akuntan, translator, copywriter, researcher, trainer.',
+                'icon' => 'book-open',
+                'badge' => 'Self-Dev & Knowledge Capital',
+                'method' => 'floor',
+                'incomes' => [
+                    ['name' => 'Fee Konsultasi & Advisory', 'is_business' => true, 'color' => '#10B981', 'icon' => 'briefcase'],
+                    ['name' => 'Honor Penulisan & Riset', 'is_business' => true, 'color' => '#059669', 'icon' => 'book-open'],
+                    ['name' => 'Workshop / Pembicara', 'is_business' => true, 'color' => '#14B8A6', 'icon' => 'mic'],
+                ],
+                'expenses' => [
+                    ['name' => 'Meeting & Networking Klien', 'group' => 'business_cost', 'tier' => 2, 'pct' => 15.0, 'is_business' => true, 'color' => '#475569', 'icon' => 'users'],
+                    ['name' => 'Makan & Kebutuhan Rumah', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 30.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Listrik, Wifi & Komunikasi', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'zap'],
+                    ['name' => 'Buku, Riset & Sertifikasi', 'group' => 'self_dev', 'tier' => 2, 'pct' => 15.0, 'is_business' => false, 'color' => '#8B5CF6', 'icon' => 'book-open'],
+                    ['name' => 'Lifestyle & Rekreasi', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#F97316', 'icon' => 'coffee'],
+                    ['name' => 'Tabungan & Investasi Portofolio', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 15.0, 'is_business' => false, 'color' => '#059669', 'icon' => 'piggy-bank'],
+                    ['name' => 'Cadangan Pajak & Proteksi', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+            'umkm_business' => [
+                'name' => 'UMKM, Toko Online & Usaha Mandiri',
+                'description' => 'Online shop, retail, merchant e-commerce, kuliner / F&B, jasa mandiri.',
+                'icon' => 'shopping-bag',
+                'badge' => 'COGS & Ad-Spend Cashflow',
+                'method' => 'floor',
+                'incomes' => [
+                    ['name' => 'Penjualan Produk / Omset', 'is_business' => true, 'color' => '#10B981', 'icon' => 'shopping-bag'],
+                    ['name' => 'Penjualan Grosir / Reseller', 'is_business' => true, 'color' => '#059669', 'icon' => 'users'],
+                    ['name' => 'Event / Bazar Offline', 'is_business' => true, 'color' => '#14B8A6', 'icon' => 'calendar'],
+                ],
+                'expenses' => [
+                    ['name' => 'HPP & Stok Barang Dagang', 'group' => 'business_cost', 'tier' => 1, 'pct' => 30.0, 'is_business' => true, 'color' => '#E11D48', 'icon' => 'shopping-bag'],
+                    ['name' => 'Iklan Meta & TikTok Ads', 'group' => 'business_cost', 'tier' => 1, 'pct' => 15.0, 'is_business' => true, 'color' => '#F97316', 'icon' => 'trending-up'],
+                    ['name' => 'Packing & Biaya Ekspedisi', 'group' => 'business_cost', 'tier' => 1, 'pct' => 10.0, 'is_business' => true, 'color' => '#475569', 'icon' => 'truck'],
+                    ['name' => 'Sewa Tempat & Utilitas Usaha', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 15.0, 'is_business' => true, 'color' => '#EAB308', 'icon' => 'home'],
+                    ['name' => 'Gaji Pribadi (Prive Owner)', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 15.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Lifestyle & Makan Santai', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 5.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'coffee'],
+                    ['name' => 'Dana Cadangan Kas Operasional', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 10.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+            'employee_salary' => [
+                'name' => 'Karyawan / Pegawai Gaji Tetap',
+                'description' => 'Pegawai swasta, ASN/PNS, BUMN dengan pendapatan bulanan terjadwal (50/30/20).',
+                'icon' => 'briefcase',
+                'badge' => '50/30/20 Standard Zero-Based',
+                'method' => 'average',
+                'incomes' => [
+                    ['name' => 'Gaji Pokok Bulanan', 'is_business' => false, 'color' => '#10B981', 'icon' => 'briefcase'],
+                    ['name' => 'Tunjangan & Lembur', 'is_business' => false, 'color' => '#059669', 'icon' => 'award'],
+                    ['name' => 'Bonus / THR', 'is_business' => false, 'color' => '#14B8A6', 'icon' => 'gift'],
+                ],
+                'expenses' => [
+                    ['name' => 'Makan & Belanja Dapur', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 25.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Sewa/Cicilan & Tagihan Listrik', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 20.0, 'is_business' => false, 'color' => '#E11D48', 'icon' => 'home'],
+                    ['name' => 'Transportasi Harian (Bensin/KRL)', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'car'],
+                    ['name' => 'Tabungan & Investasi Rutin', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 20.0, 'is_business' => false, 'color' => '#059669', 'icon' => 'piggy-bank'],
+                    ['name' => 'Lifestyle, Hobi & Hiburan', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 15.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'film'],
+                    ['name' => 'Kursus & Buku Pengembangan Diri', 'group' => 'self_dev', 'tier' => 2, 'pct' => 5.0, 'is_business' => false, 'color' => '#8B5CF6', 'icon' => 'book-open'],
+                    ['name' => 'Dana Darurat Bulanan', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => false, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+            'hybrid_sidehustle' => [
+                'name' => 'Hybrid (Karyawan + Freelance Sampingan)',
+                'description' => 'Pekerja dengan gaji kantor sekaligus menjalankan projek freelance / bisnis sampingan.',
+                'icon' => 'sparkles',
+                'badge' => 'Dual Stream & Surplus Accelerator',
+                'method' => 'floor',
+                'incomes' => [
+                    ['name' => 'Gaji Pokok Kantor', 'is_business' => false, 'color' => '#10B981', 'icon' => 'briefcase'],
+                    ['name' => 'Side-Project Freelance', 'is_business' => true, 'color' => '#059669', 'icon' => 'laptop'],
+                    ['name' => 'Komisi / Affiliate Sampingan', 'is_business' => true, 'color' => '#14B8A6', 'icon' => 'trending-up'],
+                ],
+                'expenses' => [
+                    ['name' => 'Kebutuhan Hidup Pokok (Living)', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 35.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Sewa/Cicilan & Listrik/Wifi', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 15.0, 'is_business' => false, 'color' => '#E11D48', 'icon' => 'home'],
+                    ['name' => 'Operasional Side-Hustle (Tools)', 'group' => 'business_cost', 'tier' => 2, 'pct' => 10.0, 'is_business' => true, 'color' => '#F97316', 'icon' => 'laptop'],
+                    ['name' => 'Tabungan Wishlist Impian', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 15.0, 'is_business' => false, 'color' => '#059669', 'icon' => 'target'],
+                    ['name' => 'Investasi Saham / Reksadana', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 10.0, 'is_business' => false, 'color' => '#14B8A6', 'icon' => 'trending-up'],
+                    ['name' => 'Lifestyle & Reward Diri', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'film'],
+                    ['name' => 'Cadangan Pajak & Darurat', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                ]
+            ],
+        ];
+    }
 
-        // 1. Buat 6 Fixed Budget Groups
+    /**
+     * Terapkan Preset Persona Finansial ke Akun Pengguna
+     */
+    public function applyPersonaPreset(int $userId, string $personaKey, ?string $stability = null, ?string $priority = null): array
+    {
+        $personas = $this->getAvailablePersonas();
+        $selected = $personas[$personaKey] ?? $personas['creative_media'];
+
+        // 1. Pastikan Budget Groups ada
+        $this->ensureBudgetGroupsExist();
+
+        // 2. Buat / Update Budget Profile
+        $profileName = $selected['name'];
+        $method = $stability === 'stable' ? 'average' : $selected['method'];
+
+        $profile = BudgetProfile::updateOrCreate(
+            ['user_id' => $userId, 'name' => $profileName],
+            ['is_active' => true, 'method' => $method]
+        );
+
+        // Deactive other profiles
+        BudgetProfile::where('user_id', $userId)
+            ->where('id', '!=', $profile->id)
+            ->update(['is_active' => false]);
+
+        // 3. Buat Kategori Income
+        foreach ($selected['incomes'] as $inc) {
+            Category::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                    'name' => $inc['name'],
+                    'type' => 'income',
+                ],
+                [
+                    'is_business' => $inc['is_business'],
+                    'color' => $inc['color'],
+                    'icon' => $inc['icon'],
+                ]
+            );
+        }
+
+        // 4. Buat Kategori Expense & Mapping BudgetCategory
+        $createdExpenses = [];
+        foreach ($selected['expenses'] as $exp) {
+            $cat = Category::firstOrCreate(
+                [
+                    'user_id' => $userId,
+                    'name' => $exp['name'],
+                    'type' => 'expense',
+                ],
+                [
+                    'is_business' => $exp['is_business'],
+                    'color' => $exp['color'],
+                    'icon' => $exp['icon'],
+                ]
+            );
+
+            $group = BudgetGroup::where('slug', $exp['group'])->first();
+            if ($group) {
+                // Adjust percentage slightly if user selected a priority
+                $pct = $exp['pct'];
+                if ($priority === 'emergency' && $exp['group'] === 'tax_reserve') {
+                    $pct += 5.0;
+                } elseif ($priority === 'wishlist' && $exp['group'] === 'financial_saving') {
+                    $pct += 5.0;
+                }
+
+                BudgetCategory::updateOrCreate(
+                    [
+                        'budget_profile_id' => $profile->id,
+                        'category_id' => $cat->id,
+                    ],
+                    [
+                        'budget_group_id' => $group->id,
+                        'priority_tier' => $exp['tier'],
+                        'target_percentage' => $pct,
+                    ]
+                );
+            }
+
+            $createdExpenses[] = $cat;
+        }
+
+        return [
+            'profile' => $profile,
+            'persona' => $selected,
+            'expense_count' => count($createdExpenses),
+        ];
+    }
+
+    /**
+     * Memastikan Master Budget Groups Ada di Database
+     */
+    public function ensureBudgetGroupsExist(): void
+    {
         $groupsData = [
             [
                 'name' => 'Kebutuhan Wajib (Fixed Needs)',
@@ -511,67 +735,18 @@ class BudgetAllocationService
         foreach ($groupsData as $gd) {
             BudgetGroup::firstOrCreate(['slug' => $gd['slug']], $gd);
         }
+    }
 
-        // Pastikan ada Category default jika belum ada sama sekali
-        if (Category::where('type', 'expense')->count() === 0) {
-            Category::create(['name' => 'Sewa Kantor & Studio', 'type' => 'expense', 'icon' => 'home', 'color' => '#E11D48', 'is_business' => true]);
-            Category::create(['name' => 'Listrik & Internet', 'type' => 'expense', 'icon' => 'zap', 'color' => '#EAB308', 'is_business' => false]);
-            Category::create(['name' => 'Sewa Alat & Kru Freelance', 'type' => 'expense', 'icon' => 'camera', 'color' => '#475569', 'is_business' => true]);
-            Category::create(['name' => 'Makan & Kebutuhan Pokok', 'type' => 'expense', 'icon' => 'coffee', 'color' => '#10B981', 'is_business' => false]);
-            Category::create(['name' => 'Kopi & Nongkrong', 'type' => 'expense', 'icon' => 'coffee', 'color' => '#F97316', 'is_business' => false]);
-            Category::create(['name' => 'Langganan Software (Adobe/Figma)', 'type' => 'expense', 'icon' => 'laptop', 'color' => '#8B5CF6', 'is_business' => true]);
-            Category::create(['name' => 'Cadangan Pajak & Darurat', 'type' => 'expense', 'icon' => 'shield', 'color' => '#0EA5E9', 'is_business' => true]);
-            Category::create(['name' => 'Tabungan Pembelian Alat', 'type' => 'expense', 'icon' => 'piggy-bank', 'color' => '#059669', 'is_business' => true]);
-        }
+    /**
+     * Inisialisasi awal Master Budget Groups & default profile
+     */
+    public function seedInitialBudgetConfiguration(?int $userId = null): void
+    {
+        $userId = $userId ?? auth()->id() ?? User::first()?->id;
+        if (!$userId) return;
 
-        // 2. Buat Budget Profile Default
-        $profile = BudgetProfile::firstOrCreate(
-            ['user_id' => $userId, 'name' => 'Bulan Normal (Freelance Adaptive)'],
-            ['is_active' => true, 'method' => 'floor']
-        );
-
-        // 3. Mapping Kategori Eksisting
-        $categories = Category::where('type', 'expense')->get();
-        $gFixed = BudgetGroup::where('slug', 'fixed_needs')->first();
-        $gBiz = BudgetGroup::where('slug', 'business_cost')->first();
-        $gLife = BudgetGroup::where('slug', 'lifestyle')->first();
-        $gDev = BudgetGroup::where('slug', 'self_dev')->first();
-        $gFin = BudgetGroup::where('slug', 'financial_saving')->first();
-        $gTax = BudgetGroup::where('slug', 'tax_reserve')->first();
-
-        // Template persentase awal
-        $mappings = [
-            'Sewa Kantor & Studio' => ['group' => $gFixed, 'tier' => 1, 'pct' => 15.0],
-            'Listrik & Internet' => ['group' => $gFixed, 'tier' => 1, 'pct' => 10.0],
-            'Sewa Alat & Kru Freelance' => ['group' => $gBiz, 'tier' => 1, 'pct' => 20.0],
-            'Makan & Kebutuhan Pokok' => ['group' => $gFixed, 'tier' => 2, 'pct' => 15.0],
-            'Kopi & Nongkrong' => ['group' => $gLife, 'tier' => 3, 'pct' => 10.0],
-            'Langganan Software (Adobe/Figma)' => ['group' => $gDev, 'tier' => 2, 'pct' => 10.0],
-            'Cadangan Pajak & Darurat' => ['group' => $gTax, 'tier' => 1, 'pct' => 10.0],
-            'Tabungan Pembelian Alat' => ['group' => $gFin, 'tier' => 2, 'pct' => 10.0],
-        ];
-
-        foreach ($categories as $cat) {
-            $map = $mappings[$cat->name] ?? null;
-            if (!$map) {
-                if ($cat->is_business) {
-                    $map = ['group' => $gBiz, 'tier' => 2, 'pct' => 10.0];
-                } else {
-                    $map = ['group' => $gLife, 'tier' => 3, 'pct' => 5.0];
-                }
-            }
-
-            BudgetCategory::updateOrCreate(
-                [
-                    'budget_profile_id' => $profile->id,
-                    'category_id' => $cat->id,
-                ],
-                [
-                    'budget_group_id' => $map['group']->id,
-                    'priority_tier' => $map['tier'],
-                    'target_percentage' => $map['pct'],
-                ]
-            );
-        }
+        $this->ensureBudgetGroupsExist();
+        $this->applyPersonaPreset($userId, 'creative_media');
     }
 }
+
