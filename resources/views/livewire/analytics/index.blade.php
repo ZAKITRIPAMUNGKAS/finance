@@ -73,10 +73,9 @@
 
                 <!-- GRADE + BIG SCORE CARD -->
                 <div class="flex items-center gap-4 sm:gap-5 p-3.5 sm:p-5 bg-[#F8F9FA] rounded-xl sm:rounded-2xl border border-slate-100">
-                    <!-- Big Grade Box -->
-                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-slate-950 text-[#C6F24D] flex flex-col items-center justify-center shrink-0 shadow-2xs">
-                        <span class="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest text-slate-400">GRADE</span>
-                        <span class="text-3xl sm:text-4xl font-black font-mono leading-none">{{ $healthData['grade'] }}</span>
+                    <!-- Big Health Icon Box -->
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl bg-slate-950 text-[#C6F24D] flex items-center justify-center shrink-0 shadow-2xs">
+                        <x-icon name="shield-check" class="w-8 h-8 sm:w-10 sm:h-10" strokeWidth="2.2" />
                     </div>
 
                     <!-- Score & Status -->

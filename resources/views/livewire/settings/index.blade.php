@@ -3,8 +3,11 @@
     <!-- TOP PROFILE COMPACT CARD -->
     <div class="bg-white border border-slate-200/70 rounded-3xl p-5 sm:p-6 shadow-sm flex items-center justify-between gap-4">
         <div class="flex items-center gap-3.5">
-            <div class="w-13 h-13 rounded-2xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-black text-xl shadow-sm shrink-0">
-                {{ strtoupper(substr($name ?: 'U', 0, 1)) }}
+            <div class="w-13 h-13 rounded-2xl bg-slate-950 text-[#C6F24D] flex items-center justify-center shadow-sm shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-[#C6F24D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
             </div>
             <div>
                 <div class="flex items-center gap-2">

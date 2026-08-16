@@ -264,8 +264,11 @@
                         <!-- User Card Header -->
                         <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 mb-2">
                             <div class="flex items-center gap-2.5">
-                                <div class="w-9 h-9 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-black text-xs shrink-0 shadow-2xs">
-                                    {{ $userInitial }}
+                                <div class="w-9 h-9 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#C6F24D]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
                                 </div>
                                 <div class="min-w-0 flex-1">
                                     <h4 class="font-extrabold text-xs text-slate-900 truncate">{{ $userName }}</h4>

@@ -309,9 +309,8 @@
 
                         <div class="p-3.5 bg-[#F8F9FA] rounded-2xl border border-slate-200/80 flex items-center justify-between gap-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-slate-950 text-[#C6F24D] flex flex-col items-center justify-center font-mono shrink-0 shadow-2xs">
-                                    <span class="text-[8px] font-extrabold text-slate-400">GRADE</span>
-                                    <span class="text-xl font-black leading-none">A</span>
+                                <div class="w-12 h-12 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center shrink-0 shadow-2xs">
+                                    <x-icon name="shield-check" class="w-6 h-6" strokeWidth="2.2" />
                                 </div>
                                 <div>
                                     <span class="font-bold text-xs text-slate-900 block">Kondisi Finansial Prima</span>
