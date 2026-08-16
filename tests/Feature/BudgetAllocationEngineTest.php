@@ -96,13 +96,15 @@ class BudgetAllocationEngineTest extends TestCase
     public function test_universal_personas_preset_application()
     {
         $personas = $this->service->getAvailablePersonas();
-        $this->assertCount(6, $personas);
+        $this->assertCount(8, $personas);
         $this->assertArrayHasKey('creative_media', $personas);
         $this->assertArrayHasKey('it_tech', $personas);
         $this->assertArrayHasKey('consultant_pro', $personas);
         $this->assertArrayHasKey('umkm_business', $personas);
         $this->assertArrayHasKey('employee_salary', $personas);
         $this->assertArrayHasKey('hybrid_sidehustle', $personas);
+        $this->assertArrayHasKey('pelajar_mahasiswa', $personas);
+        $this->assertArrayHasKey('keluarga_rumahtangga', $personas);
 
         // Test applying Employee Salary persona
         $result = $this->service->applyPersonaPreset($this->user->id, 'employee_salary', 'stable', 'investment');
@@ -115,6 +117,14 @@ class BudgetAllocationEngineTest extends TestCase
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,
             'name' => 'Tabungan & Investasi Rutin',
+        ]);
+
+        // Test applying Pelajar Mahasiswa persona
+        $resPelajar = $this->service->applyPersonaPreset($this->user->id, 'pelajar_mahasiswa', 'stable', 'wishlist');
+        $this->assertEquals('Pelajar, Mahasiswa & Pemula', $resPelajar['profile']->name);
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'name' => 'Sewa Kos & Listrik',
         ]);
 
         // Test applying UMKM persona
@@ -144,7 +154,9 @@ class BudgetAllocationEngineTest extends TestCase
             ->assertSet('selectedPriority', 'emergency')
             ->call('submitSurvey')
             ->assertSet('isSurveyModalOpen', false)
-            ->assertSee('UMKM, Toko Online & Usaha Mandiri');
+            ->assertSee('UMKM, Toko Online & Usaha Mandiri')
+            ->call('autoBalanceAllocation');
     }
 }
+
 

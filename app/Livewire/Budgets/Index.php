@@ -97,6 +97,28 @@ class Index extends Component
         $this->calculateAllZScores();
     }
 
+    public function autoBalanceAllocation()
+    {
+        $total = array_sum(array_column($this->categoryConfigs, 'target_percentage'));
+        if ($total <= 0) return;
+
+        $runningSum = 0;
+        $keys = array_keys($this->categoryConfigs);
+        $lastKey = end($keys);
+
+        foreach ($this->categoryConfigs as $catId => &$cfg) {
+            if ($catId === $lastKey) {
+                $cfg['target_percentage'] = round(max(0, 100.0 - $runningSum), 1);
+            } else {
+                $scaled = round(($cfg['target_percentage'] / $total) * 100.0, 1);
+                $cfg['target_percentage'] = $scaled;
+                $runningSum += $scaled;
+            }
+        }
+        unset($cfg);
+        $this->calculateAllZScores();
+    }
+
     public function openConfigModal()
     {
         $this->loadConfiguration();
@@ -131,7 +153,7 @@ class Index extends Component
         }
 
         $this->isConfigModalOpen = false;
-        session()->flash('message', 'Konfigurasi Budget Allocation Engine berhasil disimpan!');
+        session()->flash('message', 'Konfigurasi persentase budget berhasil disimpan!');
     }
 
     // ── SURVEY & PERSONA METHODS ────────────────────────────────
@@ -175,7 +197,7 @@ class Index extends Component
 
         $this->isSurveyModalOpen = false;
         $this->loadConfiguration();
-        session()->flash('message', 'Profil Finansial & Alokasi Budget berhasil disesuaikan dengan profesi Anda!');
+        session()->flash('message', 'Profil Finansial & Alokasi Budget berhasil disesuaikan dengan arketipe Anda!');
     }
 
     public function applyPersonaDirectly(string $personaKey)
@@ -197,8 +219,8 @@ class Index extends Component
 
         return view('livewire.budgets.index', compact('budgetData', 'groups', 'categories', 'personas'))
             ->layout('components.layouts.app', [
-                'headerTitle' => 'Budget Allocation Engine',
-                'headerSubtitle' => 'Floor Baseline Method & Adaptive Zero-Based Budgeting (Universal Engine)',
+                'headerTitle' => 'Smart Budget Engine',
+                'headerSubtitle' => 'Universal Adaptive Zero-Based Budgeting & Percentage Optimizer',
             ]);
     }
 }

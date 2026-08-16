@@ -583,6 +583,46 @@ class BudgetAllocationService
                     ['name' => 'Cadangan Pajak & Darurat', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 5.0, 'is_business' => true, 'color' => '#0EA5E9', 'icon' => 'shield'],
                 ]
             ],
+            'pelajar_mahasiswa' => [
+                'name' => 'Pelajar, Mahasiswa & Pemula',
+                'description' => 'Uang saku bulanan, anak kos, fresh graduate, fokus hemat anti-boncos & tabungan awal.',
+                'icon' => 'book-open',
+                'badge' => 'Smart Anti-Boncos & Hemat',
+                'method' => 'average',
+                'incomes' => [
+                    ['name' => 'Uang Saku & Kiriman', 'is_business' => false, 'color' => '#10B981', 'icon' => 'credit-card'],
+                    ['name' => 'Gaji Part-Time / Magang', 'is_business' => false, 'color' => '#059669', 'icon' => 'briefcase'],
+                    ['name' => 'Hadiah / Jasa Teman', 'is_business' => false, 'color' => '#14B8A6', 'icon' => 'gift'],
+                ],
+                'expenses' => [
+                    ['name' => 'Sewa Kos & Listrik', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 35.0, 'is_business' => false, 'color' => '#E11D48', 'icon' => 'home'],
+                    ['name' => 'Makan & Belanja Harian', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 30.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Bensin / Ongkos Transport', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'car'],
+                    ['name' => 'Tugas, Print & Kuota Internet', 'group' => 'self_dev', 'tier' => 2, 'pct' => 10.0, 'is_business' => false, 'color' => '#8B5CF6', 'icon' => 'book-open'],
+                    ['name' => 'Nongkrong & Jajan Santai', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'coffee'],
+                    ['name' => 'Tabungan Jaga-Jaga', 'group' => 'financial_saving', 'tier' => 2, 'pct' => 5.0, 'is_business' => false, 'color' => '#059669', 'icon' => 'piggy-bank'],
+                ]
+            ],
+            'keluarga_rumahtangga' => [
+                'name' => 'Pengelola Rumah Tangga & Keluarga',
+                'description' => 'Mengatur kas keluarga, belanja dapur, SPP anak, utilitas rumah, & dana darurat bersama.',
+                'icon' => 'home',
+                'badge' => 'Family Cashflow & Protection',
+                'method' => 'average',
+                'incomes' => [
+                    ['name' => 'Gaji / Nafkah Bulanan', 'is_business' => false, 'color' => '#10B981', 'icon' => 'briefcase'],
+                    ['name' => 'Usaha Sampingan Keluarga', 'is_business' => true, 'color' => '#059669', 'icon' => 'shopping-bag'],
+                    ['name' => 'Hasil Investasi / Pasif', 'is_business' => false, 'color' => '#14B8A6', 'icon' => 'trending-up'],
+                ],
+                'expenses' => [
+                    ['name' => 'Belanja Dapur & Makan Keluarga', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 30.0, 'is_business' => false, 'color' => '#10B981', 'icon' => 'coffee'],
+                    ['name' => 'Cicilan/Sewa Rumah & Listrik/Air', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 25.0, 'is_business' => false, 'color' => '#E11D48', 'icon' => 'home'],
+                    ['name' => 'Biaya Sekolah & Pendidikan Anak', 'group' => 'self_dev', 'tier' => 1, 'pct' => 15.0, 'is_business' => false, 'color' => '#8B5CF6', 'icon' => 'book-open'],
+                    ['name' => 'Transportasi & Bensin Keluarga', 'group' => 'fixed_needs', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#EAB308', 'icon' => 'car'],
+                    ['name' => 'Dana Darurat & Asuransi', 'group' => 'tax_reserve', 'tier' => 1, 'pct' => 10.0, 'is_business' => false, 'color' => '#0EA5E9', 'icon' => 'shield'],
+                    ['name' => 'Rekreasi & Jalan-Jalan Keluarga', 'group' => 'lifestyle', 'tier' => 3, 'pct' => 10.0, 'is_business' => false, 'color' => '#6366F1', 'icon' => 'film'],
+                ]
+            ],
         ];
     }
 
@@ -592,7 +632,20 @@ class BudgetAllocationService
     public function applyPersonaPreset(int $userId, string $personaKey, ?string $stability = null, ?string $priority = null): array
     {
         $personas = $this->getAvailablePersonas();
-        $selected = $personas[$personaKey] ?? $personas['creative_media'];
+        
+        // Alias fallback mapping
+        $aliases = [
+            'karyawan' => 'employee_salary',
+            'karyawan_tetap' => 'employee_salary',
+            'umkm' => 'umkm_business',
+            'umkm_bisnis' => 'umkm_business',
+            'freelance' => 'creative_media',
+            'freelance_kreatif' => 'creative_media',
+            'pelajar' => 'pelajar_mahasiswa',
+            'keluarga' => 'keluarga_rumahtangga',
+        ];
+        $resolvedKey = $aliases[$personaKey] ?? $personaKey;
+        $selected = $personas[$resolvedKey] ?? $personas['creative_media'];
 
         // 1. Pastikan Budget Groups ada
         $this->ensureBudgetGroupsExist();
