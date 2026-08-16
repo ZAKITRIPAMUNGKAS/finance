@@ -192,35 +192,41 @@
                         @endphp
 
                         @foreach($availableAccounts as $accKey => $accName)
-                        <div class="p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 {{ !empty($activeAccounts[$accKey]) ? 'bg-slate-50/80 border-slate-900/40 shadow-2xs' : 'bg-white border-slate-200 opacity-60' }}">
+                        <div class="p-3 sm:p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 sm:gap-3 {{ !empty($activeAccounts[$accKey]) ? 'bg-white border-slate-900/40 ring-1 ring-slate-900/10 shadow-xs' : 'bg-slate-50/60 border-slate-200 opacity-60 hover:opacity-80' }}">
                             
                             <!-- Toggle & Logo -->
-                            <div class="flex items-center gap-3 cursor-pointer" wire:click="toggleAccount('{{ $accKey }}')">
+                            <div class="flex items-center gap-3 cursor-pointer min-w-0 flex-1" wire:click="toggleAccount('{{ $accKey }}')">
                                 <input type="checkbox" 
                                        wire:click.stop="toggleAccount('{{ $accKey }}')"
                                        {{ !empty($activeAccounts[$accKey]) ? 'checked' : '' }}
-                                       class="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 cursor-pointer">
+                                       class="w-4 h-4 rounded text-slate-950 focus:ring-slate-950 cursor-pointer">
                                 
-                                <x-account-logo :name="$accName" class="w-8 h-8 rounded-xl shrink-0" />
+                                <x-account-logo :name="$accName" class="w-9 h-9 rounded-xl shrink-0" />
                                 
-                                <div>
-                                    <span class="font-extrabold text-xs sm:text-sm text-slate-900 block">{{ $accName }}</span>
-                                    <span class="text-[10px] text-slate-400 font-mono">{{ $accKey === 'cash' ? 'Uang Fisik' : ($accKey === 'gopay' || $accKey === 'ovo' || $accKey === 'dana' || $accKey === 'shopeepay' ? 'E-Wallet' : 'Rekening Bank') }}</span>
+                                <div class="min-w-0">
+                                    <span class="font-extrabold text-xs sm:text-sm text-slate-900 block truncate">{{ $accName }}</span>
+                                    <span class="text-[10px] text-slate-400 font-mono block">{{ $accKey === 'cash' ? 'Uang Fisik' : ($accKey === 'gopay' || $accKey === 'ovo' || $accKey === 'dana' || $accKey === 'shopeepay' ? 'E-Wallet' : 'Rekening Bank') }}</span>
                                 </div>
                             </div>
 
                             <!-- Input Saldo Awal -->
                             @if(!empty($activeAccounts[$accKey]))
-                            <div class="flex items-center gap-2 pl-7 sm:pl-0">
-                                <span class="text-[10px] font-bold text-slate-400">Saldo Awal:</span>
-                                <div class="relative w-36 sm:w-40">
-                                    <span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] font-mono font-bold text-slate-400">Rp</span>
+                            <div class="flex items-center justify-between sm:justify-end gap-2 pl-7 sm:pl-0 shrink-0">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Saldo Awal:</span>
+                                <div class="flex items-center rounded-xl bg-slate-50 border border-slate-300 focus-within:border-slate-950 focus-within:bg-white focus-within:ring-1 focus-within:ring-slate-950 px-2.5 py-1.5 transition-all">
+                                    <span class="text-[11px] font-mono font-black text-slate-400 select-none mr-1.5">Rp</span>
                                     <input type="number" 
                                            wire:model.defer="accountBalances.{{ $accKey }}"
                                            placeholder="0"
-                                           class="w-full bg-white border border-slate-300 rounded-xl pl-8 pr-2.5 py-1.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900 text-right">
+                                           class="w-24 sm:w-28 text-xs font-mono font-bold text-slate-900 bg-transparent border-0 p-0 focus:outline-none focus:ring-0 text-right">
                                 </div>
                             </div>
+                            @else
+                            <button type="button" 
+                                    wire:click="toggleAccount('{{ $accKey }}')"
+                                    class="hidden sm:inline-flex text-[10px] font-bold text-slate-400 hover:text-slate-900 transition-colors px-2 py-1">
+                                + Aktifkan
+                            </button>
                             @endif
 
                         </div>
@@ -246,12 +252,12 @@
                     <div class="p-6 bg-slate-50 rounded-3xl border border-slate-200/80 space-y-4">
                         <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-500">Estimasi Pendapatan Rata-Rata Bulanan</label>
                         
-                        <div class="relative">
-                            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-base sm:text-lg font-mono font-black text-slate-400">Rp</span>
+                        <div class="flex items-center rounded-2xl bg-white border-2 border-slate-900 px-4 py-2.5 shadow-xs focus-within:ring-2 focus-within:ring-slate-950">
+                            <span class="text-base sm:text-xl font-mono font-black text-slate-400 select-none mr-2">Rp</span>
                             <input type="number" 
                                    wire:model.live="monthlyIncome"
                                    placeholder="5000000" 
-                                   class="w-full bg-white border-2 border-slate-900 rounded-2xl pl-12 pr-4 py-3 text-lg sm:text-2xl font-mono font-black text-slate-950 focus:outline-none shadow-xs">
+                                   class="w-full text-lg sm:text-2xl font-mono font-black text-slate-950 bg-transparent border-0 p-0 focus:outline-none focus:ring-0">
                         </div>
 
                         <!-- Pilihan Cepat (Chips) -->
