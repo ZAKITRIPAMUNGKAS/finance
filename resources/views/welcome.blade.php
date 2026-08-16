@@ -2,7 +2,7 @@
 <html lang="id" class="h-full">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>PortoFinance — Personal Finance OS</title>
     
     <!-- Favicon -->
@@ -13,7 +13,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="h-full bg-white text-slate-950 font-sans antialiased selection:bg-slate-950 selection:text-[#C6F24D] flex flex-col justify-between min-h-screen overflow-x-hidden select-none relative">
+<body class="h-full bg-white text-slate-950 font-sans antialiased selection:bg-slate-950 selection:text-[#C6F24D] flex flex-col justify-between min-h-[100dvh] overflow-x-hidden select-none relative">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!--  1. PRODUCTION SPLASH SCREEN (CLEAN LIGHT THEME)           -->
@@ -27,15 +27,15 @@
             <!-- Large Logo (Borderless with Soft Lime Aura) -->
             <div class="relative mb-6">
                 <div class="absolute -inset-4 rounded-full bg-[#C6F24D]/35 blur-2xl"></div>
-                <img src="{{ asset('images/logo.svg') }}" class="relative w-28 h-28 sm:w-32 sm:h-32 object-contain" alt="PortoFinance Logo">
+                <img src="{{ asset('images/logo.svg') }}" class="relative w-24 h-24 sm:w-32 sm:h-32 object-contain" alt="PortoFinance Logo">
             </div>
 
             <!-- Brand Typography -->
             <div class="space-y-1.5">
-                <h1 class="text-3xl sm:text-4xl leading-none font-black tracking-tight text-slate-950">
+                <h1 class="text-2xl sm:text-4xl leading-none font-black tracking-tight text-slate-950">
                     Porto<span class="text-teal-700">Finance</span>
                 </h1>
-                <p class="text-xs font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
+                <p class="text-[10px] sm:text-xs font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
                     Freelancer Financial OS
                 </p>
             </div>
@@ -55,16 +55,16 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div id="onboarding-root" 
          x-data="onboardingApp()" 
-         class="w-full flex-1 flex flex-col justify-between min-h-screen">
+         class="w-full flex-1 flex flex-col justify-between min-h-[100dvh] max-w-sm sm:max-w-md md:max-w-xl lg:max-w-2xl mx-auto px-4 sm:px-6 md:px-8">
         
         <!-- ── TOP HEADER ──────────────────────────────────────── -->
-        <header class="w-full max-w-sm sm:max-w-md mx-auto px-6 pt-6 pb-2 flex items-center justify-between z-20 shrink-0">
+        <header class="w-full mx-auto pt-4 sm:pt-6 pb-2 flex items-center justify-between z-20 shrink-0">
             <!-- Brand Logo -->
             <a href="/" class="flex items-center gap-2">
-                <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain" alt="Logo">
+                <img src="{{ asset('images/logo.svg') }}" class="w-7 h-7 sm:w-8 sm:h-8 object-contain" alt="Logo">
                 <div class="leading-tight">
-                    <span class="font-black text-sm text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
-                    <span class="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Freelancer OS</span>
+                    <span class="font-black text-xs sm:text-sm text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
+                    <span class="text-[7px] sm:text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Freelancer OS</span>
                 </div>
             </a>
 
@@ -78,7 +78,7 @@
         </header>
 
         <!-- ── SLIDER VIEWPORT (STRICTLY CLIPPED TO 1 SLIDE) ────── -->
-        <main class="w-full max-w-sm sm:max-w-md mx-auto flex-1 overflow-hidden relative flex items-center py-4"
+        <main class="w-full mx-auto flex-1 overflow-hidden relative flex items-center py-2 sm:py-4 my-auto"
               @touchstart="handleTouchStart($event)"
               @touchend="handleTouchEnd($event)">
             
@@ -89,45 +89,45 @@
                  :style="'transform: translate3d(-' + ((currentSlide - 1) * 100) + '%, 0, 0)'">
 
                 <!-- ════════ SLIDE 1: FREELANCE FINANCIAL OS ════════ -->
-                <div class="w-full min-w-full shrink-0 px-6 flex flex-col justify-center items-center text-left">
-                    <div class="w-full space-y-6">
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-4 md:px-6 flex flex-col justify-center items-center text-left max-h-full">
+                    <div class="w-full space-y-4 sm:space-y-6">
                         
                         <!-- Illustration 1 -->
-                        <div class="relative w-full max-w-[270px] aspect-square mx-auto flex items-center justify-center">
-                            <div class="w-56 h-56 rounded-full bg-slate-50 border border-slate-100 absolute z-0 anim-glow"></div>
+                        <div class="relative w-full max-w-[210px] sm:max-w-[260px] md:max-w-[290px] aspect-square mx-auto flex items-center justify-center shrink-0">
+                            <div class="w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-slate-50 border border-slate-100 absolute z-0 anim-glow"></div>
 
                             <!-- Floating 1: Coin Top Left -->
-                            <div class="absolute top-2 left-2 px-2.5 py-1 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-xs rotate-[-12deg] z-20 anim-float-1">
-                                <x-icon name="dollar-sign" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
+                            <div class="absolute top-1 left-0 sm:left-2 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[10px] sm:text-xs rotate-[-12deg] z-20 anim-float-1">
+                                <x-icon name="dollar-sign" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950" strokeWidth="2.5" />
                                 <span>Rp</span>
                             </div>
 
                             <!-- Floating 2: Voice Mic Badge Top Center -->
-                            <div class="absolute -top-1 right-1/4 px-2.5 py-1 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[6deg] z-20 flex items-center gap-1.5 anim-float-2">
-                                <x-icon name="mic" class="w-3.5 h-3.5 text-rose-500" strokeWidth="2.5" />
-                                <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">VOICE</span>
+                            <div class="absolute -top-1 right-1/4 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[6deg] z-20 flex items-center gap-1 anim-float-2">
+                                <x-icon name="mic" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-500" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[8px] font-black font-mono text-slate-900 tracking-wider">VOICE</span>
                             </div>
 
                             <!-- Floating 3: Credit Card Top Right -->
-                            <div class="absolute top-4 right-1 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[12deg] z-20 flex items-center gap-1.5 anim-float-3">
-                                <x-icon name="credit-card" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                <span class="text-[8px] font-black font-mono text-slate-900">CARD</span>
+                            <div class="absolute top-2 right-0 sm:right-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[12deg] z-20 flex items-center gap-1 anim-float-3">
+                                <x-icon name="credit-card" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[8px] font-black font-mono text-slate-900">CARD</span>
                             </div>
 
                             <!-- Floating 4: Invoice Receipt Bottom Left -->
-                            <div class="absolute bottom-4 left-1 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-12deg] z-20 flex items-center gap-1.5 anim-float-2">
-                                <x-icon name="receipt" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                <span class="text-[8px] font-black font-mono text-slate-900">STRUK</span>
+                            <div class="absolute bottom-2 left-0 sm:left-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-12deg] z-20 flex items-center gap-1 anim-float-2">
+                                <x-icon name="receipt" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[8px] font-black font-mono text-slate-900">STRUK</span>
                             </div>
 
                             <!-- Floating 5: Checkmark Coin Bottom Right -->
-                            <div class="absolute bottom-5 right-3 w-8 h-8 rounded-full bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[10deg] z-20 anim-float-1">
-                                <x-icon name="check" class="w-4 h-4 text-slate-950" strokeWidth="3" />
+                            <div class="absolute bottom-2 right-1 sm:right-3 w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[10deg] z-20 anim-float-1">
+                                <x-icon name="check" class="w-3 h-3 sm:w-4 sm:h-4 text-slate-950" strokeWidth="3" />
                             </div>
 
                             <!-- Main Character & Wallet Vector -->
                             <div class="relative z-10 flex flex-col items-center">
-                                <svg viewBox="0 0 260 220" class="w-52 h-44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 260 220" class="w-40 h-34 sm:w-52 sm:h-44" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M90 100 Q75 65 100 40 Q115 25 130 35 Q145 25 155 45 Q165 70 145 100 Z" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linejoin="round"/>
                                     <circle cx="125" cy="45" r="18" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                     <path d="M128 44 Q138 46 130 52" stroke="#090D16" stroke-width="3" stroke-linecap="round"/>
@@ -148,17 +148,17 @@
                         </div>
 
                         <!-- Headline & Copy -->
-                        <div class="space-y-2 pt-2">
-                            <h1 class="text-3xl font-black text-slate-950 tracking-tight leading-[1.12]">
+                        <div class="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Finance OS<br>
                                 Made for 
-                                <span class="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-sm align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Freelancers
                             </h1>
 
-                            <p class="text-xs font-semibold text-slate-600 leading-relaxed max-w-xs">
+                            <p class="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-600 leading-relaxed max-w-sm md:max-w-md">
                                 Catat transaksi kilat via <strong>Suara (Voice) & Scan Struk</strong>, kendalikan <strong>Uang Bebas (Available Money)</strong>, amankan budget, dan capai <strong>Wishlist</strong> impianmu.
                             </p>
                         </div>
@@ -166,22 +166,22 @@
                 </div>
 
                 <!-- ════════ SLIDE 2: AVAILABLE MONEY FORMULA ═══════ -->
-                <div class="w-full min-w-full shrink-0 px-6 flex flex-col justify-center items-center text-left">
-                    <div class="w-full space-y-6">
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-4 md:px-6 flex flex-col justify-center items-center text-left max-h-full">
+                    <div class="w-full space-y-4 sm:space-y-6">
                         
                         <!-- Illustration 2 -->
-                        <div class="relative w-full max-w-[270px] aspect-square mx-auto flex items-center justify-center">
-                            <div class="w-56 h-56 rounded-full bg-emerald-50 border border-emerald-100 absolute z-0 anim-glow"></div>
+                        <div class="relative w-full max-w-[210px] sm:max-w-[260px] md:max-w-[290px] aspect-square mx-auto flex items-center justify-center shrink-0">
+                            <div class="w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-emerald-50 border border-emerald-100 absolute z-0 anim-glow"></div>
 
                             <!-- Floating Safe Pill -->
-                            <div class="absolute top-2 left-2 px-3 py-1.5 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-1">
-                                <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                <span class="text-[10px] font-black font-mono text-emerald-950">Safe To Spend</span>
+                            <div class="absolute top-1 left-0 sm:left-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-1">
+                                <x-icon name="shield-check" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600" strokeWidth="2.5" />
+                                <span class="text-[8px] sm:text-[10px] font-black font-mono text-emerald-950">Safe To Spend</span>
                             </div>
 
                             <!-- Smart Wallet Illustration -->
                             <div class="relative z-10 flex flex-col items-center">
-                                <svg viewBox="0 0 240 200" class="w-48 h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 240 200" class="w-36 h-32 sm:w-48 sm:h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="40" y="55" width="160" height="105" rx="24" fill="#FFFFFF" stroke="#090D16" stroke-width="4"/>
                                     <path d="M40 85 C90 98 150 98 200 85" stroke="#090D16" stroke-width="3.5" stroke-dasharray="6 4"/>
                                     <rect x="40" y="95" width="35" height="28" rx="10" fill="#D4F66C" stroke="#090D16" stroke-width="3.5"/>
@@ -193,24 +193,24 @@
                             </div>
 
                             <!-- Floating Badge Bottom -->
-                            <div class="absolute bottom-4 right-2 px-3 py-1.5 rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 text-xs font-mono font-black anim-float-2">
-                                <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
+                            <div class="absolute bottom-2 right-0 sm:right-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-mono font-black anim-float-2">
+                                <x-icon name="sparkles" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950" strokeWidth="2.5" />
                                 <span>Rp 8.400.000</span>
                             </div>
                         </div>
 
                         <!-- Headline & Copy -->
-                        <div class="space-y-2 pt-2">
-                            <h1 class="text-3xl font-black text-slate-950 tracking-tight leading-[1.12]">
+                        <div class="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Kendalikan<br>
                                 Uang Bebas 
-                                <span class="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-sm align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Anti-Boncos
                             </h1>
 
-                            <p class="text-xs font-semibold text-slate-600 leading-relaxed max-w-xs">
+                            <p class="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-600 leading-relaxed max-w-sm md:max-w-md">
                                 Bukan sekadar total saldo! Formula pintar yang otomatis memisahkan saldo belanja harian dari komitmen tabungan impian Anda.
                             </p>
                         </div>
@@ -218,22 +218,22 @@
                 </div>
 
                 <!-- ════════ SLIDE 3: FREELANCE PROJECTS & WISHLIST ══ -->
-                <div class="w-full min-w-full shrink-0 px-6 flex flex-col justify-center items-center text-left">
-                    <div class="w-full space-y-6">
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-4 md:px-6 flex flex-col justify-center items-center text-left max-h-full">
+                    <div class="w-full space-y-4 sm:space-y-6">
                         
                         <!-- Illustration 3 -->
-                        <div class="relative w-full max-w-[270px] aspect-square mx-auto flex items-center justify-center">
-                            <div class="w-56 h-56 rounded-full bg-indigo-50 border border-indigo-100 absolute z-0 anim-glow"></div>
+                        <div class="relative w-full max-w-[210px] sm:max-w-[260px] md:max-w-[290px] aspect-square mx-auto flex items-center justify-center shrink-0">
+                            <div class="w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-indigo-50 border border-indigo-100 absolute z-0 anim-glow"></div>
 
                             <!-- Floating Target Wishlist Tag -->
-                            <div class="absolute top-2 right-2 px-3 py-1.5 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-2">
-                                <x-icon name="target" class="w-3.5 h-3.5 text-rose-500" strokeWidth="2.5" />
-                                <span class="text-[10px] font-black font-mono text-indigo-950">Sony A7 IV • 85%</span>
+                            <div class="absolute top-1 right-0 sm:right-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-2">
+                                <x-icon name="target" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-rose-500" strokeWidth="2.5" />
+                                <span class="text-[8px] sm:text-[10px] font-black font-mono text-indigo-950">Sony A7 IV • 85%</span>
                             </div>
 
                             <!-- Project Folder Vector -->
                             <div class="relative z-10 flex flex-col items-center">
-                                <svg viewBox="0 0 240 200" class="w-48 h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 240 200" class="w-36 h-32 sm:w-48 sm:h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="50" y="60" width="140" height="95" rx="16" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                     <rect x="65" y="75" width="50" height="8" rx="4" fill="#090D16"/>
                                     <rect x="65" y="90" width="110" height="5" rx="2.5" fill="#E2E8F0"/>
@@ -244,24 +244,24 @@
                             </div>
 
                             <!-- Floating Margin Badge Bottom -->
-                            <div class="absolute bottom-4 left-2 px-3 py-1.5 rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-1">
-                                <x-icon name="briefcase" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                <span class="text-xs font-black font-mono text-slate-950">Margin: 79%</span>
+                            <div class="absolute bottom-2 left-0 sm:left-2 px-2 py-0.5 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-1">
+                                <x-icon name="briefcase" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950" strokeWidth="2.5" />
+                                <span class="text-[10px] sm:text-xs font-black font-mono text-slate-950">Margin: 79%</span>
                             </div>
                         </div>
 
                         <!-- Headline & Copy -->
-                        <div class="space-y-2 pt-2">
-                            <h1 class="text-3xl font-black text-slate-950 tracking-tight leading-[1.12]">
+                        <div class="space-y-1.5 sm:space-y-2 pt-1 sm:pt-2">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Wujudkan<br>
                                 Wishlist 
-                                <span class="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-sm align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Impianmu
                             </h1>
 
-                            <p class="text-xs font-semibold text-slate-600 leading-relaxed max-w-xs">
+                            <p class="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-600 leading-relaxed max-w-sm md:max-w-md">
                                 Pantau margin laba tiap project freelance secara transparan dan gunakan simulasi kalkulator <em>"Can I Afford This?"</em> sebelum belanja alat kerja baru.
                             </p>
                         </div>
@@ -269,28 +269,28 @@
                 </div>
 
                 <!-- ════════ SLIDE 4: SOLID FINANCIAL THEORY FOUNDATION ════ -->
-                <div class="w-full min-w-full shrink-0 px-6 flex flex-col justify-center items-center text-left">
-                    <div class="w-full space-y-5">
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-4 md:px-6 flex flex-col justify-center items-center text-left max-h-full">
+                    <div class="w-full space-y-4 sm:space-y-5">
                         
                         <!-- Illustration 4: Financial Engineering & Theory -->
-                        <div class="relative w-full max-w-[270px] aspect-square mx-auto flex items-center justify-center">
-                            <div class="w-56 h-56 rounded-full bg-[#EBFAD2] border border-[#D4F66C] absolute z-0 anim-glow"></div>
+                        <div class="relative w-full max-w-[210px] sm:max-w-[260px] md:max-w-[290px] aspect-square mx-auto flex items-center justify-center shrink-0">
+                            <div class="w-44 h-44 sm:w-56 sm:h-56 rounded-full bg-[#EBFAD2] border border-[#D4F66C] absolute z-0 anim-glow"></div>
 
                             <!-- Floating Badge 1: Smoothing Theory Top Left -->
-                            <div class="absolute top-2 left-0 px-2.5 py-1 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-1 rotate-[-6deg]">
-                                <x-icon name="activity" class="w-3.5 h-3.5 text-teal-700" strokeWidth="2.5" />
-                                <span class="text-[9px] font-black font-mono text-slate-900">Income Smoothing</span>
+                            <div class="absolute top-1 left-0 sm:left-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-1 rotate-[-6deg]">
+                                <x-icon name="activity" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-teal-700" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[9px] font-black font-mono text-slate-900">Income Smoothing</span>
                             </div>
 
                             <!-- Floating Badge 2: Dual Entity Top Right -->
-                            <div class="absolute top-3 right-0 px-2.5 py-1 rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-3 rotate-[8deg]">
-                                <x-icon name="scale" class="w-3.5 h-3.5 text-indigo-600" strokeWidth="2.5" />
-                                <span class="text-[9px] font-black font-mono text-slate-900">Kas Terpisah</span>
+                            <div class="absolute top-1 right-0 sm:right-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-3 rotate-[8deg]">
+                                <x-icon name="scale" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-indigo-600" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[9px] font-black font-mono text-slate-900">Kas Terpisah</span>
                             </div>
 
                             <!-- Center Shield & Theoretical Formula Chart Vector -->
                             <div class="relative z-10 flex flex-col items-center">
-                                <svg viewBox="0 0 240 200" class="w-48 h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg viewBox="0 0 240 200" class="w-36 h-32 sm:w-48 sm:h-40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="45" y="45" width="150" height="115" rx="20" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                     <path d="M45 75 L195 75" stroke="#090D16" stroke-width="3"/>
                                     <circle cx="65" cy="60" r="4" fill="#090D16"/>
@@ -303,34 +303,34 @@
                             </div>
 
                             <!-- Floating Badge 3: Sinking Fund Bottom Left -->
-                            <div class="absolute bottom-3 left-1 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-2 rotate-[-4deg]">
-                                <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                <span class="text-[9px] font-black font-mono text-slate-900">Sinking Fund</span>
+                            <div class="absolute bottom-2 left-0 sm:left-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 anim-float-2 rotate-[-4deg]">
+                                <x-icon name="shield-check" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-600" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[9px] font-black font-mono text-slate-900">Sinking Fund</span>
                             </div>
 
                             <!-- Floating Badge 4: Dynamic Budgeting Bottom Right -->
-                            <div class="absolute bottom-3 right-1 px-2.5 py-1 rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 text-xs font-mono font-black anim-float-1 rotate-[6deg]">
-                                <x-icon name="pie-chart" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                <span class="text-[9px] font-black font-mono text-slate-950">50/30/20 Adaptive</span>
+                            <div class="absolute bottom-2 right-0 sm:right-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg sm:rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 sm:gap-1.5 text-[10px] font-mono font-black anim-float-1 rotate-[6deg]">
+                                <x-icon name="pie-chart" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-slate-950" strokeWidth="2.5" />
+                                <span class="text-[7px] sm:text-[9px] font-black font-mono text-slate-950">50/30/20 Adaptive</span>
                             </div>
                         </div>
 
                         <!-- Headline & Copy -->
-                        <div class="space-y-2 pt-1">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C6F24D] text-slate-950 text-[9px] font-mono font-extrabold uppercase tracking-wider">
+                        <div class="space-y-1.5 sm:space-y-2 pt-1">
+                            <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C6F24D] text-slate-950 text-[8px] sm:text-[9px] font-mono font-extrabold uppercase tracking-wider">
                                 <span>Applied Financial Engineering</span>
                             </div>
 
-                            <h1 class="text-3xl font-black text-slate-950 tracking-tight leading-[1.12]">
+                            <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Berlandaskan<br>
                                 Teori Finansial 
-                                <span class="inline-flex items-center justify-center px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-sm align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Terpercaya
                             </h1>
 
-                            <p class="text-xs font-semibold text-slate-600 leading-relaxed max-w-xs">
+                            <p class="text-[11px] sm:text-xs md:text-sm font-semibold text-slate-600 leading-relaxed max-w-sm md:max-w-md">
                                 Bukan sekadar catatan biasa. Ditenagai <strong>5 pilar teori keuangan</strong> untuk memutus siklus ketidakpastian omset freelance dan menjaga kelangsungan hidup Anda secara terukur.
                             </p>
                         </div>
@@ -341,7 +341,7 @@
         </main>
 
         <!-- ── BOTTOM NAVIGATION ───────────────────────────────── -->
-        <footer class="w-full max-w-sm sm:max-w-md mx-auto px-6 py-6 border-t border-slate-100 flex items-center justify-between z-20 shrink-0 bg-white">
+        <footer class="w-full mx-auto py-4 sm:py-6 border-t border-slate-100 flex items-center justify-between z-20 shrink-0 bg-white">
             
             <!-- Left: Back Button -->
             <div class="w-16 flex items-center">
@@ -382,7 +382,7 @@
                 <button @click="nextSlide()" 
                         id="btn-next"
                         type="button" 
-                        class="w-11 h-11 rounded-full bg-slate-950 hover:bg-slate-800 text-white flex items-center justify-center font-bold transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-95 shadow-md cursor-pointer z-30 group">
+                        class="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-slate-950 hover:bg-slate-800 text-white flex items-center justify-center font-bold transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-95 shadow-md cursor-pointer z-30 group">
                     <template x-if="currentSlide < totalSlides">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#C6F24D] group-hover:translate-x-0.5 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
@@ -405,7 +405,6 @@
             const splash = document.getElementById('splash-screen');
             if (!splash) return;
 
-            // 1.5s clean light splash reveal duration before smooth fade out
             setTimeout(() => {
                 splash.classList.add('is-hidden');
                 setTimeout(() => {
