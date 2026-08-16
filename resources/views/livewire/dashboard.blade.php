@@ -100,12 +100,12 @@
             <!-- Health & Emergency Mini-Bar -->
             <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between text-xs">
                 <div class="flex items-center gap-2.5">
-                    <span class="w-8 h-8 rounded-xl bg-slate-900 text-[#C6F24D] flex items-center justify-center font-bold text-xs">
-                        {{ $healthScore['grade'] }}
-                    </span>
+                    <div class="w-8 h-8 rounded-xl bg-slate-900 text-[#C6F24D] flex items-center justify-center shadow-2xs">
+                        <x-icon name="activity" class="w-4 h-4" strokeWidth="2.5" />
+                    </div>
                     <div>
                         <span class="font-bold text-slate-900 block leading-tight">Health Score {{ $healthScore['total_score'] }}/100</span>
-                        <span class="text-[10px] text-slate-500">{{ $healthScore['status'] }}</span>
+                        <span class="text-[10px] text-slate-500 font-medium">{{ $healthScore['status'] }}</span>
                     </div>
                 </div>
                 <div class="text-right font-mono">
