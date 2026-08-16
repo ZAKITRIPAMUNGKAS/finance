@@ -114,6 +114,24 @@ class OnboardingWizard extends Component
         }
     }
 
+    public function saveOnboarding(array $payload, BudgetAllocationService $budgetService)
+    {
+        if (isset($payload['persona'])) {
+            $this->persona = $payload['persona'];
+        }
+        if (isset($payload['activeAccounts'])) {
+            $this->activeAccounts = $payload['activeAccounts'];
+        }
+        if (isset($payload['accountBalances'])) {
+            $this->accountBalances = $payload['accountBalances'];
+        }
+        if (isset($payload['monthlyIncome'])) {
+            $this->monthlyIncome = (string) $payload['monthlyIncome'];
+        }
+
+        return $this->completeOnboarding($budgetService);
+    }
+
     public function completeOnboarding(BudgetAllocationService $budgetService)
     {
         $user = Auth::user();
