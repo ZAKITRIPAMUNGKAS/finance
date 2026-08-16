@@ -85,131 +85,156 @@
     </div>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  MODAL 1: ADD / EDIT ACCOUNT (WITH REAL LOGO PRESETS)       -->
+    <!--  MODAL 1: ADD / EDIT ACCOUNT (CLEAN NEAT COMPACT LAYOUT)    -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
+    <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" 
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
+        x-cloak>
+        
+        <div @click.outside="$wire.set('isModalOpen', false)" 
+            class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col anim-scale-up">
+            
             <!-- Drag indicator (mobile only) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
             
-            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2">
+            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
+                <div class="flex items-center gap-2.5">
                     <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-2xs">
                         <x-icon name="credit-card" class="w-4 h-4" strokeWidth="2.5" />
                     </div>
                     <div>
                         <h3 class="text-sm sm:text-base font-extrabold text-slate-950">
-                            {{ $accountId ? 'Edit Rekening / Dompet' : 'Tambah Rekening / Dompet Real' }}
+                            {{ $accountId ? 'Edit Rekening / Dompet' : 'Tambah Rekening / Dompet' }}
                         </h3>
                         <p class="text-[10px] text-slate-400 font-medium">Pilih bank / e-wallet resmi atau input manual</p>
                     </div>
                 </div>
-                <button wire:click="$set('isModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"><x-icon name="x" class="w-4 h-4" /></button>
+                <button wire:click="$set('isModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
+                    <x-icon name="x" class="w-4 h-4" />
+                </button>
             </div>
 
             <form wire:submit.prevent="saveAccount" class="p-5 space-y-4 overflow-y-auto">
                 
-                <!-- 1. QUICK PRESET PROVIDERS SELECTOR (REAL BRAND LOGOS) -->
+                <!-- 1. COMPACT PRESET SELECTOR (GRID 6 COLS ON DESKTOP, 4 ON MOBILE) -->
                 @if(!$accountId)
-                <div class="space-y-2">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Pilih Cepat Bank & E-Wallet Populer:</label>
+                <div class="space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Pilih Cepat Bank & E-Wallet:</label>
+                        <span class="text-[9px] text-slate-400">Klik untuk auto-fill</span>
+                    </div>
                     
-                    <!-- Presets Grid -->
-                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                    <!-- Presets Grid Container with Safe Style -->
+                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-1.5 p-2 bg-slate-50 border border-slate-100 rounded-2xl" 
+                         style="display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px;">
+                        
                         <!-- BCA -->
-                        <button type="button" wire:click="selectPreset('BCA', 'bank', '#003B70')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="BCA" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BCA</span>
+                        <button type="button" wire:click="selectPreset('BCA', 'bank', '#003B70')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="BCA" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">BCA</span>
                         </button>
 
                         <!-- Mandiri -->
-                        <button type="button" wire:click="selectPreset('Bank Mandiri', 'bank', '#002D62')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="Mandiri" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Mandiri</span>
+                        <button type="button" wire:click="selectPreset('Bank Mandiri', 'bank', '#002D62')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="Mandiri" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">Mandiri</span>
                         </button>
 
                         <!-- BRI -->
-                        <button type="button" wire:click="selectPreset('BRI', 'bank', '#00529C')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="BRI" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BRI</span>
+                        <button type="button" wire:click="selectPreset('BRI', 'bank', '#00529C')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="BRI" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">BRI</span>
                         </button>
 
                         <!-- BNI -->
-                        <button type="button" wire:click="selectPreset('BNI', 'bank', '#005E6A')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="BNI" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BNI</span>
+                        <button type="button" wire:click="selectPreset('BNI', 'bank', '#005E6A')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="BNI" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">BNI</span>
                         </button>
 
                         <!-- Bank Jago -->
-                        <button type="button" wire:click="selectPreset('Bank Jago', 'bank', '#8235F4')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="Jago" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Jago</span>
+                        <button type="button" wire:click="selectPreset('Bank Jago', 'bank', '#8235F4')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="Jago" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">Jago</span>
                         </button>
 
                         <!-- GoPay -->
-                        <button type="button" wire:click="selectPreset('GoPay', 'ewallet', '#00AA13')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="GoPay" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">GoPay</span>
+                        <button type="button" wire:click="selectPreset('GoPay', 'ewallet', '#00AA13')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="GoPay" type="ewallet" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">GoPay</span>
                         </button>
 
                         <!-- OVO -->
-                        <button type="button" wire:click="selectPreset('OVO', 'ewallet', '#4C3494')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="OVO" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">OVO</span>
+                        <button type="button" wire:click="selectPreset('OVO', 'ewallet', '#4C3494')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="OVO" type="ewallet" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">OVO</span>
                         </button>
 
                         <!-- DANA -->
-                        <button type="button" wire:click="selectPreset('DANA', 'ewallet', '#118EEA')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="DANA" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">DANA</span>
+                        <button type="button" wire:click="selectPreset('DANA', 'ewallet', '#118EEA')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="DANA" type="ewallet" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">DANA</span>
                         </button>
 
                         <!-- ShopeePay -->
-                        <button type="button" wire:click="selectPreset('ShopeePay', 'ewallet', '#EE4D2D')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="ShopeePay" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">SPay</span>
+                        <button type="button" wire:click="selectPreset('ShopeePay', 'ewallet', '#EE4D2D')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="ShopeePay" type="ewallet" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">SPay</span>
                         </button>
 
                         <!-- SeaBank -->
-                        <button type="button" wire:click="selectPreset('SeaBank', 'bank', '#F26422')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="SeaBank" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">SeaBank</span>
+                        <button type="button" wire:click="selectPreset('SeaBank', 'bank', '#F26422')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="SeaBank" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">SeaBank</span>
                         </button>
 
                         <!-- Jenius -->
-                        <button type="button" wire:click="selectPreset('Jenius BTPN', 'bank', '#00A3E0')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="Jenius" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Jenius</span>
+                        <button type="button" wire:click="selectPreset('Jenius BTPN', 'bank', '#00A3E0')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="Jenius" type="bank" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">Jenius</span>
                         </button>
 
                         <!-- Cash Tunai -->
-                        <button type="button" wire:click="selectPreset('Dompet Tunai', 'cash', '#F59E0B')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
-                            <x-account-logo name="Cash" type="cash" class="w-8 h-8 rounded-lg group-hover:scale-105" />
-                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Cash</span>
+                        <button type="button" wire:click="selectPreset('Dompet Tunai', 'cash', '#F59E0B')" 
+                            class="py-1.5 px-1 rounded-xl border border-slate-200/90 hover:border-slate-950 hover:bg-white bg-white/80 flex flex-col items-center justify-center gap-1 text-center transition-all cursor-pointer group shadow-2xs">
+                            <x-account-logo name="Cash" type="cash" class="w-7 h-7 rounded-lg group-hover:scale-105" />
+                            <span class="text-[9px] font-extrabold text-slate-800 truncate w-full text-center">Cash</span>
                         </button>
                     </div>
                 </div>
                 @endif
 
                 <!-- 2. LIVE REAL-TIME LOGO & CARD PREVIEW -->
-                <div class="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-3">
+                <div class="p-3 bg-slate-50 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-3">
                     <div class="flex items-center gap-3 min-w-0">
-                        <x-account-logo :name="$name ?: 'BCA'" :type="$type" class="w-10 h-10 rounded-xl shrink-0 shadow-xs" />
+                        <x-account-logo :name="$name ?: 'BCA'" :type="$type" class="w-9 h-9 rounded-xl shrink-0 shadow-xs" />
                         <div class="min-w-0">
                             <span class="text-xs font-black text-slate-950 block truncate">{{ $name ?: 'Nama Akun / Provider' }}</span>
                             <span class="text-[10px] font-mono text-slate-400 capitalize block">{{ $type }} {{ $account_number ? '• ' . $account_number : '' }}</span>
                         </div>
                     </div>
-                    <span class="px-2.5 py-1 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-white text-slate-900 border border-slate-200 shadow-2xs shrink-0">
-                        Auto Logo Detection
+                    <span class="px-2 py-0.5 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-white text-slate-900 border border-slate-200 shadow-2xs shrink-0">
+                        Auto Logo
                     </span>
                 </div>
 
-                <!-- 3. INPUT FIELDS -->
+                <!-- 3. INPUT FIELDS (CLEAN & SPACIOUS) -->
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nama Akun *</label>
-                        <input type="text" wire:model.live.debounce.150ms="name" placeholder="e.g. BCA Utama / GoPay / Mandiri Bisnis" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        <input type="text" wire:model.live.debounce.150ms="name" placeholder="e.g. BCA Utama / GoPay / Mandiri Bisnis" 
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                         @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
 
@@ -231,12 +256,14 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Rekening / No. HP E-Wallet (Opsional)</label>
-                        <input type="text" wire:model.live.debounce.150ms="account_number" placeholder="e.g. 8210984123 atau 081234567890" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        <input type="text" wire:model.live.debounce.150ms="account_number" placeholder="e.g. 8210984123 atau 081234567890" 
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                     </div>
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Saldo Awal (Rp) *</label>
-                        <input type="number" wire:model.defer="initial_balance" placeholder="0" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        <input type="number" wire:model.defer="initial_balance" placeholder="0" 
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                         @error('initial_balance') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -267,7 +294,7 @@
     <!--  MODAL 2: TRANSFER ANTAR REKENING                           -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div x-data="{ open: @entangle('isTransferModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col anim-scale-up">
             <!-- Drag indicator (mobile only) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
 
