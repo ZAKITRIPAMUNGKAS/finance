@@ -163,22 +163,28 @@
                                 </div>
 
                                 <!-- Main Character & Wallet Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 260 220" class="w-44 h-38 sm:w-56 sm:h-48 md:w-64 md:h-54" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <svg viewBox="0 0 260 220" style="width: 220px; height: 186px; display: block;" xmlns="http://www.w3.org/2000/svg">
+                                        <!-- Character Head & Body -->
                                         <path d="M90 100 Q75 65 100 40 Q115 25 130 35 Q145 25 155 45 Q165 70 145 100 Z" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linejoin="round"/>
                                         <circle cx="125" cy="45" r="18" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                         <path d="M128 44 Q138 46 130 52" stroke="#090D16" stroke-width="3" stroke-linecap="round"/>
                                         <circle cx="124" cy="40" r="2.5" fill="#090D16"/>
                                         <path d="M110 36 Q125 22 145 32 L152 38" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
+                                        <!-- Waving Arm -->
                                         <path d="M100 70 Q70 60 62 35 Q60 28 65 25 Q70 23 75 32 L88 65" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
                                         <circle cx="63" cy="26" r="3" fill="#090D16"/>
+                                        <!-- Right Arm Resting on Wallet -->
                                         <path d="M140 75 Q165 80 180 100 Q185 110 175 115 L150 115" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
+                                        <!-- Wallet Body -->
                                         <rect x="50" y="95" width="160" height="95" rx="20" fill="#FFFFFF" stroke="#090D16" stroke-width="4"/>
                                         <path d="M50 120 C90 130 170 130 210 120" stroke="#090D16" stroke-width="3" stroke-dasharray="6 4"/>
-                                        <path d="M130 145 A10 10 0 0 1 130 165" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M138 140 A18 18 0 0 1 138 170" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M146 135 A26 26 0 0 1 146 175" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <rect x="50" y="130" width="30" height="24" rx="8" fill="#D4F66C" stroke="#090D16" stroke-width="3.5"/>
+                                        <!-- Contactless Payment Waves -->
+                                        <path d="M130 145 A10 10 0 0 1 130 165" stroke="#090D16" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M138 140 A18 18 0 0 1 138 170" stroke="#090D16" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                                        <path d="M146 135 A26 26 0 0 1 146 175" stroke="#090D16" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+                                        <!-- Wallet Clasp in Lime -->
+                                        <rect x="50" y="130" width="30" height="24" rx="8" fill="#C6F24D" stroke="#090D16" stroke-width="3.5"/>
                                         <circle cx="65" cy="142" r="3.5" fill="#090D16"/>
                                     </svg>
                                 </div>
@@ -236,11 +242,11 @@
                                 </div>
 
                                 <!-- Smart Wallet Illustration -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <svg viewBox="0 0 240 200" style="width: 200px; height: 165px; display: block;" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="40" y="55" width="160" height="105" rx="24" fill="#FFFFFF" stroke="#090D16" stroke-width="4"/>
                                         <path d="M40 85 C90 98 150 98 200 85" stroke="#090D16" stroke-width="3.5" stroke-dasharray="6 4"/>
-                                        <rect x="40" y="95" width="35" height="28" rx="10" fill="#D4F66C" stroke="#090D16" stroke-width="3.5"/>
+                                        <rect x="40" y="95" width="35" height="28" rx="10" fill="#C6F24D" stroke="#090D16" stroke-width="3.5"/>
                                         <circle cx="58" cy="109" r="4" fill="#090D16"/>
                                         <path d="M125 115 A10 10 0 0 1 125 135" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
                                         <path d="M135 110 A18 18 0 0 1 135 140" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
@@ -307,8 +313,8 @@
                                 </div>
 
                                 <!-- Project Folder Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <svg viewBox="0 0 240 200" style="width: 200px; height: 165px; display: block;" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="50" y="60" width="140" height="95" rx="16" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                         <rect x="65" y="75" width="50" height="8" rx="4" fill="#090D16"/>
                                         <rect x="65" y="90" width="110" height="5" rx="2.5" fill="#E2E8F0"/>
@@ -359,8 +365,8 @@
                                     <span>Income Smoothing</span>
                                 </span>
                                 <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="scale" class="w-3.5 h-3.5 text-indigo-600" />
-                                    <span>Pemisahan Kas Bisnis</span>
+                                    <x-icon name="pie-chart" class="w-3.5 h-3.5 text-indigo-600" />
+                                    <span>Kas Terpisah</span>
                                 </span>
                                 <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
                                     <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" />
@@ -386,13 +392,13 @@
 
                                 <!-- Floating Badge 2: Dual Entity Top Right -->
                                 <div class="absolute top-2 right-0 sm:right-1 px-2.5 py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 anim-float-3 rotate-[8deg]">
-                                    <x-icon name="scale" class="w-3.5 h-3.5 text-indigo-600" strokeWidth="2.5" />
+                                    <x-icon name="pie-chart" class="w-3.5 h-3.5 text-indigo-600" strokeWidth="2.5" />
                                     <span class="text-[8px] sm:text-[10px] font-black font-mono text-slate-900">Kas Terpisah</span>
                                 </div>
 
                                 <!-- Center Shield & Theoretical Formula Chart Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <div class="relative z-10 flex flex-col items-center justify-center">
+                                    <svg viewBox="0 0 240 200" style="width: 200px; height: 165px; display: block;" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="45" y="45" width="150" height="115" rx="20" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
                                         <path d="M45 75 L195 75" stroke="#090D16" stroke-width="3"/>
                                         <circle cx="65" cy="60" r="4" fill="#090D16"/>
