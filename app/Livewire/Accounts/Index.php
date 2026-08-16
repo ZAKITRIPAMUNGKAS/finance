@@ -39,8 +39,15 @@ class Index extends Component
         $this->reset(['accountId', 'name', 'account_number', 'notes']);
         $this->type = 'bank';
         $this->initial_balance = '0';
-        $this->color = '#3B82F6';
+        $this->color = '#003B70';
         $this->isModalOpen = true;
+    }
+
+    public function selectPreset(string $name, string $type, string $color)
+    {
+        $this->name = $name;
+        $this->type = $type;
+        $this->color = $color;
     }
 
     public function openEditModal(int $id)
@@ -129,6 +136,25 @@ class Index extends Component
         ]);
 
         $this->isTransferModalOpen = false;
+        $this->dispatch('refresh-data');
+    }
+
+    public function deleteAccount(int $id)
+    {
+        $userId = auth()->id();
+        $account = Account::where('user_id', $userId)->findOrFail($id);
+        
+        // Prevent deleting if it's the last remaining account
+        if (Account::where('user_id', $userId)->where('is_active', true)->count() <= 1) {
+            return;
+        }
+
+        if ($account->transactions()->count() > 0) {
+            $account->update(['is_active' => false]);
+        } else {
+            $account->delete();
+        }
+
         $this->dispatch('refresh-data');
     }
 

@@ -1,25 +1,28 @@
 <div class="space-y-4 sm:space-y-6">
     
     <!-- TOP SUMMARY & ACTIONS -->
-    <div class="bg-white border border-slate-200/70 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
+    <div class="bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
         <div>
-            <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Likuiditas Seluruh Akun</span>
-            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-slate-900 mt-0.5">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Total Likuiditas Seluruh Akun</span>
+            </div>
+            <div class="text-2xl sm:text-3xl font-black font-mono text-slate-950 mt-0.5 tracking-tight">
                 Rp {{ number_format($totalBalance, 0, ',', '.') }}
             </div>
-            <p class="text-[11px] sm:text-xs text-slate-400 mt-0.5">Tersimpan di {{ $accounts->count() }} akun aktif</p>
+            <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-medium">Tersimpan di {{ $accounts->count() }} rekening bank & e-wallet aktif</p>
         </div>
 
         <div class="grid grid-cols-2 gap-2 sm:flex sm:items-center">
             <button wire:click="openTransferModal" 
                     type="button"
-                    class="w-full sm:w-auto px-3.5 py-2.5 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs active-tap">
-                <x-icon name="arrow-right-left" class="w-3.5 h-3.5 text-slate-700" />
+                    class="w-full sm:w-auto px-4 py-2.5 rounded-xl sm:rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-extrabold transition-colors flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs active-tap">
+                <x-icon name="arrow-right-left" class="w-3.5 h-3.5 text-slate-700" strokeWidth="2.5" />
                 <span>Transfer</span>
             </button>
             <button wire:click="openCreateModal" 
                     type="button"
-                    class="w-full sm:w-auto px-4 py-2.5 rounded-xl sm:rounded-2xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-extrabold shadow-2xs active-tap transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    class="w-full sm:w-auto px-4 py-2.5 rounded-xl sm:rounded-2xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-black shadow-2xs active-tap transition-all flex items-center justify-center gap-2 cursor-pointer">
                 <span class="w-4 h-4 rounded-full bg-[#C6F24D] text-slate-950 flex items-center justify-center text-[10px] font-black">+</span>
                 <span>Tambah Akun</span>
             </button>
@@ -29,23 +32,38 @@
     <!-- ACCOUNT CARDS GRID -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
         @foreach($accounts as $acc)
-        <div class="bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:shadow-md transition-all group">
+        <div class="bg-white border border-slate-200/80 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xs flex flex-col justify-between hover:shadow-md hover:border-slate-400/80 transition-all group relative">
             <div>
-                <!-- Top Header -->
+                <!-- Top Header with Real Brand Logo -->
                 <div class="flex items-center justify-between mb-3.5">
-                    <div class="flex items-center gap-3">
-                        <x-account-logo :name="$acc->name" :type="$acc->type" class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl shrink-0" />
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-account-logo :name="$acc->name" :type="$acc->type" class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl shrink-0" />
                         <div class="min-w-0">
-                            <h4 class="font-extrabold text-sm sm:text-base text-slate-900 group-hover:text-teal-600 transition-colors truncate">{{ $acc->name }}</h4>
-                            <span class="text-[10px] sm:text-[11px] text-slate-400 capitalize truncate block">{{ $acc->type }} {{ $acc->account_number ? '• ' . $acc->account_number : '' }}</span>
+                            <h4 class="font-extrabold text-sm sm:text-base text-slate-950 group-hover:text-teal-700 transition-colors truncate">{{ $acc->name }}</h4>
+                            <div class="flex items-center gap-1.5 mt-0.5">
+                                <span class="text-[10px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 uppercase">{{ $acc->type }}</span>
+                                @if($acc->account_number)
+                                <span class="text-[10px] font-mono text-slate-400 truncate">{{ $acc->account_number }}</span>
+                                @endif
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- Action Dropdown / Edit -->
+                    <div class="flex items-center gap-1 shrink-0">
+                        <button wire:click="openEditModal({{ $acc->id }})" 
+                                type="button"
+                                title="Edit Akun"
+                                class="p-1.5 rounded-lg text-slate-400 hover:text-slate-950 hover:bg-slate-100 transition-colors cursor-pointer">
+                            <x-icon name="edit" class="w-3.5 h-3.5" />
+                        </button>
                     </div>
                 </div>
 
                 <!-- Balance Display -->
                 <div class="p-3.5 sm:p-4 bg-[#F8F9FA] rounded-xl sm:rounded-2xl border border-slate-100">
                     <span class="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 block">Saldo Akun:</span>
-                    <span class="text-lg sm:text-xl font-extrabold font-mono text-slate-900 block mt-0.5">
+                    <span class="text-lg sm:text-xl font-black font-mono text-slate-950 block mt-0.5">
                         Rp {{ number_format($acc->current_balance, 0, ',', '.') }}
                     </span>
                     <div class="flex items-center justify-between text-[10px] text-slate-400 mt-2 pt-2 border-t border-slate-200/60 font-mono">
@@ -56,81 +74,217 @@
             </div>
 
             <!-- Card Footer -->
-            <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400">
+            <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-[10px] sm:text-[11px] text-slate-400 font-medium">
                 <span>{{ $acc->transactions_count }} transaksi</span>
                 <span class="text-emerald-700 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aktif
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Terhubung
                 </span>
             </div>
         </div>
         @endforeach
     </div>
 
-    <!-- MODAL 1: ADD ACCOUNT -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  MODAL 1: ADD / EDIT ACCOUNT (WITH REAL LOGO PRESETS)       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
     <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div @click.outside="$wire.set('isModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col">
             <!-- Drag indicator (mobile only) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
             
-            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Tambah Rekening / Dompet</h3>
-                <button wire:click="$set('isModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors"><x-icon name="x" class="w-4 h-4" /></button>
+            <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-2xs">
+                        <x-icon name="credit-card" class="w-4 h-4" strokeWidth="2.5" />
+                    </div>
+                    <div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-950">
+                            {{ $accountId ? 'Edit Rekening / Dompet' : 'Tambah Rekening / Dompet Real' }}
+                        </h3>
+                        <p class="text-[10px] text-slate-400 font-medium">Pilih bank / e-wallet resmi atau input manual</p>
+                    </div>
+                </div>
+                <button wire:click="$set('isModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"><x-icon name="x" class="w-4 h-4" /></button>
             </div>
-            <form wire:submit.prevent="saveAccount" class="p-5 space-y-3.5 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Akun *</label>
-                    <input type="text" wire:model.defer="name" placeholder="e.g. BCA Bisnis / GoPay / Dompet" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
-                    @error('name') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
-                </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tipe Akun *</label>
-                        <select wire:model.defer="type" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
-                            <option value="bank">Bank</option>
-                            <option value="ewallet">E-Wallet</option>
-                            <option value="cash">Cash Dompet</option>
-                            <option value="investment">Investasi</option>
-                        </select>
+            <form wire:submit.prevent="saveAccount" class="p-5 space-y-4 overflow-y-auto">
+                
+                <!-- 1. QUICK PRESET PROVIDERS SELECTOR (REAL BRAND LOGOS) -->
+                @if(!$accountId)
+                <div class="space-y-2">
+                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400">Pilih Cepat Bank & E-Wallet Populer:</label>
+                    
+                    <!-- Presets Grid -->
+                    <div class="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                        <!-- BCA -->
+                        <button type="button" wire:click="selectPreset('BCA', 'bank', '#003B70')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="BCA" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BCA</span>
+                        </button>
+
+                        <!-- Mandiri -->
+                        <button type="button" wire:click="selectPreset('Bank Mandiri', 'bank', '#002D62')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="Mandiri" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Mandiri</span>
+                        </button>
+
+                        <!-- BRI -->
+                        <button type="button" wire:click="selectPreset('BRI', 'bank', '#00529C')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="BRI" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BRI</span>
+                        </button>
+
+                        <!-- BNI -->
+                        <button type="button" wire:click="selectPreset('BNI', 'bank', '#005E6A')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="BNI" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">BNI</span>
+                        </button>
+
+                        <!-- Bank Jago -->
+                        <button type="button" wire:click="selectPreset('Bank Jago', 'bank', '#8235F4')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="Jago" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Jago</span>
+                        </button>
+
+                        <!-- GoPay -->
+                        <button type="button" wire:click="selectPreset('GoPay', 'ewallet', '#00AA13')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="GoPay" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">GoPay</span>
+                        </button>
+
+                        <!-- OVO -->
+                        <button type="button" wire:click="selectPreset('OVO', 'ewallet', '#4C3494')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="OVO" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">OVO</span>
+                        </button>
+
+                        <!-- DANA -->
+                        <button type="button" wire:click="selectPreset('DANA', 'ewallet', '#118EEA')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="DANA" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">DANA</span>
+                        </button>
+
+                        <!-- ShopeePay -->
+                        <button type="button" wire:click="selectPreset('ShopeePay', 'ewallet', '#EE4D2D')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="ShopeePay" type="ewallet" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">SPay</span>
+                        </button>
+
+                        <!-- SeaBank -->
+                        <button type="button" wire:click="selectPreset('SeaBank', 'bank', '#F26422')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="SeaBank" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">SeaBank</span>
+                        </button>
+
+                        <!-- Jenius -->
+                        <button type="button" wire:click="selectPreset('Jenius BTPN', 'bank', '#00A3E0')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="Jenius" type="bank" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Jenius</span>
+                        </button>
+
+                        <!-- Cash Tunai -->
+                        <button type="button" wire:click="selectPreset('Dompet Tunai', 'cash', '#F59E0B')" class="p-2 rounded-xl border border-slate-200 hover:border-slate-950 hover:bg-slate-50 flex flex-col items-center gap-1 text-center transition-all cursor-pointer group">
+                            <x-account-logo name="Cash" type="cash" class="w-8 h-8 rounded-lg group-hover:scale-105" />
+                            <span class="text-[10px] font-bold text-slate-800 truncate w-full">Cash</span>
+                        </button>
                     </div>
+                </div>
+                @endif
+
+                <!-- 2. LIVE REAL-TIME LOGO & CARD PREVIEW -->
+                <div class="p-3.5 bg-slate-50 border border-slate-200/90 rounded-2xl flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <x-account-logo :name="$name ?: 'BCA'" :type="$type" class="w-10 h-10 rounded-xl shrink-0 shadow-xs" />
+                        <div class="min-w-0">
+                            <span class="text-xs font-black text-slate-950 block truncate">{{ $name ?: 'Nama Akun / Provider' }}</span>
+                            <span class="text-[10px] font-mono text-slate-400 capitalize block">{{ $type }} {{ $account_number ? '• ' . $account_number : '' }}</span>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full text-[9px] font-mono font-black uppercase tracking-wider bg-white text-slate-900 border border-slate-200 shadow-2xs shrink-0">
+                        Auto Logo Detection
+                    </span>
+                </div>
+
+                <!-- 3. INPUT FIELDS -->
+                <div class="space-y-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Warna Label</label>
-                        <input type="color" wire:model.defer="color" class="w-full h-9 bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl p-1 cursor-pointer">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Akun *</label>
+                        <input type="text" wire:model.live.debounce.150ms="name" placeholder="e.g. BCA Utama / GoPay / Mandiri Bisnis" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tipe Akun *</label>
+                            <select wire:model.live="type" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
+                                <option value="bank">Bank</option>
+                                <option value="ewallet">E-Wallet</option>
+                                <option value="cash">Cash Dompet</option>
+                                <option value="investment">Investasi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Warna Label</label>
+                            <input type="color" wire:model.defer="color" class="w-full h-9 bg-[#F8F9FA] border border-slate-200 rounded-xl p-1 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Rekening / No. HP E-Wallet (Opsional)</label>
+                        <input type="text" wire:model.live.debounce.150ms="account_number" placeholder="e.g. 8210984123 atau 081234567890" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Saldo Awal (Rp) *</label>
+                        <input type="number" wire:model.defer="initial_balance" placeholder="0" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        @error('initial_balance') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Rekening / HP (Opsional)</label>
-                    <input type="text" wire:model.defer="account_number" placeholder="8210..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Saldo Awal (Rp) *</label>
-                    <input type="number" wire:model.defer="initial_balance" placeholder="0" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl sm:rounded-2xl bg-slate-950 text-white text-xs font-extrabold shadow-sm active-tap">Simpan</button>
+                <!-- Footer CTA -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0">
+                    <div>
+                        @if($accountId)
+                        <button type="button" 
+                                wire:click="deleteAccount({{ $accountId }})" 
+                                wire:confirm="Yakin ingin menghapus rekening ini?"
+                                class="text-xs font-bold text-rose-600 hover:text-rose-800 transition-colors cursor-pointer">
+                            Hapus Akun
+                        </button>
+                        @endif
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <button type="button" wire:click="$set('isModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-white text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-slate-800 transition-all">Simpan Akun</button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- MODAL 2: TRANSFER -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  MODAL 2: TRANSFER ANTAR REKENING                           -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
     <div x-data="{ open: @entangle('isTransferModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
         <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <!-- Drag indicator (mobile only) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
 
             <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Transfer Antar Rekening</h3>
-                <button wire:click="$set('isTransferModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors"><x-icon name="x" class="w-4 h-4" /></button>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-2xs">
+                        <x-icon name="arrow-right-left" class="w-4 h-4" strokeWidth="2.5" />
+                    </div>
+                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Transfer Antar Rekening</h3>
+                </div>
+                <button wire:click="$set('isTransferModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"><x-icon name="x" class="w-4 h-4" /></button>
             </div>
+
             <form wire:submit.prevent="executeTransfer" class="p-5 space-y-3.5 overflow-y-auto">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Dari Rekening Sumber *</label>
-                    <select wire:model.defer="from_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    <select wire:model.defer="from_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
                         @foreach($accounts as $acc)
                             <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
                         @endforeach
@@ -139,7 +293,7 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Ke Rekening Tujuan *</label>
-                    <select wire:model.defer="to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    <select wire:model.defer="to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
                         @foreach($accounts as $acc)
                             <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
                         @endforeach
@@ -148,23 +302,23 @@
 
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Transfer (Rp) *</label>
-                    <input type="number" wire:model.defer="transfer_amount" placeholder="500000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                    <input type="number" wire:model.defer="transfer_amount" placeholder="500000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                        <input type="date" wire:model.defer="transfer_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        <input type="date" wire:model.defer="transfer_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
-                        <input type="text" wire:model.defer="transfer_note" placeholder="Top up / Pindah saldo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl sm:rounded-2xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        <input type="text" wire:model.defer="transfer_note" placeholder="Top up / Pindah saldo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
                     </div>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isTransferModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl sm:rounded-2xl bg-[#C6F24D] text-slate-950 text-xs font-extrabold shadow-sm active-tap">Kirim Transfer</button>
+                    <button type="button" wire:click="$set('isTransferModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#C6F24D] text-slate-950 text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-[#b8e640] transition-all">Kirim Transfer</button>
                 </div>
             </form>
         </div>

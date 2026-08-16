@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password123'),
         ]);
 
-        // 2. Create Accounts (Multi-Account: Bank, E-Wallet, Cash)
+        // 2. Create Accounts (Multi-Account: Bank, E-Wallet, Cash with real brand styling)
         $bca = Account::create([
             'user_id' => $user->id,
             'name' => 'BCA Utama',
@@ -38,38 +38,38 @@ class DatabaseSeeder extends Seeder
             'account_number' => '8210984123',
             'current_balance' => 14500000,
             'initial_balance' => 14500000,
-            'color' => '#2563EB',
+            'color' => '#003B70',
             'icon' => 'building-2',
             'is_active' => true,
         ]);
 
         $mandiri = Account::create([
             'user_id' => $user->id,
-            'name' => 'Mandiri Bisnis',
+            'name' => 'Bank Mandiri',
             'type' => 'bank',
             'account_number' => '137001928341',
             'current_balance' => 8200000,
             'initial_balance' => 8200000,
-            'color' => '#0284C7',
+            'color' => '#002D62',
             'icon' => 'landmark',
             'is_active' => true,
         ]);
 
         $gopay = Account::create([
             'user_id' => $user->id,
-            'name' => 'GoPay / OVO',
+            'name' => 'GoPay',
             'type' => 'ewallet',
             'account_number' => '081234567890',
             'current_balance' => 750000,
             'initial_balance' => 750000,
-            'color' => '#10B981',
+            'color' => '#00AA13',
             'icon' => 'smartphone',
             'is_active' => true,
         ]);
 
         $cash = Account::create([
             'user_id' => $user->id,
-            'name' => 'Cash Dompet',
+            'name' => 'Dompet Tunai',
             'type' => 'cash',
             'current_balance' => 450000,
             'initial_balance' => 450000,
