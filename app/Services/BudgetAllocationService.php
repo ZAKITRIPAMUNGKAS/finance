@@ -55,7 +55,7 @@ class BudgetAllocationService
             if (!empty($allMonthly)) {
                 $monthlyIncomes = $allMonthly;
             } else {
-                $monthlyIncomes = [10000000.0]; // Default starter baseline
+                $monthlyIncomes = [5000000.0]; // Default starter baseline Rp 5.000.000
             }
         }
 
