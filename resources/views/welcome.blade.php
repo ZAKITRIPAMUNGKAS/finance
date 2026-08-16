@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>PortoFinance — Personal Finance OS</title>
+    <title>PortoFinance — Personal & Freelancer Financial OS</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="alternate icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo.svg') }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -27,7 +27,7 @@
             <!-- Large Logo (Borderless with Soft Lime Aura) -->
             <div class="relative mb-6">
                 <div class="absolute -inset-4 rounded-full bg-[#C6F24D]/35 blur-2xl"></div>
-                <img src="{{ asset('images/logo.svg') }}" class="relative w-24 h-24 sm:w-32 sm:h-32 object-contain" alt="PortoFinance Logo">
+                <img src="{{ asset('images/logo.svg') }}" class="relative w-24 h-24 sm:w-32 sm:h-32 object-contain drop-shadow-md" alt="PortoFinance Logo">
             </div>
 
             <!-- Brand Typography -->
@@ -36,7 +36,7 @@
                     Porto<span class="text-teal-700">Finance</span>
                 </h1>
                 <p class="text-[10px] sm:text-xs font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
-                    Freelancer Financial OS
+                    Personal & Freelancer Financial OS
                 </p>
             </div>
 
@@ -44,7 +44,7 @@
             <div class="mt-8 flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-slate-950 anim-dot-1"></span>
                 <span class="w-2.5 h-2.5 rounded-full bg-teal-700 anim-dot-2"></span>
-                <span class="w-2.5 h-2.5 rounded-full bg-[#090D16] anim-dot-3"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-[#C6F24D] anim-dot-3"></span>
             </div>
 
         </div>
@@ -55,16 +55,16 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div id="onboarding-root" 
          x-data="onboardingApp()" 
-         class="w-full flex-1 flex flex-col justify-between min-h-[100dvh] max-w-6xl mx-auto px-4 sm:px-6 lg:px-12">
+         class="w-full flex-1 flex flex-col justify-between min-h-[100dvh] max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-6">
         
         <!-- ── TOP HEADER ──────────────────────────────────────── -->
-        <header class="w-full pt-4 sm:pt-6 md:pt-8 pb-2 flex items-center justify-between z-20 shrink-0">
+        <header class="w-full pb-2 flex items-center justify-between z-20 shrink-0">
             <!-- Brand Logo -->
             <a href="/" class="flex items-center gap-2.5 group">
                 <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 sm:w-9 sm:h-9 object-contain group-hover:scale-105 transition-transform" alt="Logo">
                 <div class="leading-tight">
                     <span class="font-black text-sm sm:text-base text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
-                    <span class="text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Freelancer Financial OS</span>
+                    <span class="text-[8px] sm:text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Financial OS</span>
                 </div>
             </a>
 
@@ -77,8 +77,8 @@
             </button>
         </header>
 
-        <!-- ── SLIDER VIEWPORT (RESPONSIVE 2-COL DESKTOP / 1-COL MOBILE) ────── -->
-        <main class="w-full flex-1 overflow-hidden relative flex items-center py-2 sm:py-6 my-auto"
+        <!-- ── SLIDER VIEWPORT ─────────────────────────────────── -->
+        <main class="w-full flex-1 overflow-hidden relative flex items-center py-2 sm:py-4 my-auto"
               @touchstart="handleTouchStart($event)"
               @touchend="handleTouchEnd($event)">
             
@@ -88,99 +88,65 @@
                  style="transform: translate3d(0%, 0, 0);"
                  :style="'transform: translate3d(-' + ((currentSlide - 1) * 100) + '%, 0, 0)'">
 
-                <!-- ════════ SLIDE 1: FREELANCE FINANCIAL OS ════════ -->
-                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 md:px-10 flex items-center justify-center">
-                    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-center">
+                <!-- ════════ SLIDE 1: OFFICIAL BRAND & MODERN FINANCIAL OS ════════ -->
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 flex items-center justify-center">
+                    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
                         
-                        <!-- Left Column (Desktop): Text & Copy -->
+                        <!-- Left Column: Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
-                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900 text-[#D4F66C] text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>⚡ The #1 Freelancer Financial Hub</span>
+                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-950 text-[#C6F24D] text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
+                                <span>⚡ #1 Modern Financial OS</span>
                             </div>
 
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Finance OS<br>
                                 Made for 
-                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3.5 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-base align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#C6F24D] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
-                                Freelancers
+                                Smart Creators
                             </h1>
 
                             <p class="text-xs sm:text-sm md:text-base font-semibold text-slate-600 leading-relaxed max-w-lg">
-                                Catat transaksi kilat via <strong>Suara (Voice) & Scan Struk</strong>, kendalikan <strong>Uang Bebas (Available Money)</strong>, amankan budget, dan capai <strong>Wishlist</strong> impianmu.
+                                Catat transaksi kilat via <strong>Suara (Voice) & Scan Struk</strong>, kendalikan <strong>Uang Bebas (Available Money)</strong>, amankan budget harian, dan capai <strong>Wishlist</strong> impianmu.
                             </p>
 
-                            <!-- Feature Badges on Desktop -->
-                            <div class="hidden sm:flex flex-wrap items-center gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
+                            <!-- Feature Badges -->
+                            <div class="flex flex-wrap items-center gap-2 pt-1">
+                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5 shadow-2xs">
                                     <x-icon name="mic" class="w-3.5 h-3.5 text-rose-500" />
                                     <span>Voice & OCR Scan</span>
                                 </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" />
+                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5 shadow-2xs">
+                                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-teal-600" />
                                     <span>Anti-Boncos Buffer</span>
-                                </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="shopping-bag" class="w-3.5 h-3.5 text-teal-600" />
-                                    <span>Goal Sinking Fund</span>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Right Column (Desktop): Illustration -->
+                        <!-- Right Column: Official 3D Logo Artwork -->
                         <div class="md:col-span-5 order-1 md:order-2 flex justify-center items-center">
-                            <div class="relative w-full max-w-[220px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px] aspect-square flex items-center justify-center shrink-0">
-                                <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-slate-50 border border-slate-100 absolute z-0 anim-glow"></div>
+                            <div class="relative w-full max-w-[240px] sm:max-w-[300px] aspect-square flex items-center justify-center shrink-0">
+                                
+                                <!-- Soft Aura Glow -->
+                                <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full bg-teal-500/10 blur-2xl absolute z-0"></div>
+                                <div class="w-36 h-36 sm:w-44 sm:h-44 rounded-full bg-[#C6F24D]/25 blur-xl absolute z-0"></div>
 
-                                <!-- Floating 1: Coin Top Left -->
-                                <div class="absolute top-2 left-0 sm:left-2 px-2.5 py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[10px] sm:text-xs rotate-[-12deg] z-20 anim-float-1">
-                                    <x-icon name="dollar-sign" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                    <span>Rp</span>
+                                <!-- Floating Badge 1: Voice -->
+                                <div class="absolute top-2 right-2 px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-md flex items-center gap-1 text-[10px] font-bold font-mono text-slate-900 z-20 anim-float-1">
+                                    <x-icon name="mic" class="w-3 h-3 text-rose-500" />
+                                    <span>VOICE</span>
                                 </div>
 
-                                <!-- Floating 2: Voice Mic Badge Top Center -->
-                                <div class="absolute -top-1 right-1/4 px-2.5 py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[6deg] z-20 flex items-center gap-1 anim-float-2">
-                                    <x-icon name="mic" class="w-3.5 h-3.5 text-rose-500" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[9px] font-black font-mono text-slate-900 tracking-wider">VOICE</span>
+                                <!-- Floating Badge 2: Struk OCR -->
+                                <div class="absolute bottom-4 left-2 px-2.5 py-1 rounded-xl bg-white border border-slate-200 shadow-md flex items-center gap-1 text-[10px] font-bold font-mono text-slate-900 z-20 anim-float-2">
+                                    <x-icon name="receipt" class="w-3 h-3 text-teal-600" />
+                                    <span>STRUK</span>
                                 </div>
 
-                                <!-- Floating 3: Credit Card Top Right -->
-                                <div class="absolute top-3 right-0 sm:right-1 px-2.5 py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[12deg] z-20 flex items-center gap-1 anim-float-3">
-                                    <x-icon name="credit-card" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[9px] font-black font-mono text-slate-900">CARD</span>
-                                </div>
-
-                                <!-- Floating 4: Invoice Receipt Bottom Left -->
-                                <div class="absolute bottom-3 left-0 sm:left-1 px-2.5 py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-12deg] z-20 flex items-center gap-1 anim-float-2">
-                                    <x-icon name="receipt" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[9px] font-black font-mono text-slate-900">STRUK</span>
-                                </div>
-
-                                <!-- Floating 5: Checkmark Coin Bottom Right -->
-                                <div class="absolute bottom-3 right-1 sm:right-3 w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[10deg] z-20 anim-float-1">
-                                    <x-icon name="check" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950" strokeWidth="3" />
-                                </div>
-
-                                <!-- Main Character & Wallet Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 260 220" class="w-44 h-38 sm:w-56 sm:h-48 md:w-64 md:h-54" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M90 100 Q75 65 100 40 Q115 25 130 35 Q145 25 155 45 Q165 70 145 100 Z" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linejoin="round"/>
-                                        <circle cx="125" cy="45" r="18" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
-                                        <path d="M128 44 Q138 46 130 52" stroke="#090D16" stroke-width="3" stroke-linecap="round"/>
-                                        <circle cx="124" cy="40" r="2.5" fill="#090D16"/>
-                                        <path d="M110 36 Q125 22 145 32 L152 38" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M100 70 Q70 60 62 35 Q60 28 65 25 Q70 23 75 32 L88 65" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <circle cx="63" cy="26" r="3" fill="#090D16"/>
-                                        <path d="M140 75 Q165 80 180 100 Q185 110 175 115 L150 115" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <rect x="50" y="95" width="160" height="95" rx="20" fill="#FFFFFF" stroke="#090D16" stroke-width="4"/>
-                                        <path d="M50 120 C90 130 170 130 210 120" stroke="#090D16" stroke-width="3" stroke-dasharray="6 4"/>
-                                        <path d="M130 145 A10 10 0 0 1 130 165" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M138 140 A18 18 0 0 1 138 170" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M146 135 A26 26 0 0 1 146 175" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <rect x="50" y="130" width="30" height="24" rx="8" fill="#D4F66C" stroke="#090D16" stroke-width="3.5"/>
-                                        <circle cx="65" cy="142" r="3.5" fill="#090D16"/>
-                                    </svg>
+                                <!-- Center Official 3D Graphic -->
+                                <div class="relative z-10 p-4 rounded-3xl bg-white/60 backdrop-blur-xs border border-slate-100 shadow-xl">
+                                    <img src="{{ asset('images/logo.svg') }}" class="w-36 h-36 sm:w-48 sm:h-48 object-contain drop-shadow-xl" alt="PortoFinance Official Logo">
                                 </div>
                             </div>
                         </div>
@@ -189,10 +155,10 @@
                 </div>
 
                 <!-- ════════ SLIDE 2: AVAILABLE MONEY FORMULA ═══════ -->
-                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 md:px-10 flex items-center justify-center">
-                    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-center">
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 flex items-center justify-center">
+                    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
                         
-                        <!-- Left Column (Desktop): Text & Copy -->
+                        <!-- Left Column: Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
                                 <span>🔒 Smart Liquidity Formula</span>
@@ -201,57 +167,60 @@
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Kendalikan<br>
                                 Uang Bebas 
-                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3.5 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-base align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#C6F24D] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Anti-Boncos
                             </h1>
 
                             <p class="text-xs sm:text-sm md:text-base font-semibold text-slate-600 leading-relaxed max-w-lg">
-                                Bukan sekadar total saldo! Formula pintar yang otomatis memisahkan saldo belanja harian dari komitmen tabungan impian Anda.
+                                Bukan sekadar total saldo! Formula pintar yang otomatis memisahkan saldo belanja harian dari komitmen tabungan dan tagihan rutin Anda.
                             </p>
 
-                            <!-- Feature Badges on Desktop -->
-                            <div class="hidden sm:flex flex-wrap items-center gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-900 text-[11px] font-bold border border-emerald-200 flex items-center gap-1.5">
+                            <div class="flex flex-wrap items-center gap-2 pt-1">
+                                <span class="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-900 text-[11px] font-bold border border-emerald-200 flex items-center gap-1.5 shadow-2xs">
                                     <x-icon name="sparkles" class="w-3.5 h-3.5 text-emerald-600" />
-                                    <span>Real-Time Calculation</span>
+                                    <span>Real-Time Available Money</span>
                                 </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="lock" class="w-3.5 h-3.5 text-slate-700" />
-                                    <span>Locked Sinking Funds</span>
+                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5 shadow-2xs">
+                                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-slate-700" />
+                                    <span>Safe To Spend Indicator</span>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Right Column (Desktop): Illustration -->
+                        <!-- Right Column: Smart Liquidity Card -->
                         <div class="md:col-span-5 order-1 md:order-2 flex justify-center items-center">
-                            <div class="relative w-full max-w-[220px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px] aspect-square flex items-center justify-center shrink-0">
-                                <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-emerald-50 border border-emerald-100 absolute z-0 anim-glow"></div>
+                            <div class="relative w-full max-w-[240px] sm:max-w-[300px] aspect-square flex items-center justify-center shrink-0">
+                                
+                                <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full bg-emerald-500/10 blur-2xl absolute z-0"></div>
 
                                 <!-- Floating Safe Pill -->
-                                <div class="absolute top-2 left-0 sm:left-2 px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-1">
+                                <div class="absolute top-2 left-2 px-3 py-1 rounded-xl bg-white border border-slate-200 shadow-md z-20 flex items-center gap-1.5 text-[10px] font-mono font-black text-emerald-950 anim-float-1">
                                     <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                    <span class="text-[9px] sm:text-[11px] font-black font-mono text-emerald-950">Safe To Spend</span>
+                                    <span>Safe To Spend</span>
                                 </div>
 
-                                <!-- Smart Wallet Illustration -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="40" y="55" width="160" height="105" rx="24" fill="#FFFFFF" stroke="#090D16" stroke-width="4"/>
-                                        <path d="M40 85 C90 98 150 98 200 85" stroke="#090D16" stroke-width="3.5" stroke-dasharray="6 4"/>
-                                        <rect x="40" y="95" width="35" height="28" rx="10" fill="#D4F66C" stroke="#090D16" stroke-width="3.5"/>
-                                        <circle cx="58" cy="109" r="4" fill="#090D16"/>
-                                        <path d="M125 115 A10 10 0 0 1 125 135" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M135 110 A18 18 0 0 1 135 140" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                        <path d="M145 105 A26 26 0 0 1 145 145" stroke="#090D16" stroke-width="3.5" stroke-linecap="round"/>
-                                    </svg>
+                                <!-- Card Graphic -->
+                                <div class="relative z-10 w-48 sm:w-56 p-5 rounded-3xl bg-white border-2 border-slate-900 shadow-xl space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Uang Bebas</span>
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    </div>
+                                    <div>
+                                        <div class="text-xl sm:text-2xl font-black font-mono text-slate-950">Rp 5.250.000</div>
+                                        <div class="text-[10px] font-bold text-emerald-700 mt-0.5">100% Aman Dibelanjakan</div>
+                                    </div>
+                                    <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-500 font-medium">
+                                        <span>Tabungan Terkunci</span>
+                                        <span class="font-mono font-bold text-slate-900">Rp 3.150.000</span>
+                                    </div>
                                 </div>
 
                                 <!-- Floating Badge Bottom -->
-                                <div class="absolute bottom-3 right-0 sm:right-2 px-3 py-1 sm:py-1.5 rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 text-xs sm:text-sm font-mono font-black anim-float-2">
-                                    <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                    <span>Rp 8.400.000</span>
+                                <div class="absolute bottom-2 right-2 px-3 py-1 rounded-xl bg-[#C6F24D] border border-slate-950 shadow-md z-20 flex items-center gap-1 text-[11px] font-mono font-black text-slate-950 anim-float-2">
+                                    <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" />
+                                    <span>Terkendali</span>
                                 </div>
                             </div>
                         </div>
@@ -259,161 +228,70 @@
                     </div>
                 </div>
 
-                <!-- ════════ SLIDE 3: FREELANCE PROJECTS & WISHLIST ══ -->
-                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 md:px-10 flex items-center justify-center">
-                    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-center">
+                <!-- ════════ SLIDE 3: WISHLIST & GOALS ═══════════════════ -->
+                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 flex items-center justify-center">
+                    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
                         
-                        <!-- Left Column (Desktop): Text & Copy -->
+                        <!-- Left Column: Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>🎯 Goal & Project Tracking</span>
+                                <span>🎯 Goal & Wishlist Tracking</span>
                             </div>
 
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
                                 Wujudkan<br>
                                 Wishlist 
-                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3.5 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-base align-middle mx-1 shadow-xs">
+                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3 py-0.5 rounded-full bg-slate-950 text-[#C6F24D] text-xs sm:text-sm align-middle mx-1 shadow-xs">
                                     &rarr;
                                 </span><br>
                                 Impianmu
                             </h1>
 
                             <p class="text-xs sm:text-sm md:text-base font-semibold text-slate-600 leading-relaxed max-w-lg">
-                                Pantau margin laba tiap project freelance secara transparan dan gunakan simulasi kalkulator <em>"Can I Afford This?"</em> sebelum belanja alat kerja baru.
+                                Pantau progres tabungan barang impian Anda dan gunakan simulasi kalkulator <em>"Can I Afford This?"</em> sebelum memutuskan membeli barang baru.
                             </p>
 
-                            <!-- Feature Badges on Desktop -->
-                            <div class="hidden sm:flex flex-wrap items-center gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-900 text-[11px] font-bold border border-indigo-200 flex items-center gap-1.5">
-                                    <x-icon name="briefcase" class="w-3.5 h-3.5 text-indigo-600" />
-                                    <span>Project Net Margin</span>
+                            <div class="flex flex-wrap items-center gap-2 pt-1">
+                                <span class="px-2.5 py-1 rounded-xl bg-indigo-50 text-indigo-900 text-[11px] font-bold border border-indigo-200 flex items-center gap-1.5 shadow-2xs">
+                                    <x-icon name="target" class="w-3.5 h-3.5 text-indigo-600" />
+                                    <span>Goal Sinking Funds</span>
                                 </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
+                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5 shadow-2xs">
                                     <x-icon name="calculator" class="w-3.5 h-3.5 text-slate-700" />
-                                    <span>"Can I Afford This?" Simulator</span>
+                                    <span>Affordability Simulator</span>
                                 </span>
                             </div>
                         </div>
 
-                        <!-- Right Column (Desktop): Illustration -->
+                        <!-- Right Column: Wishlist Card -->
                         <div class="md:col-span-5 order-1 md:order-2 flex justify-center items-center">
-                            <div class="relative w-full max-w-[220px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px] aspect-square flex items-center justify-center shrink-0">
-                                <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-indigo-50 border border-indigo-100 absolute z-0 anim-glow"></div>
+                            <div class="relative w-full max-w-[240px] sm:max-w-[300px] aspect-square flex items-center justify-center shrink-0">
+                                
+                                <div class="w-48 h-48 sm:w-60 sm:h-60 rounded-full bg-indigo-500/10 blur-2xl absolute z-0"></div>
 
-                                <!-- Floating Target Wishlist Tag -->
-                                <div class="absolute top-2 right-0 sm:right-2 px-3 py-1 sm:py-1.5 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 anim-float-2">
-                                    <x-icon name="target" class="w-3.5 h-3.5 text-rose-500" strokeWidth="2.5" />
-                                    <span class="text-[9px] sm:text-[11px] font-black font-mono text-indigo-950">Sony A7 IV • 85%</span>
+                                <!-- Wishlist Card Graphic -->
+                                <div class="relative z-10 w-48 sm:w-56 p-5 rounded-3xl bg-white border-2 border-slate-900 shadow-xl space-y-3.5">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Wishlist Impian</span>
+                                        <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-bold">85%</span>
+                                    </div>
+                                    <div>
+                                        <div class="text-sm font-extrabold text-slate-950">MacBook Pro M3</div>
+                                        <div class="text-xs font-mono font-bold text-slate-500 mt-0.5">Rp 21.250.000 / 25jt</div>
+                                    </div>
+                                    <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5">
+                                        <div class="bg-[#C6F24D] h-full rounded-full w-[85%]"></div>
+                                    </div>
+                                    <div class="text-[10px] text-teal-700 font-bold flex items-center gap-1">
+                                        <x-icon name="check-circle" class="w-3.5 h-3.5" />
+                                        <span>Siap terbeli 1 bulan lagi!</span>
+                                    </div>
                                 </div>
 
-                                <!-- Project Folder Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="50" y="60" width="140" height="95" rx="16" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
-                                        <rect x="65" y="75" width="50" height="8" rx="4" fill="#090D16"/>
-                                        <rect x="65" y="90" width="110" height="5" rx="2.5" fill="#E2E8F0"/>
-                                        <rect x="65" y="100" width="85" height="5" rx="2.5" fill="#E2E8F0"/>
-                                        <rect x="65" y="115" width="110" height="12" rx="6" fill="#F1F5F9" stroke="#090D16" stroke-width="2"/>
-                                        <rect x="67" y="117" width="80" height="8" rx="4" fill="#C6F24D"/>
-                                    </svg>
-                                </div>
-
-                                <!-- Floating Margin Badge Bottom -->
-                                <div class="absolute bottom-3 left-0 sm:left-2 px-3 py-1 sm:py-1.5 rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1.5 text-xs sm:text-sm font-mono font-black anim-float-1">
-                                    <x-icon name="briefcase" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                    <span>Margin: 79%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- ════════ SLIDE 4: SOLID FINANCIAL THEORY FOUNDATION ════ -->
-                <div class="w-full min-w-full shrink-0 px-2 sm:px-6 md:px-10 flex items-center justify-center">
-                    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 lg:gap-16 items-center">
-                        
-                        <!-- Left Column (Desktop): Text & Copy -->
-                        <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
-                            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>📐 Applied Financial Engineering</span>
-                            </div>
-
-                            <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
-                                Berlandaskan<br>
-                                Teori Finansial 
-                                <span class="inline-flex items-center justify-center px-2.5 sm:px-3.5 py-0.5 rounded-full bg-slate-950 text-[#D4F66C] text-xs sm:text-base align-middle mx-1 shadow-xs">
-                                    &rarr;
-                                </span><br>
-                                Terpercaya
-                            </h1>
-
-                            <p class="text-xs sm:text-sm md:text-base font-semibold text-slate-600 leading-relaxed max-w-lg">
-                                Bukan sekadar catatan biasa. Ditenagai <strong>5 pilar teori keuangan</strong> untuk memutus siklus ketidakpastian omset freelance dan menjaga kelangsungan hidup Anda secara terukur.
-                            </p>
-
-                            <!-- Feature Badges on Desktop -->
-                            <div class="hidden sm:grid grid-cols-2 gap-2 pt-2">
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="activity" class="w-3.5 h-3.5 text-teal-700" />
-                                    <span>Income Smoothing</span>
-                                </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="scale" class="w-3.5 h-3.5 text-indigo-600" />
-                                    <span>Pemisahan Kas Bisnis</span>
-                                </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" />
-                                    <span>Sinking Fund Goal</span>
-                                </span>
-                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 text-[11px] font-bold border border-slate-200/80 flex items-center gap-1.5">
-                                    <x-icon name="pie-chart" class="w-3.5 h-3.5 text-slate-900" />
-                                    <span>50/30/20 Adaptive</span>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Right Column (Desktop): Illustration -->
-                        <div class="md:col-span-5 order-1 md:order-2 flex justify-center items-center">
-                            <div class="relative w-full max-w-[220px] sm:max-w-[280px] md:max-w-[320px] lg:max-w-[360px] aspect-square flex items-center justify-center shrink-0">
-                                <div class="w-48 h-48 sm:w-64 sm:h-64 md:w-72 md:h-72 rounded-full bg-[#EBFAD2] border border-[#D4F66C] absolute z-0 anim-glow"></div>
-
-                                <!-- Floating Badge 1: Smoothing Theory Top Left -->
-                                <div class="absolute top-2 left-0 sm:left-1 px-2.5 py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 anim-float-1 rotate-[-6deg]">
-                                    <x-icon name="activity" class="w-3.5 h-3.5 text-teal-700" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[10px] font-black font-mono text-slate-900">Income Smoothing</span>
-                                </div>
-
-                                <!-- Floating Badge 2: Dual Entity Top Right -->
-                                <div class="absolute top-2 right-0 sm:right-1 px-2.5 py-1 rounded-xl sm:rounded-2xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 anim-float-3 rotate-[8deg]">
-                                    <x-icon name="scale" class="w-3.5 h-3.5 text-indigo-600" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[10px] font-black font-mono text-slate-900">Kas Terpisah</span>
-                                </div>
-
-                                <!-- Center Shield & Theoretical Formula Chart Vector -->
-                                <div class="relative z-10 flex flex-col items-center">
-                                    <svg viewBox="0 0 240 200" class="w-40 h-34 sm:w-52 sm:h-44 md:w-60 md:h-50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="45" y="45" width="150" height="115" rx="20" fill="#FFFFFF" stroke="#090D16" stroke-width="3.5"/>
-                                        <path d="M45 75 L195 75" stroke="#090D16" stroke-width="3"/>
-                                        <circle cx="65" cy="60" r="4" fill="#090D16"/>
-                                        <circle cx="80" cy="60" r="4" fill="#090D16"/>
-                                        <path d="M65 130 C85 130 95 105 120 110 C145 115 155 90 175 88" stroke="#84CC16" stroke-width="4" stroke-linecap="round" fill="none"/>
-                                        <circle cx="175" cy="88" r="5" fill="#C6F24D" stroke="#090D16" stroke-width="2.5"/>
-                                        <rect x="65" y="140" width="110" height="8" rx="4" fill="#F1F5F9" stroke="#090D16" stroke-width="2"/>
-                                        <rect x="67" y="142" width="75" height="4" rx="2" fill="#059669"/>
-                                    </svg>
-                                </div>
-
-                                <!-- Floating Badge 3: Sinking Fund Bottom Left -->
-                                <div class="absolute bottom-3 left-0 sm:left-1 px-2.5 py-1 rounded-lg sm:rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 anim-float-2 rotate-[-4deg]">
-                                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[10px] font-black font-mono text-slate-900">Sinking Fund</span>
-                                </div>
-
-                                <!-- Floating Badge 4: Dynamic Budgeting Bottom Right -->
-                                <div class="absolute bottom-3 right-0 sm:right-1 px-2.5 py-1 rounded-lg sm:rounded-xl bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] z-20 flex items-center gap-1 text-xs font-mono font-black anim-float-1 rotate-[6deg]">
-                                    <x-icon name="pie-chart" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                                    <span class="text-[8px] sm:text-[10px] font-black font-mono text-slate-950">50/30/20 Adaptive</span>
+                                <!-- Floating Badge Bottom -->
+                                <div class="absolute bottom-2 left-2 px-3 py-1 rounded-xl bg-slate-950 text-[#C6F24D] shadow-md z-20 flex items-center gap-1 text-[11px] font-mono font-black anim-float-1">
+                                    <x-icon name="sparkles" class="w-3.5 h-3.5" />
+                                    <span>Target Tercapai</span>
                                 </div>
                             </div>
                         </div>
@@ -425,56 +303,54 @@
         </main>
 
         <!-- ── BOTTOM NAVIGATION ───────────────────────────────── -->
-        <footer class="w-full py-4 sm:py-6 md:py-8 border-t border-slate-100 flex items-center justify-between z-20 shrink-0 bg-white">
+        <footer class="w-full pt-3 pb-2 border-t border-slate-100 flex items-center justify-between z-20 shrink-0 bg-white">
             
             <!-- Left: Back Button -->
-            <div class="w-20 flex items-center">
+            <div class="w-24 flex items-center">
                 <button x-show="currentSlide > 1" 
                         x-transition:enter="transition ease-out duration-200"
                         x-transition:enter-start="opacity-0 -translate-x-2"
                         x-transition:enter-end="opacity-100 translate-x-0"
-                        x-transition:leave="transition ease-in duration-150"
-                        x-transition:leave-start="opacity-100 translate-x-0"
-                        x-transition:leave-end="opacity-0 -translate-x-2"
                         @click="prevSlide()" 
                         id="btn-prev"
                         type="button" 
-                        class="text-xs sm:text-sm font-bold text-slate-400 hover:text-slate-950 transition-colors duration-200 cursor-pointer flex items-center gap-1"
+                        class="text-xs sm:text-sm font-bold text-slate-500 hover:text-slate-950 transition-colors duration-150 cursor-pointer flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-slate-100"
                         style="display: none;">
                     <x-icon name="arrow-left" class="w-3.5 h-3.5" />
                     <span>Kembali</span>
                 </button>
             </div>
 
-            <!-- Center: Step Indicator Dots (Morphing Width) -->
+            <!-- Center: Step Indicator Dots (3 Clean Dots) -->
             <div class="flex items-center gap-2">
                 <button @click="goToSlide(1)" id="dot-1" type="button" 
-                        class="h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
-                        :class="currentSlide === 1 ? 'w-6 sm:w-8 bg-slate-950' : 'w-1.5 sm:w-2 bg-slate-200 hover:bg-slate-300'"></button>
+                        class="h-2 rounded-full transition-all duration-300 cursor-pointer"
+                        :class="currentSlide === 1 ? 'w-7 bg-slate-950' : 'w-2 bg-slate-200 hover:bg-slate-300'"></button>
                 <button @click="goToSlide(2)" id="dot-2" type="button" 
-                        class="h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
-                        :class="currentSlide === 2 ? 'w-6 sm:w-8 bg-slate-950' : 'w-1.5 sm:w-2 bg-slate-200 hover:bg-slate-300'"></button>
+                        class="h-2 rounded-full transition-all duration-300 cursor-pointer"
+                        :class="currentSlide === 2 ? 'w-7 bg-slate-950' : 'w-2 bg-slate-200 hover:bg-slate-300'"></button>
                 <button @click="goToSlide(3)" id="dot-3" type="button" 
-                        class="h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
-                        :class="currentSlide === 3 ? 'w-6 sm:w-8 bg-slate-950' : 'w-1.5 sm:w-2 bg-slate-200 hover:bg-slate-300'"></button>
-                <button @click="goToSlide(4)" id="dot-4" type="button" 
-                        class="h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer"
-                        :class="currentSlide === 4 ? 'w-6 sm:w-8 bg-slate-950' : 'w-1.5 sm:w-2 bg-slate-200 hover:bg-slate-300'"></button>
+                        class="h-2 rounded-full transition-all duration-300 cursor-pointer"
+                        :class="currentSlide === 3 ? 'w-7 bg-slate-950' : 'w-2 bg-slate-200 hover:bg-slate-300'"></button>
             </div>
 
-            <!-- Right: Next / Start Button with Smooth Morphing -->
-            <div class="w-20 flex justify-end">
+            <!-- Right: Next / Start Button -->
+            <div class="w-24 flex justify-end">
                 <button @click="nextSlide()" 
                         id="btn-next"
                         type="button" 
-                        class="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-950 hover:bg-slate-800 text-white flex items-center justify-center font-bold transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] active:scale-95 shadow-md cursor-pointer z-30 group">
+                        class="h-10 sm:h-11 px-4 sm:px-5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] flex items-center justify-center font-black text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md cursor-pointer z-30 gap-1.5">
                     <template x-if="currentSlide < totalSlides">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5 text-[#C6F24D] group-hover:translate-x-0.5 transition-transform duration-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                        </svg>
+                        <span class="flex items-center gap-1">
+                            <span>Lanjut</span>
+                            <x-icon name="arrow-right" class="w-3.5 h-3.5" />
+                        </span>
                     </template>
                     <template x-if="currentSlide === totalSlides">
-                        <span class="text-xs sm:text-sm font-black text-[#C6F24D]">GO</span>
+                        <span class="flex items-center gap-1">
+                            <span>Mulai</span>
+                            <x-icon name="sparkles" class="w-3.5 h-3.5" />
+                        </span>
                     </template>
                 </button>
             </div>
@@ -495,14 +371,14 @@
                 setTimeout(() => {
                     splash.remove();
                 }, 600);
-            }, 1500);
+            }, 1200);
         });
 
         // ── 2. Alpine Onboarding Engine ──────────────────────────────
         function onboardingApp() {
             return {
                 currentSlide: 1,
-                totalSlides: 4,
+                totalSlides: 3,
                 touchStartX: 0,
                 touchEndX: 0,
                 isNavigating: false,
@@ -526,60 +402,45 @@
                         setTimeout(() => { this.isNavigating = false; }, 450);
                     }
                 },
-                goToSlide(num) {
-                    if (this.isNavigating || num === this.currentSlide) return;
+                goToSlide(index) {
+                    if (this.isNavigating || index === this.currentSlide) return;
                     this.isNavigating = true;
-                    this.currentSlide = num;
+                    this.currentSlide = index;
                     this.syncTrack();
                     setTimeout(() => { this.isNavigating = false; }, 450);
                 },
-                skip() {
-                    this.exitToLogin();
-                },
-                exitToLogin() {
-                    const root = document.getElementById('onboarding-root');
-                    if (root) {
-                        root.classList.add('anim-page-exit-left');
+                syncTrack() {
+                    const track = document.getElementById('slide-track');
+                    if (track) {
+                        track.style.transform = `translate3d(-${(this.currentSlide - 1) * 100}%, 0, 0)`;
                     }
-                    setTimeout(() => {
-                        window.location.href = "{{ route('login') }}";
-                    }, 240);
                 },
                 handleTouchStart(e) {
                     this.touchStartX = e.changedTouches[0].screenX;
                 },
                 handleTouchEnd(e) {
                     this.touchEndX = e.changedTouches[0].screenX;
-                    const diff = this.touchStartX - this.touchEndX;
-                    if (diff > 45) {
-                        this.nextSlide();
-                    } else if (diff < -45) {
-                        this.prevSlide();
-                    }
+                    this.handleSwipe();
                 },
-                syncTrack() {
-                    const track = document.getElementById('slide-track');
-                    if (track) {
-                        const offset = (this.currentSlide - 1) * 100;
-                        track.style.transform = `translate3d(-${offset}%, 0, 0)`;
-                    }
-                    for (let i = 1; i <= 4; i++) {
-                        const dot = document.getElementById('dot-' + i);
-                        if (dot) {
-                            if (this.currentSlide === i) {
-                                dot.className = "h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer w-6 sm:w-8 bg-slate-950";
-                            } else {
-                                dot.className = "h-1.5 sm:h-2 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer w-1.5 sm:w-2 bg-slate-200 hover:bg-slate-300";
-                            }
+                handleSwipe() {
+                    const threshold = 40;
+                    const diff = this.touchStartX - this.touchEndX;
+                    if (Math.abs(diff) > threshold) {
+                        if (diff > 0) {
+                            this.nextSlide();
+                        } else {
+                            this.prevSlide();
                         }
                     }
-                    const btnPrev = document.getElementById('btn-prev');
-                    if (btnPrev) btnPrev.style.display = (this.currentSlide > 1) ? 'inline-flex' : 'none';
+                },
+                skip() {
+                    this.exitToLogin();
+                },
+                exitToLogin() {
+                    window.location.href = "{{ route('login') }}";
                 }
             };
         }
     </script>
-
-    @livewireScripts
 </body>
 </html>
