@@ -142,12 +142,28 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Klien *</label>
-                        <select wire:model.defer="client_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        <div class="flex items-center justify-between mb-1">
+                            <label class="block text-xs font-bold text-slate-700">Klien *</label>
+                            <a href="{{ route('clients') }}" class="text-[10px] font-bold text-teal-700 hover:text-teal-900 hover:underline flex items-center gap-0.5">
+                                <span>+ Tambah</span>
+                            </a>
+                        </div>
+                        <select wire:model.live="client_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 cursor-pointer">
+                            <option value="">-- Pilih Klien --</option>
                             @foreach($clients as $c)
                                 <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->company ?? 'Individu' }})</option>
                             @endforeach
+                            <option value="new_client" class="font-bold text-teal-700 bg-teal-50">
+                                ➕ + Tambah Klien Baru &rarr;
+                            </option>
                         </select>
+                        @if($clients->isEmpty())
+                            <div class="mt-1.5 p-2 rounded-xl bg-amber-50 border border-amber-200 text-[10px] text-amber-900 flex items-center justify-between gap-1">
+                                <span>Belum ada klien.</span>
+                                <a href="{{ route('clients') }}" class="font-bold underline text-amber-950 hover:text-black">Tambah &rarr;</a>
+                            </div>
+                        @endif
+                        @error('client_id') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Layanan *</label>

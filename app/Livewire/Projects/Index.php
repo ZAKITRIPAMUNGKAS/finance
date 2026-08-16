@@ -72,6 +72,14 @@ class Index extends Component
         $this->isProjectModalOpen = true;
     }
 
+    public function updatedClientId($val)
+    {
+        if ($val === 'new_client' || $val === 'add_new') {
+            $this->isProjectModalOpen = false;
+            return $this->redirect(route('clients'), navigate: true);
+        }
+    }
+
     public function saveProject()
     {
         $userId = auth()->id();
