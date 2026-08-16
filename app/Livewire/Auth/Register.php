@@ -32,20 +32,16 @@ class Register extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
+            'onboarding_completed' => false,
         ]);
 
-        $cleanBal = (float) str_replace(['.', ','], ['', '.'], $this->initial_balance);
-        if ($cleanBal < 0) {
-            $cleanBal = 0;
-        }
-
-        // 1. Create Starter Multi-Accounts
+        // 1. Create Clean Starter Multi-Accounts with Rp 0 Balance
         Account::create([
             'user_id' => $user->id,
             'name' => 'BCA Utama',
             'type' => 'bank',
-            'initial_balance' => $cleanBal,
-            'current_balance' => $cleanBal,
+            'initial_balance' => 0,
+            'current_balance' => 0,
             'color' => '#003B70',
             'icon' => 'building-2',
             'is_active' => true,
@@ -53,7 +49,7 @@ class Register extends Component
 
         Account::create([
             'user_id' => $user->id,
-            'name' => 'GoPay / E-Wallet',
+            'name' => 'GoPay',
             'type' => 'ewallet',
             'initial_balance' => 0,
             'current_balance' => 0,
@@ -64,7 +60,7 @@ class Register extends Component
 
         Account::create([
             'user_id' => $user->id,
-            'name' => 'Cash Dompet',
+            'name' => 'Dompet Tunai',
             'type' => 'cash',
             'initial_balance' => 0,
             'current_balance' => 0,
@@ -73,24 +69,11 @@ class Register extends Component
             'is_active' => true,
         ]);
 
-        // 2. Starter Categories (Personal vs Business)
-        Category::create(['user_id' => $user->id, 'name' => 'Project Freelance', 'type' => 'income', 'is_business' => true, 'color' => '#10B981', 'icon' => 'briefcase']);
-        Category::create(['user_id' => $user->id, 'name' => 'Monthly Retainer', 'type' => 'income', 'is_business' => true, 'color' => '#059669', 'icon' => 'repeat']);
-        Category::create(['user_id' => $user->id, 'name' => 'Passive / Asset', 'type' => 'income', 'is_business' => false, 'color' => '#14B8A6', 'icon' => 'trending-up']);
-
-        Category::create(['user_id' => $user->id, 'name' => 'Equipment & Alat', 'type' => 'expense', 'is_business' => true, 'color' => '#EF4444', 'icon' => 'camera']);
-        Category::create(['user_id' => $user->id, 'name' => 'Software & Hosting', 'type' => 'expense', 'is_business' => true, 'color' => '#F97316', 'icon' => 'server']);
-        Category::create(['user_id' => $user->id, 'name' => 'Transport & Operasional', 'type' => 'expense', 'is_business' => true, 'color' => '#EAB308', 'icon' => 'car']);
-        Category::create(['user_id' => $user->id, 'name' => 'Makan & Minum', 'type' => 'expense', 'is_business' => false, 'color' => '#8B5CF6', 'icon' => 'utensils']);
-        Category::create(['user_id' => $user->id, 'name' => 'Listrik, Wifi & Kos', 'type' => 'expense', 'is_business' => false, 'color' => '#EC4899', 'icon' => 'zap']);
-        Category::create(['user_id' => $user->id, 'name' => 'Lifestyle & Hiburan', 'type' => 'expense', 'is_business' => false, 'color' => '#6366F1', 'icon' => 'film']);
-
-        // 3. Initialize Adaptive Budget Profile & Groups
+        // 2. Initialize Adaptive Budget Profile
         $budgetService->seedInitialBudgetConfiguration($user->id);
 
         Auth::login($user);
         session()->regenerate();
-        session()->flash('new_user_onboarding', true);
 
         return redirect()->route('dashboard');
     }

@@ -157,6 +157,39 @@ class BudgetAllocationEngineTest extends TestCase
             ->assertSee('UMKM, Toko Online & Usaha Mandiri')
             ->call('autoBalanceAllocation');
     }
+
+    public function test_onboarding_wizard_full_flow()
+    {
+        $newUser = User::factory()->create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'onboarding_completed' => false,
+        ]);
+
+        $this->actingAs($newUser);
+
+        Livewire::test(\App\Livewire\OnboardingWizard::class)
+            ->assertSet('isOpen', true)
+            ->assertSet('step', 1)
+            ->call('setPersona', 'employee_salary')
+            ->assertSet('persona', 'employee_salary')
+            ->call('nextStep')
+            ->assertSet('step', 2)
+            ->call('toggleAccount', 'mandiri')
+            ->call('nextStep')
+            ->assertSet('step', 3)
+            ->call('setMonthlyIncomeChip', '7500000')
+            ->assertSet('monthlyIncome', '7500000')
+            ->call('completeOnboarding')
+            ->assertSet('isOpen', false);
+
+        $this->assertTrue($newUser->fresh()->onboarding_completed);
+        $this->assertDatabaseHas('accounts', [
+            'user_id' => $newUser->id,
+            'name' => 'Bank Mandiri',
+        ]);
+    }
 }
+
 
 

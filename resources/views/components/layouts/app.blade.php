@@ -387,6 +387,9 @@
     <!-- Global Quick Tutorial Modal -->
     <x-quick-tutorial-modal />
 
+    <!-- Global Financial Onboarding Setup Wizard (Muncul sebelum Tour) -->
+    <livewire:onboarding-wizard />
+
     <!-- Global Interactive Onboarding Tour (with spotlight & pointer arrow) -->
     <x-interactive-tour />
 

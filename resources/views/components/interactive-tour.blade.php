@@ -52,9 +52,9 @@
             }
         ],
         init() {
-            const isNewUser = {{ session('new_user_onboarding') ? 'true' : 'false' }};
+            const hasOnboarding = {{ auth()->check() && !auth()->user()->onboarding_completed ? 'false' : 'true' }};
             const completed = localStorage.getItem('portofinance_guided_tour_done');
-            if (isNewUser || completed !== 'true') {
+            if (hasOnboarding && completed !== 'true') {
                 setTimeout(() => {
                     this.startTour();
                 }, 600);
