@@ -34,27 +34,27 @@
 
     <div class="flex flex-col items-center text-center px-6">
 
-        <!-- Large Logo (Borderless with Soft Lime Aura) -->
-        <div class="relative mb-6">
-            <div class="absolute -inset-4 rounded-full bg-[#C6F24D]/35 blur-2xl"></div>
-            <img src="{{ asset('images/logo.svg') }}" class="relative w-28 h-28 sm:w-32 sm:h-32 object-contain" alt="PortoFinance Logo">
+        <!-- Compact Logo (Borderless with Soft Lime Aura) -->
+        <div class="relative mb-4">
+            <div class="absolute -inset-3 rounded-full bg-[#C6F24D]/30 blur-xl"></div>
+            <img src="{{ asset('images/logo.svg') }}" class="relative w-14 h-14 sm:w-16 sm:h-16 object-contain" alt="PortoFinance Logo">
         </div>
 
         <!-- Brand Typography -->
-        <div class="space-y-1.5">
-            <h1 class="text-3xl sm:text-4xl leading-none font-black tracking-tight text-slate-950">
+        <div class="space-y-1">
+            <h1 class="text-xl sm:text-2xl leading-none font-black tracking-tight text-slate-950">
                 Porto<span class="text-teal-700">Finance</span>
             </h1>
-            <p class="text-xs font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
+            <p class="text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
                 Freelancer Financial OS
             </p>
         </div>
 
         <!-- Animated Dot Wave Loading Indicator -->
-        <div class="mt-8 flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-950 anim-dot-1"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-teal-700 anim-dot-2"></span>
-            <span class="w-2.5 h-2.5 rounded-full bg-[#090D16] anim-dot-3"></span>
+        <div class="mt-6 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-slate-950 anim-dot-1"></span>
+            <span class="w-2 h-2 rounded-full bg-teal-700 anim-dot-2"></span>
+            <span class="w-2 h-2 rounded-full bg-[#C6F24D] anim-dot-3"></span>
         </div>
 
     </div>
