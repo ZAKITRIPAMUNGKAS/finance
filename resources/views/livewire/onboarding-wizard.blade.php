@@ -13,17 +13,17 @@
                  cash: true
              },
              balances: {
-                 bca: '0',
-                 mandiri: '0',
-                 bri: '0',
-                 bni: '0',
-                 jago: '0',
-                 seabank: '0',
-                 gopay: '0',
-                 ovo: '0',
-                 dana: '0',
-                 shopeepay: '0',
-                 cash: '0'
+                 bca: '',
+                 mandiri: '',
+                 bri: '',
+                 bni: '',
+                 jago: '',
+                 seabank: '',
+                 gopay: '',
+                 ovo: '',
+                 dana: '',
+                 shopeepay: '',
+                 cash: ''
              },
              monthlyIncome: 5000000,
              rawIncomeInput: '5.000.000',
@@ -33,7 +33,7 @@
              toggleAcc(key) {
                  this.activeAccounts[key] = !this.activeAccounts[key];
                  if (!this.activeAccounts[key]) {
-                     this.balances[key] = '0';
+                     this.balances[key] = '';
                  }
              },
 
@@ -53,7 +53,7 @@
              // Balance input formatter
              formatBalance(key, e) {
                  let num = parseInt(e.target.value.replace(/\D/g, ''), 10) || 0;
-                 this.balances[key] = num > 0 ? num.toLocaleString('id-ID') : '0';
+                 this.balances[key] = num > 0 ? num.toLocaleString('id-ID') : '';
              },
 
              // 50/30/20 Smart Formula
@@ -90,7 +90,7 @@
                  this.isSubmitting = true;
                  let cleanBalances = {};
                  for (let k in this.balances) {
-                     cleanBalances[k] = String(this.balances[k]).replace(/\./g, '');
+                     cleanBalances[k] = this.balances[k] ? String(this.balances[k]).replace(/\./g, '') : '0';
                  }
 
                  $wire.saveOnboarding({
@@ -108,69 +108,77 @@
         <div class="bg-white rounded-[24px] shadow-2xl border border-slate-200/90 w-full max-w-[640px] max-h-[90vh] flex flex-col overflow-hidden transition-all transform animate-scale-up">
             
             <!-- ── PART 1: COMPACT HEADER (STABLE & FIXED TOP) ──────── -->
-            <header class="px-5 py-4 sm:px-6 sm:py-4.5 border-b border-slate-100 bg-[#F8FAFC] shrink-0">
-                <div class="flex items-center justify-between gap-3 mb-3">
-                    <!-- Brand Eyebrow -->
-                    <div class="flex items-center gap-2.5">
-                        <img src="{{ asset('images/logo.svg') }}" style="width: 26px; height: 26px;" class="object-contain shrink-0" alt="PortoFinance Logo">
-                        <div class="leading-none">
-                            <span class="font-black text-sm text-[#0F172A] tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
-                            <span class="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block mt-0.5">Financial Setup</span>
+            <header class="px-5 py-3.5 sm:px-6 sm:py-4 border-b border-slate-100 bg-[#F8FAFC]/80 backdrop-blur-md shrink-0 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                    <img src="{{ asset('storage/logo/logofinance.png') }}" 
+                         alt="PortoFinance Logo" 
+                         class="h-7 w-auto object-contain shrink-0"
+                         onerror="this.style.display='none'">
+                    <div>
+                        <div class="flex items-center gap-1.5 leading-none">
+                            <span class="text-sm sm:text-base font-black tracking-tight text-[#0F172A]">Porto</span>
+                            <span class="text-sm sm:text-base font-black tracking-tight text-[#008F83]">Finance</span>
                         </div>
-                    </div>
-
-                    <!-- Step Badge -->
-                    <div class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] font-mono font-bold text-slate-600 shadow-2xs">
-                        <span x-text="step"></span> <span class="text-slate-300">/</span> <span>3</span>
+                        <span class="text-[9px] font-mono font-bold tracking-widest text-[#64748B] uppercase block mt-0.5">
+                            Financial Setup
+                        </span>
                     </div>
                 </div>
 
-                <!-- Horizontal Stepper Bar -->
-                <div class="flex items-center justify-between gap-2 pt-1 text-[11px] font-mono font-bold">
-                    
-                    <!-- 01 Profil -->
-                    <div class="flex-1 flex flex-col gap-1.5">
-                        <div class="h-1.5 rounded-full transition-all duration-300"
-                             :class="step === 1 ? 'bg-[#0F172A]' : (step > 1 ? 'bg-[#008F83]' : 'bg-slate-200')"></div>
-                        <div class="flex items-center gap-1 transition-colors"
-                             :class="step === 1 ? 'text-[#0F172A]' : (step > 1 ? 'text-[#008F83]' : 'text-slate-400')">
-                            <span class="text-[9px]">01</span>
-                            <span class="truncate">Profil</span>
-                        </div>
-                    </div>
-
-                    <span class="text-slate-300 text-[9px] mb-3">&bull;</span>
-
-                    <!-- 02 Rekening -->
-                    <div class="flex-1 flex flex-col gap-1.5">
-                        <div class="h-1.5 rounded-full transition-all duration-300"
-                             :class="step === 2 ? 'bg-[#0F172A]' : (step > 2 ? 'bg-[#008F83]' : 'bg-slate-200')"></div>
-                        <div class="flex items-center gap-1 transition-colors"
-                             :class="step === 2 ? 'text-[#0F172A]' : (step > 2 ? 'text-[#008F83]' : 'text-slate-400')">
-                            <span class="text-[9px]">02</span>
-                            <span class="truncate">Rekening</span>
-                        </div>
-                    </div>
-
-                    <span class="text-slate-300 text-[9px] mb-3">&bull;</span>
-
-                    <!-- 03 Anggaran -->
-                    <div class="flex-1 flex flex-col gap-1.5">
-                        <div class="h-1.5 rounded-full transition-all duration-300"
-                             :class="step === 3 ? 'bg-[#0F172A]' : 'bg-slate-200'"></div>
-                        <div class="flex items-center gap-1 transition-colors"
-                             :class="step === 3 ? 'text-[#0F172A]' : 'text-slate-400'">
-                            <span class="text-[9px]">03</span>
-                            <span class="truncate">Anggaran</span>
-                        </div>
-                    </div>
-
+                <!-- Step Counter Pill -->
+                <div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-2xs">
+                    <span class="text-xs font-mono font-bold text-[#0F172A]" x-text="step"></span>
+                    <span class="text-xs font-mono text-slate-400">/</span>
+                    <span class="text-xs font-mono text-slate-400">3</span>
                 </div>
             </header>
 
-            <!-- ── PART 2: SCROLLABLE CONTENT AREA ──────────────────── -->
-            <main class="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-5 text-[#0F172A] custom-scrollbar">
+            <!-- ── STEP PROGRESS BAR (HEADER ATTACHED) ────────────────── -->
+            <div class="px-5 sm:px-6 py-2.5 bg-slate-50/50 border-b border-slate-100 shrink-0">
+                <div class="grid grid-cols-3 gap-2">
+                    
+                    <!-- Step 1 Indicator -->
+                    <div class="space-y-1">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step >= 1 ? 'bg-[#0F172A]' : 'bg-slate-200'"></div>
+                        <div class="flex items-center justify-between text-[10px] font-mono font-bold"
+                             :class="step >= 1 ? 'text-[#0F172A]' : 'text-slate-400'">
+                            <span>01 Profil</span>
+                            <span x-show="step > 1" class="text-emerald-600">
+                                <x-icon name="check" class="w-3 h-3" strokeWidth="2.5" />
+                            </span>
+                        </div>
+                    </div>
 
+                    <!-- Step 2 Indicator -->
+                    <div class="space-y-1">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step >= 2 ? 'bg-[#0F172A]' : 'bg-slate-200'"></div>
+                        <div class="flex items-center justify-between text-[10px] font-mono font-bold"
+                             :class="step >= 2 ? 'text-[#0F172A]' : 'text-slate-400'">
+                            <span>02 Rekening</span>
+                            <span x-show="step > 2" class="text-emerald-600">
+                                <x-icon name="check" class="w-3 h-3" strokeWidth="2.5" />
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 Indicator -->
+                    <div class="space-y-1">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step === 3 ? 'bg-[#0F172A]' : 'bg-slate-200'"></div>
+                        <div class="flex items-center justify-between text-[10px] font-mono font-bold"
+                             :class="step === 3 ? 'text-[#0F172A]' : 'text-slate-400'">
+                            <span>03 Anggaran</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ── PART 2: SCROLLABLE BODY (WITH AMPLE BOTTOM PADDING) ── -->
+            <main class="p-5 sm:p-6 overflow-y-auto flex-1 overscroll-contain">
+                
                 <!-- ═══════════════════════════════════════════════════════ -->
                 <!-- STEP 1: PROFIL KEUANGAN                                 -->
                 <!-- ═══════════════════════════════════════════════════════ -->
@@ -315,7 +323,7 @@
                              :class="activeAccounts.bca ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bca')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="BCA" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="BCA" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">BCA Utama</h4>
                                         <span class="text-[10px] text-slate-400">Bank Transfer</span>
@@ -329,15 +337,15 @@
                             
                             <div x-show="activeAccounts.bca" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bca"
                                            @input="formatBalance('bca', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -347,7 +355,7 @@
                              :class="activeAccounts.mandiri ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('mandiri')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="Mandiri" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="Mandiri" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank Mandiri</h4>
                                         <span class="text-[10px] text-slate-400">Livin' by Mandiri</span>
@@ -361,15 +369,15 @@
                             
                             <div x-show="activeAccounts.mandiri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.mandiri"
                                            @input="formatBalance('mandiri', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -379,7 +387,7 @@
                              :class="activeAccounts.bri ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bri')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="BRI" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="BRI" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank BRI</h4>
                                         <span class="text-[10px] text-slate-400">BRImo</span>
@@ -393,15 +401,15 @@
                             
                             <div x-show="activeAccounts.bri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bri"
                                            @input="formatBalance('bri', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -411,7 +419,7 @@
                              :class="activeAccounts.bni ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bni')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="BNI" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="BNI" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank BNI</h4>
                                         <span class="text-[10px] text-slate-400">BNI Mobile</span>
@@ -425,15 +433,15 @@
                             
                             <div x-show="activeAccounts.bni" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bni"
                                            @input="formatBalance('bni', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -443,7 +451,7 @@
                              :class="activeAccounts.jago ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('jago')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="Bank Jago" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="Bank Jago" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank Jago</h4>
                                         <span class="text-[10px] text-slate-400">Digital Banking</span>
@@ -457,15 +465,15 @@
                             
                             <div x-show="activeAccounts.jago" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.jago"
                                            @input="formatBalance('jago', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -475,7 +483,7 @@
                              :class="activeAccounts.seabank ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('seabank')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="SeaBank" type="bank" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="SeaBank" type="bank" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">SeaBank</h4>
                                         <span class="text-[10px] text-slate-400">Digital Banking</span>
@@ -489,15 +497,15 @@
                             
                             <div x-show="activeAccounts.seabank" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.seabank"
                                            @input="formatBalance('seabank', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -507,7 +515,7 @@
                              :class="activeAccounts.gopay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('gopay')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="GoPay" type="ewallet" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="GoPay" type="ewallet" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">GoPay</h4>
                                         <span class="text-[10px] text-slate-400">E-Wallet</span>
@@ -521,15 +529,15 @@
                             
                             <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.gopay"
                                            @input="formatBalance('gopay', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -539,7 +547,7 @@
                              :class="activeAccounts.ovo ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('ovo')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="OVO" type="ewallet" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="OVO" type="ewallet" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">OVO</h4>
                                         <span class="text-[10px] text-slate-400">E-Wallet</span>
@@ -553,15 +561,15 @@
                             
                             <div x-show="activeAccounts.ovo" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.ovo"
                                            @input="formatBalance('ovo', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -571,7 +579,7 @@
                              :class="activeAccounts.dana ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('dana')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="DANA" type="ewallet" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="DANA" type="ewallet" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">DANA</h4>
                                         <span class="text-[10px] text-slate-400">E-Wallet</span>
@@ -585,15 +593,15 @@
                             
                             <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.dana"
                                            @input="formatBalance('dana', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -603,7 +611,7 @@
                              :class="activeAccounts.shopeepay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('shopeepay')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="ShopeePay" type="ewallet" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="ShopeePay" type="ewallet" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">ShopeePay</h4>
                                         <span class="text-[10px] text-slate-400">E-Wallet</span>
@@ -617,15 +625,15 @@
                             
                             <div x-show="activeAccounts.shopeepay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.shopeepay"
                                            @input="formatBalance('shopeepay', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -635,7 +643,7 @@
                              :class="activeAccounts.cash ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('cash')">
                                 <div class="flex items-center gap-2.5">
-                                    <x-account-logo name="Dompet Tunai" type="cash" class="w-[44px] h-[44px] rounded-xl shrink-0" />
+                                    <x-account-logo name="Dompet Tunai" type="cash" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Dompet Tunai</h4>
                                         <span class="text-[10px] text-slate-400">Cash Fisik</span>
@@ -649,8 +657,8 @@
                             
                             <div x-show="activeAccounts.cash" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative">
-                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="relative flex items-center">
+                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
                                         Rp
                                     </span>
                                     <input type="text" 
