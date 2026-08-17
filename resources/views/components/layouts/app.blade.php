@@ -89,6 +89,14 @@
                         <x-icon name="pie-chart" class="w-4 h-4" />
                         <span>Percentage Budget</span>
                     </a>
+                    <a href="{{ route('subscriptions') }}" 
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('subscriptions*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="repeat" class="w-4 h-4" />
+                            <span>Subscriptions</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold">Burn</span>
+                    </a>
                 </div>
             </div>
 
@@ -106,20 +114,31 @@
                         <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-900 text-white font-bold">Margin</span>
                     </a>
                     <a href="{{ route('clients') }}" 
-                       class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('clients*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
-                        <x-icon name="users" class="w-4 h-4" />
-                        <span>Clients & Invoices</span>
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('clients*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="users" class="w-4 h-4" />
+                            <span>Clients & Invoices</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">Aging</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Planning v1.1 Section -->
+            <!-- AI Intelligence & Planning Section -->
             <div>
                 <div class="flex items-center justify-between px-3 mb-2">
-                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Planning (v1.1)</p>
-                    <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-lime-100 text-lime-800 font-extrabold uppercase">New</span>
+                    <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Intelligence & Tools</p>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#C6F24D] text-slate-950 font-black uppercase">Smart</span>
                 </div>
                 <div class="space-y-1">
+                    <a href="{{ route('ai-copilot') }}" 
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('ai-copilot*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="sparkles" class="w-4 h-4 text-amber-500" />
+                            <span>AI Copilot</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-950 text-[#C6F24D] font-black">AI</span>
+                    </a>
                     <a href="{{ route('wishlists') }}" 
                        id="tour-nav-wishlists"
                        class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('wishlists*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
@@ -136,6 +155,15 @@
                             <span>Can I Afford This?</span>
                         </div>
                         <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Check</span>
+                    </a>
+                    <a href="{{ route('reports.financial-statement') }}" 
+                       target="_blank"
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 transition-all">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="file-text" class="w-4 h-4" />
+                            <span>Laporan & Cetak PDF</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">PDF</span>
                     </a>
                 </div>
             </div>

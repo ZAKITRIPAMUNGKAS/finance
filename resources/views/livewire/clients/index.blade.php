@@ -34,6 +34,65 @@
         </div>
     </div>
 
+    <!-- INVOICE PAYMENT AGING BREAKDOWN (0-15d, 16-30d, >30d) -->
+    @if($totalReceivables > 0)
+    <div class="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xs space-y-3">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <h4 class="text-xs font-extrabold text-slate-900 uppercase tracking-wider">Invoice Aging & Follow-Up Radar</h4>
+            </div>
+            <span class="text-[10px] font-mono text-slate-400">Total Piutang: Rp {{ number_format($totalReceivables, 0, ',', '.') }}</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <!-- 1. Current -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/70 space-y-1">
+                <div class="flex items-center gap-1.5 text-[10px] font-bold text-slate-600">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>Belum Tempo</span>
+                </div>
+                <div class="text-xs sm:text-sm font-black font-mono text-slate-900">
+                    Rp {{ number_format($agingCurrent, 0, ',', '.') }}
+                </div>
+            </div>
+
+            <!-- 2. 1-15 Days -->
+            <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200/70 space-y-1">
+                <div class="flex items-center gap-1.5 text-[10px] font-bold text-amber-800">
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span>Lewat 1-15 Hari</span>
+                </div>
+                <div class="text-xs sm:text-sm font-black font-mono text-amber-900">
+                    Rp {{ number_format($aging1to15, 0, ',', '.') }}
+                </div>
+            </div>
+
+            <!-- 3. 16-30 Days -->
+            <div class="p-3 rounded-xl bg-orange-50/70 border border-orange-200/70 space-y-1">
+                <div class="flex items-center gap-1.5 text-[10px] font-bold text-orange-800">
+                    <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+                    <span>Lewat 16-30 Hari</span>
+                </div>
+                <div class="text-xs sm:text-sm font-black font-mono text-orange-900">
+                    Rp {{ number_format($aging16to30, 0, ',', '.') }}
+                </div>
+            </div>
+
+            <!-- 4. >30 Days -->
+            <div class="p-3 rounded-xl bg-rose-50/70 border border-rose-200/70 space-y-1">
+                <div class="flex items-center gap-1.5 text-[10px] font-bold text-rose-800">
+                    <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+                    <span>Kritis (>30 Hari)</span>
+                </div>
+                <div class="text-xs sm:text-sm font-black font-mono text-rose-900">
+                    Rp {{ number_format($agingOver30, 0, ',', '.') }}
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- INVOICE LIST -->
     <div class="bg-white border border-slate-200/70 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-xs space-y-3.5 sm:space-y-4">
         <h3 class="text-sm sm:text-base font-extrabold text-slate-900 tracking-tight">Daftar Invoice & Status Penagihan</h3>
@@ -48,18 +107,21 @@
                         <th class="py-3.5 px-6">Jatuh Tempo</th>
                         <th class="py-3.5 px-6 text-right">Nominal</th>
                         <th class="py-3.5 px-6 text-center">Status</th>
-                        <th class="py-3.5 px-6 text-center">Aksi</th>
+                        <th class="py-3.5 px-6 text-center">Aksi & Follow-Up</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                     @forelse($invoices as $inv)
+                    @php
+                        $waLink = $this->getWhatsAppLink($inv);
+                    @endphp
                     <tr class="hover:bg-slate-50/70 transition-colors">
                         <td class="py-4 px-6 font-mono font-bold text-slate-900">
                             {{ $inv->invoice_number }}
                         </td>
                         <td class="py-4 px-6">
                             <span class="font-bold text-slate-900 block">{{ $inv->project->name ?? '-' }}</span>
-                            <span class="text-[11px] text-slate-400">{{ $inv->project->client->name ?? '-' }}</span>
+                            <span class="text-[11px] text-slate-400">{{ $inv->project->client->name ?? '-' }} {{ $inv->project->client->phone ? '• ' . $inv->project->client->phone : '' }}</span>
                         </td>
                         <td class="py-4 px-6 text-slate-600 font-mono">
                             {{ \Carbon\Carbon::parse($inv->due_date)->translatedFormat('d M Y') }}
@@ -80,13 +142,24 @@
                             @endif
                         </td>
                         <td class="py-4 px-6 text-center">
-                            @if($inv->status !== 'paid')
-                            <button wire:click="openMarkPaidModal({{ $inv->id }})" class="px-3 py-1 rounded-xl bg-[#C6F24D] text-slate-950 font-bold text-[11px] shadow-sm active-tap">
-                                ✓ Tandai Lunas
-                            </button>
-                            @else
-                            <span class="text-[11px] text-slate-400 font-mono">Lunas {{ $inv->paid_at ? \Carbon\Carbon::parse($inv->paid_at)->translatedFormat('d M') : '' }}</span>
-                            @endif
+                            <div class="flex items-center justify-center gap-1.5">
+                                @if($inv->status !== 'paid')
+                                    @if($waLink)
+                                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" 
+                                       class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-[11px] flex items-center gap-1 shadow-2xs active:scale-95 transition-all"
+                                       title="Follow up invoice via WhatsApp">
+                                        <x-icon name="message-circle" class="w-3.5 h-3.5 text-emerald-600" />
+                                        <span>WA</span>
+                                    </a>
+                                    @endif
+
+                                    <button wire:click="openMarkPaidModal({{ $inv->id }})" class="px-3 py-1 rounded-xl bg-[#C6F24D] hover:bg-[#B5E63B] text-slate-950 font-bold text-[11px] shadow-sm active-tap cursor-pointer">
+                                        ✓ Lunas
+                                    </button>
+                                @else
+                                    <span class="text-[11px] text-slate-400 font-mono">Lunas {{ $inv->paid_at ? \Carbon\Carbon::parse($inv->paid_at)->translatedFormat('d M') : '' }}</span>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                     @empty
@@ -99,7 +172,10 @@
         <!-- MOBILE CARDS -->
         <div class="md:hidden space-y-2.5">
             @forelse($invoices as $inv)
-            <div class="p-3.5 bg-[#F8F9FA] rounded-xl sm:rounded-2xl border border-slate-100 space-y-2">
+            @php
+                $waLink = $this->getWhatsAppLink($inv);
+            @endphp
+            <div class="p-3.5 bg-[#F8F9FA] rounded-xl sm:rounded-2xl border border-slate-100 space-y-2.5">
                 <div class="flex items-center justify-between">
                     <span class="font-mono font-bold text-xs text-slate-900">{{ $inv->invoice_number }}</span>
                     @if($inv->status === 'paid')
@@ -118,16 +194,24 @@
                     <span class="text-slate-400 text-[10px]">Due: {{ \Carbon\Carbon::parse($inv->due_date)->translatedFormat('d M') }}</span>
                     <span class="font-black text-slate-900">Rp {{ number_format($inv->amount, 0, ',', '.') }}</span>
                 </div>
+                
                 @if($inv->status !== 'paid')
-                <div class="pt-1">
-                    <button wire:click="openMarkPaidModal({{ $inv->id }})" class="w-full py-2 rounded-xl bg-[#C6F24D] text-slate-950 font-extrabold text-xs shadow-2xs active-tap">
-                        ✓ Tandai Pelunasan
+                <div class="flex items-center justify-end gap-2 pt-1">
+                    @if($waLink)
+                    <a href="{{ $waLink }}" target="_blank" rel="noopener noreferrer" 
+                       class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-800 font-bold text-xs flex items-center gap-1.5 shadow-2xs">
+                        <x-icon name="message-circle" class="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Kirim WA</span>
+                    </a>
+                    @endif
+                    <button wire:click="openMarkPaidModal({{ $inv->id }})" class="px-3.5 py-1.5 rounded-xl bg-[#C6F24D] text-slate-950 font-bold text-xs shadow-2xs">
+                        ✓ Tandai Lunas
                     </button>
                 </div>
                 @endif
             </div>
             @empty
-            <div class="p-6 text-center text-xs text-slate-400">Belum ada invoice dibuat.</div>
+            <div class="p-6 text-center text-slate-400 text-xs">Belum ada invoice dibuat.</div>
             @endforelse
         </div>
     </div>

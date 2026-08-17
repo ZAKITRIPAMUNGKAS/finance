@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Index extends Component
@@ -125,6 +126,44 @@ class Index extends Component
         $this->dispatch('refresh-data');
     }
 
+    /**
+     * Generate 1-Click WhatsApp Follow-up Message & Link
+     */
+    public function getWhatsAppLink(Invoice $invoice, string $tone = 'friendly'): ?string
+    {
+        $client = $invoice->project?->client;
+        if (!$client || empty($client->phone)) {
+            return null;
+        }
+
+        // Clean phone number (replace leading 0 with 62)
+        $phone = preg_replace('/[^0-9]/', '', $client->phone);
+        if (str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        $user = auth()->user();
+        $clientName = $client->name;
+        $projName = $invoice->project?->name ?? 'Proyek Freelance';
+        $invNum = $invoice->invoice_number;
+        $nominal = 'Rp ' . number_format($invoice->amount, 0, ',', '.');
+        $dueDate = $invoice->due_date ? Carbon::parse($invoice->due_date)->translatedFormat('d F Y') : 'hari ini';
+        $account = Account::where('user_id', $user->id)->where('type', 'bank')->where('is_active', true)->first();
+        $rekInfo = $account ? "Rekening Tujuan:\n• {$account->name}: " . ($account->account_number ?: 'Silakan konfirmasi') . " a.n. {$user->name}" : "";
+
+        $daysOverdue = $invoice->due_date && Carbon::parse($invoice->due_date)->isPast() 
+            ? (int) Carbon::parse($invoice->due_date)->diffInDays(now()) 
+            : 0;
+
+        if ($daysOverdue > 0) {
+            $msg = "Halo {$clientName},\n\nSemoga kabarnya sehat dan lancar selalu. 🙏\n\nKami ingin menginformasikan pengingat mengenai Invoice #{$invNum} untuk pekerjaan *{$projName}* senilai *{$nominal}* yang telah melewati jatuh tempo pada {$dueDate} ({$daysOverdue} hari lalu).\n\n{$rekInfo}\n\nMohon konfirmasi atau kirimkan bukti transfer jika pembayaran sudah dilakukan ya. Terima kasih banyak atas kerjasamanya! ✨\n\nSalam hangat,\n*{$user->name}*";
+        } else {
+            $msg = "Halo {$clientName},\n\nSemoga kabarnya sehat selalu. 🙏\n\nBerikut kami informasikan pengingat mengenai Invoice #{$invNum} untuk proyek *{$projName}* senilai *{$nominal}* dengan tanggal jatuh tempo pada *{$dueDate}*.\n\n{$rekInfo}\n\nJika ada pertanyaan mengenai tagihan ini, silakan hubungi kami kapan saja. Terima kasih banyak! ✨\n\nSalam,\n*{$user->name}*";
+        }
+
+        return 'https://api.whatsapp.com/send?phone=' . $phone . '&text=' . rawurlencode($msg);
+    }
+
     public function render()
     {
         $userId = auth()->id();
@@ -146,12 +185,30 @@ class Index extends Component
                   });
             })->sum('amount');
 
+        // Invoice Aging Calculations
+        $unpaidInvoices = $invoices->whereIn('status', ['sent', 'overdue']);
+        $now = Carbon::now()->startOfDay();
+
+        $agingCurrent = $unpaidInvoices->filter(fn($i) => !$i->due_date || Carbon::parse($i->due_date)->gte($now))->sum('amount');
+        $aging1to15 = $unpaidInvoices->filter(fn($i) => $i->due_date && Carbon::parse($i->due_date)->lt($now) && $now->diffInDays(Carbon::parse($i->due_date)) <= 15)->sum('amount');
+        $aging16to30 = $unpaidInvoices->filter(fn($i) => $i->due_date && Carbon::parse($i->due_date)->lt($now) && $now->diffInDays(Carbon::parse($i->due_date)) > 15 && $now->diffInDays(Carbon::parse($i->due_date)) <= 30)->sum('amount');
+        $agingOver30 = $unpaidInvoices->filter(fn($i) => $i->due_date && Carbon::parse($i->due_date)->lt($now) && $now->diffInDays(Carbon::parse($i->due_date)) > 30)->sum('amount');
+
         $accounts = Account::where('user_id', $userId)->where('is_active', true)->get();
 
-        return view('livewire.clients.index', compact('clients', 'invoices', 'totalReceivables', 'overdueTotal', 'accounts'))
-            ->layout('components.layouts.app', [
-                'headerTitle' => 'Clients & Invoices / Piutang',
-                'headerSubtitle' => 'Kelola direktori klien, invoice penagihan dan status piutang bisnis'
-            ]);
+        return view('livewire.clients.index', compact(
+            'clients', 
+            'invoices', 
+            'totalReceivables', 
+            'overdueTotal', 
+            'agingCurrent', 
+            'aging1to15', 
+            'aging16to30', 
+            'agingOver30', 
+            'accounts'
+        ))->layout('components.layouts.app', [
+            'headerTitle' => 'Clients & Invoices / Piutang',
+            'headerSubtitle' => 'Kelola direktori klien, invoice penagihan dan status piutang bisnis'
+        ]);
     }
 }
