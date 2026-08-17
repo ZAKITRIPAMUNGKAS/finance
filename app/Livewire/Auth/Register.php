@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Category;
 use App\Models\User;
 use App\Services\BudgetAllocationService;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -72,10 +73,13 @@ class Register extends Component
         // 2. Initialize Adaptive Budget Profile
         $budgetService->seedInitialBudgetConfiguration($user->id);
 
+        // 3. Fire registered event to send verification email
+        event(new Registered($user));
+
         Auth::login($user);
         session()->regenerate();
 
-        return redirect()->route('dashboard');
+        return redirect()->route('verification.notice');
     }
 
     public function render()
