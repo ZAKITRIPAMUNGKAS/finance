@@ -170,8 +170,9 @@
                                 @endif
                                 <button type="button" wire:click="deleteInvoice({{ $inv->id }})" 
                                     wire:confirm="Yakin ingin menghapus invoice {{ $inv->invoice_number }}?"
-                                    class="p-1.5 rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer">
-                                    <x-icon name="trash" class="w-3.5 h-3.5" />
+                                    title="Hapus Invoice"
+                                    class="p-2 rounded-xl bg-slate-100/70 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer active:scale-95 flex items-center justify-center">
+                                    <x-icon name="trash" class="w-4 h-4" strokeWidth="2.2" />
                                 </button>
                             </div>
                         </div>
