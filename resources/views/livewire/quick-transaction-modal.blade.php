@@ -494,28 +494,38 @@
 
                         this.recognition.onstart = () => {
                             this.recordingVoice = true;
-                            this.voiceStatus = 'Mendengarkan suara Anda... Silakan bicara.';
+                            this.voiceStatus = '🎙️ Sedang mendengarkan... Silakan bicara.';
                             this.voiceTranscript = '';
                         };
 
                         this.recognition.onresult = (event) => {
-                            let fullText = '';
+                            let interim = '';
+                            let final = '';
                             for (let i = 0; i < event.results.length; ++i) {
-                                fullText += event.results[i][0].transcript;
+                                if (event.results[i].isFinal) {
+                                    final += event.results[i][0].transcript;
+                                } else {
+                                    interim += event.results[i][0].transcript;
+                                }
                             }
-                            this.voiceTranscript = fullText.trim();
-                            this.voiceStatus = this.voiceTranscript ? '🎙️ ' + this.voiceTranscript : 'Mendengarkan suara...';
+                            const captured = (final || interim).trim();
+                            if (captured) {
+                                this.voiceTranscript = captured;
+                                this.voiceStatus = '🎙️ "' + captured + '"';
+                            }
                         };
 
                         this.recognition.onerror = (event) => {
-                            console.error('Speech recognition error:', event.error);
+                            console.warn('Speech recognition error:', event.error);
                             this.recordingVoice = false;
                             if (event.error === 'not-allowed' || event.error === 'permission-denied') {
-                                this.voiceStatus = '⚠️ Izin mikrofon belum diberikan. Silakan izinkan akses mikrofon di browser Anda.';
+                                this.voiceStatus = '⚠️ Izin mikrofon belum diberikan. Silakan klik ikon gembok di address bar browser untuk mengizinkan mikrofon.';
                             } else if (event.error === 'no-speech') {
-                                this.voiceStatus = '⚠️ Belum terdengar suara. Silakan klik tombol dan coba bicara lagi.';
+                                this.voiceStatus = '⚠️ Suara tidak terdeteksi. Silakan klik tombol dan coba bicara lagi.';
                             } else if (event.error === 'network') {
-                                this.voiceStatus = '⚠️ Koneksi speech recognition offline atau terganggu.';
+                                this.voiceStatus = '⚠️ Gangguan koneksi speech recognition. Pastikan internet aktif.';
+                            } else if (event.error === 'audio-capture') {
+                                this.voiceStatus = '⚠️ Mikrofon tidak terdeteksi atau sedang dipakai aplikasi lain.';
                             } else {
                                 this.voiceStatus = '⚠️ Status: ' + event.error;
                             }
@@ -523,14 +533,14 @@
 
                         this.recognition.onend = () => {
                             this.recordingVoice = false;
-                            if (this.voiceTranscript && this.voiceTranscript.trim().length >= 3) {
-                                this.voiceStatus = '⚡ Memproses: ' + this.voiceTranscript;
+                            if (this.voiceTranscript && this.voiceTranscript.trim().length >= 2) {
+                                this.voiceStatus = '⚡ Memproses: "' + this.voiceTranscript + '"';
                                 this.$wire.processVoiceInput(this.voiceTranscript.trim());
                             }
                         };
                     } else {
                         this.speechSupported = false;
-                        this.voiceStatus = 'Browser ini belum mendukung Web Speech API (Gunakan Google Chrome atau Microsoft Edge).';
+                        this.voiceStatus = 'Browser ini belum mendukung Web Speech API (Gunakan Google Chrome, Microsoft Edge, atau Safari).';
                     }
                 },
 
@@ -545,7 +555,7 @@
                 startVoice() {
                     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                     if (!SpeechRecognition) {
-                        alert('Fitur input suara membutuhkan browser Google Chrome atau Microsoft Edge.');
+                        this.voiceStatus = '⚠️ Browser Anda tidak mendukung Web Speech API. Silakan gunakan Google Chrome atau Microsoft Edge.';
                         return;
                     }
                     
@@ -554,44 +564,33 @@
                     }
 
                     this.voiceTranscript = '';
-                    this.voiceStatus = 'Menyiapkan mikrofon...';
+                    this.voiceStatus = '🎙️ Menyiapkan mikrofon... Silakan bicara.';
 
-                    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                        navigator.mediaDevices.getUserMedia({ audio: true })
-                            .then(() => {
-                                try {
-                                    this.recognition.start();
-                                } catch (err) {
-                                    try { this.recognition.stop(); } catch(e) {}
-                                    setTimeout(() => {
-                                        try { this.recognition.start(); } catch(e) {}
-                                    }, 150);
-                                }
-                            })
-                            .catch((err) => {
-                                console.warn('Microphone permission check:', err);
-                                try {
-                                    this.recognition.start();
-                                } catch (e) {
-                                    this.voiceStatus = '⚠️ Izin mikrofon ditolak. Klik ikon gembok/setelan browser untuk mengizinkan mikrofon.';
-                                }
-                            });
-                    } else {
+                    try {
+                        this.recognition.start();
+                    } catch (err) {
+                        console.warn('Recognition start caught:', err);
                         try {
-                            this.recognition.start();
-                        } catch (err) {
-                            try { this.recognition.stop(); } catch(e) {}
-                            setTimeout(() => {
-                                try { this.recognition.start(); } catch(e) {}
-                            }, 150);
-                        }
+                            this.recognition.abort();
+                        } catch (e) {}
+                        setTimeout(() => {
+                            try {
+                                this.recognition.start();
+                            } catch (e) {
+                                console.error('Recognition retry failed:', e);
+                                this.voiceStatus = '⚠️ Gagal memulai mikrofon: ' + (e.message || 'Klik lagi untuk mencoba');
+                            }
+                        }, 120);
                     }
                 },
 
                 stopVoice() {
-                    if (this.recognition && this.recordingVoice) {
-                        this.recognition.stop();
+                    if (this.recognition) {
+                        try {
+                            this.recognition.stop();
+                        } catch (e) {}
                     }
+                    this.recordingVoice = false;
                 },
 
                 preprocessImage(imgData, callback) {
