@@ -17,9 +17,16 @@ class Index extends Component
     public bool $isConfigModalOpen = false;
     public string $profileName = '';
     public string $method = 'floor'; // 'floor' or 'average'
-    public array $categoryConfigs = []; // [category_id => ['group_id', 'tier', 'percentage']]
+    public array $categoryConfigs = []; // [category_id => ['id', 'category_id', 'name', 'budget_group_id', 'priority_tier', 'target_percentage']]
     public array $zScores = []; // [category_id => [status, badge, message]]
     public string $configTab = 'overview'; // 'overview' | 'config'
+
+    // Add New Custom Pos Kategori State
+    public bool $isAddingCategory = false;
+    public string $newCategoryName = '';
+    public ?int $newCategoryGroupId = null;
+    public int $newCategoryTier = 1;
+    public float $newCategoryPercentage = 5.0;
 
     // Smart Financial Persona Survey Modal
     public bool $isSurveyModalOpen = false;
@@ -44,14 +51,14 @@ class Index extends Component
     public function loadConfiguration()
     {
         $userId = auth()->id();
-        $activeProfile = BudgetProfile::with(['budgetCategories'])
+        $activeProfile = BudgetProfile::with(['budgetCategories.category'])
             ->where('user_id', $userId)
             ->where('is_active', true)
             ->first();
 
         if (!$activeProfile) {
             $this->budgetService->seedInitialBudgetConfiguration($userId);
-            $activeProfile = BudgetProfile::with(['budgetCategories'])
+            $activeProfile = BudgetProfile::with(['budgetCategories.category'])
                 ->where('user_id', $userId)
                 ->where('is_active', true)
                 ->first();
@@ -66,6 +73,7 @@ class Index extends Component
                 $this->categoryConfigs[$bCat->category_id] = [
                     'id' => $bCat->id,
                     'category_id' => $bCat->category_id,
+                    'name' => $bCat->category?->name ?? 'Kategori',
                     'budget_group_id' => $bCat->budget_group_id,
                     'priority_tier' => (int) $bCat->priority_tier,
                     'target_percentage' => (float) $bCat->target_percentage,
@@ -73,6 +81,11 @@ class Index extends Component
             }
 
             $this->calculateAllZScores();
+        }
+
+        $defaultGroup = BudgetGroup::first();
+        if ($defaultGroup && !$this->newCategoryGroupId) {
+            $this->newCategoryGroupId = $defaultGroup->id;
         }
     }
 
@@ -122,8 +135,62 @@ class Index extends Component
     public function openConfigModal()
     {
         $this->loadConfiguration();
+        $this->isAddingCategory = false;
         $this->configTab = 'overview';
         $this->isConfigModalOpen = true;
+    }
+
+    public function toggleAddCategory()
+    {
+        $this->isAddingCategory = !$this->isAddingCategory;
+        if ($this->isAddingCategory && empty($this->newCategoryGroupId)) {
+            $this->newCategoryGroupId = BudgetGroup::first()?->id;
+        }
+    }
+
+    public function addNewCategory()
+    {
+        $this->validate([
+            'newCategoryName' => 'required|string|max:100',
+            'newCategoryGroupId' => 'required|exists:budget_groups,id',
+            'newCategoryTier' => 'required|in:1,2,3',
+            'newCategoryPercentage' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $userId = auth()->id();
+        $cleanName = trim($this->newCategoryName);
+
+        $category = Category::firstOrCreate(
+            [
+                'user_id' => $userId,
+                'name' => $cleanName,
+                'type' => 'expense',
+            ],
+            [
+                'color' => '#0F172A',
+                'icon' => 'tag',
+            ]
+        );
+
+        $this->categoryConfigs[$category->id] = [
+            'id' => null,
+            'category_id' => $category->id,
+            'name' => $category->name,
+            'budget_group_id' => (int) $this->newCategoryGroupId,
+            'priority_tier' => (int) $this->newCategoryTier,
+            'target_percentage' => (float) $this->newCategoryPercentage,
+        ];
+
+        $this->newCategoryName = '';
+        $this->newCategoryPercentage = 5.0;
+        $this->isAddingCategory = false;
+        $this->calculateAllZScores();
+    }
+
+    public function removeCategory(int $catId)
+    {
+        unset($this->categoryConfigs[$catId]);
+        $this->calculateAllZScores();
     }
 
     public function saveConfiguration()
@@ -137,7 +204,16 @@ class Index extends Component
                 'method' => $this->method,
             ]);
 
+            $savedCategoryIds = [];
+
             foreach ($this->categoryConfigs as $catId => $cfg) {
+                // Update category name in database if user edited it
+                if (!empty($cfg['name'])) {
+                    Category::where('id', $catId)
+                        ->where('user_id', $userId)
+                        ->update(['name' => trim($cfg['name'])]);
+                }
+
                 BudgetCategory::updateOrCreate(
                     [
                         'budget_profile_id' => $activeProfile->id,
@@ -149,11 +225,19 @@ class Index extends Component
                         'target_percentage' => $cfg['target_percentage'],
                     ]
                 );
+
+                $savedCategoryIds[] = $catId;
             }
+
+            // Remove any budget categories that were deleted from the config
+            BudgetCategory::where('budget_profile_id', $activeProfile->id)
+                ->whereNotIn('category_id', $savedCategoryIds)
+                ->delete();
         }
 
         $this->isConfigModalOpen = false;
-        session()->flash('message', 'Konfigurasi persentase budget berhasil disimpan!');
+        $this->loadConfiguration();
+        session()->flash('message', 'Konfigurasi persentase budget & pos kategori berhasil disimpan!');
     }
 
     // ── SURVEY & PERSONA METHODS ────────────────────────────────

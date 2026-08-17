@@ -443,54 +443,54 @@
     <!--  MODAL 2: INTERACTIVE PERCENTAGE SLIDERS & ENGINE CONFIG    -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div x-data="{ open: @entangle('isConfigModalOpen') }" x-show="open" 
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
+        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
         x-cloak>
         
         <div @click.outside="$wire.set('isConfigModalOpen', false)" 
             class="relative w-full max-w-2xl bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col anim-scale-up">
             
-            <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
+            <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2 shrink-0"></div>
 
             <!-- Header -->
             <div class="px-5 sm:px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-white">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-black shadow-2xs">
-                        <x-icon name="sliders" class="w-4 h-4" strokeWidth="2.5" />
+                    <div class="w-10 h-10 rounded-2xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-black shadow-2xs shrink-0">
+                        <x-icon name="sliders" class="w-5 h-5" strokeWidth="2.2" />
                     </div>
                     <div>
-                        <h3 class="text-sm sm:text-base font-extrabold text-slate-950">Atur Persentase Alokasi Budget</h3>
-                        <p class="text-[10px] sm:text-xs text-slate-400">Geser slider interaktif untuk mengatur porsi target setiap pos</p>
+                        <h3 class="text-base font-extrabold text-slate-950 tracking-tight">Atur Persentase Alokasi Budget</h3>
+                        <p class="text-xs text-slate-500">Sesuaikan porsi target, edit nama pos, atau tambah pos alokasi baru</p>
                     </div>
                 </div>
-                <button wire:click="$set('isConfigModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
+                <button wire:click="$set('isConfigModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer">
                     <x-icon name="x" class="w-4 h-4" />
                 </button>
             </div>
 
             <!-- BODY -->
-            <div class="p-5 sm:p-6 space-y-4 overflow-y-auto">
+            <div class="p-5 sm:p-6 space-y-4.5 overflow-y-auto">
                 
                 <!-- 1. MULTI-SEGMENT LIVING ALLOCATION BAR (TOTAL 100%) -->
                 @php
                     $totalPct = array_sum(array_column($categoryConfigs, 'target_percentage'));
                 @endphp
-                <div class="p-4 bg-slate-50 border border-slate-200/90 rounded-2xl space-y-3">
-                    <div class="flex items-center justify-between">
+                <div class="p-4.5 bg-slate-50 border border-slate-200/90 rounded-2xl space-y-3 shadow-2xs">
+                    <div class="flex flex-wrap items-center justify-between gap-2.5">
                         <div class="flex items-center gap-2">
                             <span class="text-xs font-extrabold text-slate-900">Total Alokasi:</span>
-                            <span class="px-2 py-0.5 rounded-full font-mono text-xs font-black {{ abs($totalPct - 100) < 0.1 ? 'bg-emerald-100 text-emerald-800' : ($totalPct > 100 ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
+                            <span class="px-2.5 py-0.5 rounded-full font-mono text-xs font-black {{ abs($totalPct - 100) < 0.1 ? 'bg-emerald-100 text-emerald-800' : ($totalPct > 100 ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
                                 {{ round($totalPct, 1) }}% / 100%
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2">
                             <button type="button" wire:click="autoBalanceAllocation" 
-                                class="px-3 py-1 rounded-xl bg-white border border-slate-200 hover:border-slate-950 text-slate-800 text-[11px] font-extrabold shadow-2xs transition-all cursor-pointer flex items-center gap-1 active-tap">
+                                class="px-3 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-950 text-slate-800 text-[11px] font-extrabold shadow-2xs transition-all cursor-pointer flex items-center gap-1.5 active-tap">
                                 <span>⚡ Seimbangkan 100%</span>
                             </button>
                             <button type="button" wire:click="applyEmaSuggestions" 
-                                class="px-3 py-1 rounded-xl bg-slate-950 text-[#C6F24D] text-[11px] font-extrabold hover:bg-slate-800 shadow-2xs transition-all cursor-pointer flex items-center gap-1 active-tap">
-                                <x-icon name="sparkles" class="w-3 h-3" />
+                                class="px-3 py-1.5 rounded-xl bg-slate-950 text-[#C6F24D] text-[11px] font-extrabold hover:bg-slate-800 shadow-2xs transition-all cursor-pointer flex items-center gap-1.5 active-tap">
+                                <x-icon name="sparkles" class="w-3 h-3 text-[#C6F24D]" />
                                 <span>Saran Historis</span>
                             </button>
                         </div>
@@ -500,7 +500,6 @@
                     <div class="w-full bg-slate-200 rounded-full h-3.5 overflow-hidden flex shadow-inner">
                         @foreach($categoryConfigs as $catId => $cfg)
                         @php
-                            $catModel = $categories->firstWhere('id', $catId);
                             $pct = (float) ($cfg['target_percentage'] ?? 0);
                             $groupModel = $groups->firstWhere('id', $cfg['budget_group_id']);
                             $color = $groupModel?->color ?? '#64748B';
@@ -508,14 +507,14 @@
                         @if($pct > 0)
                         <div class="h-full transition-all duration-300 relative group" 
                             style="width: {{ $pct }}%; background-color: {{ $color }};" 
-                            title="{{ $catModel?->name }}: {{ $pct }}%">
+                            title="{{ $cfg['name'] ?? 'Kategori' }}: {{ $pct }}%">
                         </div>
                         @endif
                         @endforeach
                     </div>
 
                     <!-- Status Hint -->
-                    <div class="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
+                    <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-0.5 gap-2">
                         <span>
                             @if(abs($totalPct - 100) < 0.1)
                                 <strong class="text-emerald-700 font-bold">✓ Alokasi 100% Sempurna & Seimbang</strong>
@@ -525,7 +524,7 @@
                                 <strong class="text-amber-700 font-bold">⚠ Sisa {{ round(100 - $totalPct, 1) }}% belum dialokasikan</strong>
                             @endif
                         </span>
-                        <span class="font-mono text-slate-400">Base Income: Rp {{ number_format($budgetData['base_budget_income'], 0, ',', '.') }}</span>
+                        <span class="font-mono text-slate-500 font-bold">Base Income: Rp {{ number_format($budgetData['base_budget_income'], 0, ',', '.') }}</span>
                     </div>
                 </div>
 
@@ -534,67 +533,150 @@
                     <div>
                         <label class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-1">Nama Profil Anggaran</label>
                         <input type="text" wire:model="profileName" 
-                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950">
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 focus:bg-white transition-all">
                     </div>
 
                     <div>
                         <label class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-1">Metode Baseline Kas</label>
                         <select wire:model="method" 
-                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 focus:bg-white cursor-pointer transition-all">
                             <option value="floor">Floor Baseline (P25) — Untuk Pendapatan Fluktuatif</option>
                             <option value="average">Rolling Average — Untuk Gaji Bulanan Teratur</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- 3. INTERACTIVE CATEGORY SLIDERS LIST -->
+                <!-- 3. CUSTOM CATEGORIES SECTION & ADD BUTTON -->
                 <div class="space-y-3 pt-1">
-                    <label class="text-xs font-extrabold text-slate-900 block">Daftar Slider Pos Kategori:</label>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-xs font-extrabold text-slate-900 block">Daftar Pos Alokasi</label>
+                            <span class="text-[10px] text-slate-400">{{ count($categoryConfigs) }} Pos Terdaftar — Klik nama untuk mengedit</span>
+                        </div>
+                        <button type="button" wire:click="toggleAddCategory"
+                            class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer {{ $isAddingCategory ? 'bg-slate-200 text-slate-800' : 'bg-[#C6F24D] text-slate-950 hover:bg-[#B5E63B] shadow-2xs' }}">
+                            <x-icon :name="$isAddingCategory ? 'x' : 'plus'" class="w-3.5 h-3.5" strokeWidth="2.5" />
+                            <span>{{ $isAddingCategory ? 'Tutup Form' : '+ Tambah Pos Baru' }}</span>
+                        </button>
+                    </div>
 
+                    <!-- Expandable Add New Pos Form -->
+                    @if($isAddingCategory)
+                    <div class="p-4 bg-[#F7FFD9] border-2 border-slate-900 rounded-2xl space-y-3 animate-fade-in shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-extrabold text-slate-900 flex items-center gap-1.5">
+                                <x-icon name="plus-circle" class="w-4 h-4 text-slate-900" />
+                                <span>Tambah Pos Alokasi Kategori Baru</span>
+                            </h4>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[10px] font-bold uppercase text-slate-700 block mb-1">Nama Pos / Kategori *</label>
+                                <input type="text" wire:model="newCategoryName" placeholder="e.g. Investasi Saham / Netflix"
+                                    class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950">
+                                @error('newCategoryName') <span class="text-[10px] text-rose-600 font-bold block mt-0.5">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold uppercase text-slate-700 block mb-1">Target Persentase (%) *</label>
+                                <input type="number" step="0.5" min="0" max="100" wire:model="newCategoryPercentage" placeholder="5"
+                                    class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-950">
+                                @error('newCategoryPercentage') <span class="text-[10px] text-rose-600 font-bold block mt-0.5">{{ $message }}</span> @enderror
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold uppercase text-slate-700 block mb-1">Kelompok Pos (Group) *</label>
+                                <select wire:model="newCategoryGroupId"
+                                    class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
+                                    @foreach($groups as $g)
+                                        <option value="{{ $g->id }}">{{ $g->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="text-[10px] font-bold uppercase text-slate-700 block mb-1">Tingkat Prioritas (Tier) *</label>
+                                <select wire:model="newCategoryTier"
+                                    class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
+                                    <option value="1">Tier 1 — Wajib (Critical)</option>
+                                    <option value="2">Tier 2 — Variabel (Essential)</option>
+                                    <option value="3">Tier 3 — Keinginan (Wants)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-end gap-2 pt-1 border-t border-lime-300">
+                            <button type="button" wire:click="toggleAddCategory" class="px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-slate-950 cursor-pointer">
+                                Batal
+                            </button>
+                            <button type="button" wire:click="addNewCategory" class="px-4 py-1.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 shadow-2xs active-tap cursor-pointer">
+                                + Tambahkan ke Alokasi
+                            </button>
+                        </div>
+                    </div>
+                    @endif
+
+                    <!-- Category Sliders List -->
                     <div class="space-y-2.5">
-                        @foreach($categories as $cat)
-                        @php
-                            $cfg = $categoryConfigs[$cat->id] ?? null;
-                            $z = $zScores[$cat->id] ?? null;
-                        @endphp
-                        @if($cfg)
+                        @foreach($categoryConfigs as $catId => $cfg)
                         @php
                             $catPct = (float) ($cfg['target_percentage'] ?? 0);
                             $calcNominal = ($catPct / 100) * $budgetData['base_budget_income'];
                             $grp = $groups->firstWhere('id', $cfg['budget_group_id']);
                         @endphp
-                        <div class="p-3.5 bg-white rounded-2xl border border-slate-200/90 shadow-2xs space-y-2 hover:border-slate-400 transition-all">
+                        <div class="p-3.5 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs space-y-2.5 hover:border-slate-300 transition-all group">
                             
-                            <!-- Header Item: Name, Calculated Nominal, Percentage Badge -->
+                            <!-- Header Item: Editable Name, Tag, Nominal, Percentage Badge, Trash Button -->
                             <div class="flex items-center justify-between gap-2">
-                                <div class="flex items-center gap-2 min-w-0">
+                                <div class="flex items-center gap-2 min-w-0 flex-1">
                                     <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $grp?->color ?? '#0F172A' }}"></span>
-                                    <span class="font-extrabold text-xs text-slate-950 truncate">{{ $cat->name }}</span>
-                                    <span class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 shrink-0">
-                                        {{ $grp?->name ?? 'Group' }}
+                                    
+                                    <!-- Inline Editable Name -->
+                                    <div class="relative flex-1 min-w-[140px] max-w-[280px]">
+                                        <input type="text" 
+                                            wire:model.lazy="categoryConfigs.{{ $catId }}.name"
+                                            class="w-full text-xs font-extrabold text-slate-950 bg-transparent hover:bg-slate-100/70 focus:bg-white focus:ring-1 focus:ring-slate-950 border border-transparent hover:border-slate-200 focus:border-slate-950 rounded-lg px-1.5 py-0.5 transition-all truncate"
+                                            title="Klik untuk mengubah nama pos">
+                                    </div>
+
+                                    <span class="text-[9px] font-mono font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 shrink-0 hidden sm:inline-block">
+                                        {{ $grp?->name ?? 'Pos' }}
                                     </span>
                                 </div>
 
-                                <div class="flex items-center gap-2 font-mono shrink-0">
-                                    <span class="text-xs font-black text-slate-950">Rp {{ number_format($calcNominal, 0, ',', '.') }}</span>
-                                    <span class="px-2 py-0.5 rounded-lg bg-slate-950 text-[#C6F24D] text-xs font-black">
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <span class="font-mono text-xs font-extrabold text-slate-950">
+                                        Rp {{ number_format($calcNominal, 0, ',', '.') }}
+                                    </span>
+                                    
+                                    <span class="px-2.5 py-0.5 rounded-lg bg-slate-950 text-[#C6F24D] font-mono text-xs font-black">
                                         {{ $catPct }}%
                                     </span>
+
+                                    <!-- Delete Category from allocation -->
+                                    <button type="button" 
+                                        wire:click="removeCategory({{ $catId }})" 
+                                        wire:confirm="Hapus pos kategori '{{ $cfg['name'] ?? 'ini' }}' dari alokasi budget?"
+                                        class="p-1 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer ml-0.5" 
+                                        title="Hapus dari alokasi">
+                                        <x-icon name="trash-2" class="w-3.5 h-3.5" />
+                                    </button>
                                 </div>
                             </div>
 
                             <!-- Interactive Smooth Range Slider -->
                             <div class="space-y-1">
                                 <input type="range" min="0" max="60" step="0.5" 
-                                    wire:model.live="categoryConfigs.{{ $cat->id }}.target_percentage" 
-                                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-950">
+                                    wire:model.live="categoryConfigs.{{ $catId }}.target_percentage" 
+                                    class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-slate-950">
                             </div>
 
                             <!-- Controls: Group & Tier Selector -->
                             <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100">
                                 <div>
-                                    <select wire:model="categoryConfigs.{{ $cat->id }}.budget_group_id" 
-                                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-semibold text-slate-800 focus:outline-none focus:border-slate-950 cursor-pointer">
+                                    <select wire:model="categoryConfigs.{{ $catId }}.budget_group_id" 
+                                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 focus:outline-none focus:border-slate-950 focus:bg-white cursor-pointer transition-all">
                                         @foreach($groups as $g)
                                             <option value="{{ $g->id }}">{{ $g->name }}</option>
                                         @endforeach
@@ -602,8 +684,8 @@
                                 </div>
 
                                 <div>
-                                    <select wire:model="categoryConfigs.{{ $cat->id }}.priority_tier" 
-                                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-lg px-2 py-1 text-[11px] font-semibold text-slate-800 focus:outline-none focus:border-slate-950 cursor-pointer">
+                                    <select wire:model="categoryConfigs.{{ $catId }}.priority_tier" 
+                                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-2.5 py-1.5 text-[11px] font-semibold text-slate-800 focus:outline-none focus:border-slate-950 focus:bg-white cursor-pointer transition-all">
                                         <option value="1">Tier 1 — Wajib (Critical)</option>
                                         <option value="2">Tier 2 — Variabel (Essential)</option>
                                         <option value="3">Tier 3 — Keinginan (Wants)</option>
@@ -612,7 +694,6 @@
                             </div>
 
                         </div>
-                        @endif
                         @endforeach
                     </div>
                 </div>
@@ -622,15 +703,15 @@
             <!-- Modal Footer -->
             <div class="px-5 sm:px-6 py-4 border-t border-slate-100 bg-white flex items-center justify-between shrink-0">
                 <span class="text-xs text-slate-500">
-                    Total: <strong class="font-mono text-slate-950 font-black">{{ array_sum(array_column($categoryConfigs, 'target_percentage')) }}%</strong>
+                    Total: <strong class="font-mono text-slate-950 font-black text-sm">{{ array_sum(array_column($categoryConfigs, 'target_percentage')) }}%</strong>
                 </span>
                 <div class="flex items-center gap-2">
                     <button type="button" wire:click="$set('isConfigModalOpen', false)" 
-                        class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">
+                        class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer transition-all">
                         Batal
                     </button>
                     <button type="button" wire:click="saveConfiguration" 
-                        class="px-5 py-2 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-black hover:bg-slate-800 cursor-pointer shadow-sm active-tap">
+                        class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-black hover:bg-slate-800 cursor-pointer shadow-sm active-tap transition-all">
                         Simpan Alokasi
                     </button>
                 </div>
