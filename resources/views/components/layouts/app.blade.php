@@ -137,7 +137,7 @@
                             <x-icon name="sparkles" class="w-4 h-4 text-amber-500" />
                             <span>AI Copilot</span>
                         </div>
-                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-slate-950 text-[#C6F24D] font-black">AI</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-900 font-bold">Coming Soon</span>
                     </a>
                     <a href="{{ route('wishlists') }}" 
                        id="tour-nav-wishlists"

@@ -92,10 +92,11 @@
                         <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-rose-600 truncate w-full">Voice AI</span>
                     </button>
 
-                    <!-- 5. AI Copilot -->
-                    <a href="{{ route('ai-copilot') }}" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
-                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-slate-950 group-hover:bg-slate-800 text-[#C6F24D] flex items-center justify-center transition-all shadow-xs group-hover:scale-105">
+                    <!-- 5. AI Copilot (Coming Soon) -->
+                    <a href="{{ route('ai-copilot') }}" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap relative">
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-slate-950 group-hover:bg-slate-800 text-[#C6F24D] flex items-center justify-center transition-all shadow-xs group-hover:scale-105 relative">
                             <x-icon name="sparkles" class="w-5 h-5 text-[#C6F24D]" strokeWidth="2.2" />
+                            <span class="absolute -top-1.5 -right-1.5 px-1 py-0.2 rounded-full bg-amber-400 text-slate-950 font-black text-[8px] uppercase tracking-tighter">Soon</span>
                         </div>
                         <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-900 group-hover:text-slate-950 truncate w-full">AI Copilot</span>
                     </a>

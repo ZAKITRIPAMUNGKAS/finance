@@ -153,9 +153,8 @@ class NewSystemsSuiteTest extends TestCase
 
         // Test Livewire Copilot
         Livewire::test(\App\Livewire\AiCopilot\Index::class)
-            ->set('userQuery', 'Berapa bulan runway saya?')
-            ->call('sendQuery')
-            ->assertSee('Runway');
+            ->assertSee('Coming Soon')
+            ->assertSee('AI Financial Copilot');
     }
 
     public function test_financial_statement_pdf_report_and_csv_export(): void
