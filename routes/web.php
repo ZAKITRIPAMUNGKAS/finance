@@ -70,7 +70,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Invoices & Financial Reports
     Route::get('/invoices/{id}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
-    Route::get('/reports/financial-statement', [\App\Http\Controllers\ReportExportController::class, 'financialStatement'])->name('reports.financial-statement');
+    Route::get('/reports/financial-statement', \App\Livewire\Reports\FinancialStatement::class)->name('reports.financial-statement');
     Route::get('/reports/export-transactions-csv', [\App\Http\Controllers\ReportExportController::class, 'exportTransactionsCsv'])->name('reports.export-csv');
 });
 
