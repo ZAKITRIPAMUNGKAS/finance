@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>PortoFinance — Personal Finance OS</title>
     
-    <!-- Favicon -->
+    <!-- Favicon & PWA Icons -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.svg') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logofinance.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/logofinance.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logofinance.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logofinance.png') }}">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

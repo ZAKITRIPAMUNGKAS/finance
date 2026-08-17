@@ -10,21 +10,27 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/images/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "/favicon.png",
+      "src": "/images/logofinance.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/favicon.png",
+      "src": "/images/logofinance.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/logofinance.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ],
@@ -39,28 +45,28 @@
       "short_name": "Catat",
       "description": "Catat mutasi pengeluaran & pemasukan instan",
       "url": "/dashboard?quick=1",
-      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+      "icons": [{ "src": "/images/logofinance.png", "sizes": "192x192" }]
     },
     {
       "name": "🎤 Input Suara AI",
       "short_name": "Suara AI",
       "description": "Catat otomatis hanya dengan berbicara",
       "url": "/dashboard?quick=voice",
-      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+      "icons": [{ "src": "/images/logofinance.png", "sizes": "192x192" }]
     },
     {
       "name": "📸 Scan Struk OCR",
       "short_name": "Scan Struk",
       "description": "Foto nota/struk belanja dengan kamera HP",
       "url": "/dashboard?quick=scan",
-      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+      "icons": [{ "src": "/images/logofinance.png", "sizes": "192x192" }]
     },
     {
       "name": "🧾 Proyek & Invoice",
       "short_name": "Invoice",
       "description": "Kelola tagihan klien & pantau profit margin",
       "url": "/projects",
-      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+      "icons": [{ "src": "/images/logofinance.png", "sizes": "192x192" }]
     }
   ]
 }
