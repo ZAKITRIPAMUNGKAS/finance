@@ -488,8 +488,9 @@
                     <!-- Complete / Mulai Kelola Keuangan Button -->
                     <button @click="close()" 
                             type="button"
-                            class="px-4 py-2 rounded-xl text-xs font-extrabold text-slate-950 bg-slate-900 text-[#C6F24D] hover:bg-slate-800 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer active-tap">
-                        <span>Mulai Kelola 🚀</span>
+                            class="px-4 py-2 rounded-xl text-xs font-black text-white bg-slate-950 hover:bg-slate-800 transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer active-tap border border-slate-800 shrink-0">
+                        <span class="text-white font-black tracking-wide">Mulai Kelola</span>
+                        <span>🚀</span>
                     </button>
                 </div>
             </div>
