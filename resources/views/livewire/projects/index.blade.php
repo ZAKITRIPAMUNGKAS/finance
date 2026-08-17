@@ -142,38 +142,66 @@
                         <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Daftar Invoice ({{ $proj->invoices->count() }})</span>
                         <span class="text-[10px] text-slate-400">Klik "Tandai Lunas" untuk mencatat pemasukan</span>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         @foreach($proj->invoices as $inv)
-                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
-                            <div class="space-y-0.5">
-                                <div class="flex items-center gap-2">
-                                    <span class="font-mono font-bold text-slate-900 text-xs">{{ $inv->invoice_number }}</span>
-                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase {{ $inv->status === 'paid' ? 'bg-emerald-100 text-emerald-800' : ($inv->is_overdue ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
-                                        {{ $inv->status === 'paid' ? 'LUNAS' : ($inv->is_overdue ? 'JATUH TEMPO' : 'TERKIRIM') }}
-                                    </span>
+                        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between gap-2.5">
+                            <div class="flex items-start justify-between gap-2">
+                                <div class="space-y-0.5">
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="font-mono font-bold text-slate-900 text-xs">{{ $inv->invoice_number }}</span>
+                                        <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase {{ $inv->status === 'paid' ? 'bg-emerald-100 text-emerald-800' : ($inv->is_overdue ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
+                                            {{ $inv->status === 'paid' ? 'LUNAS' : ($inv->is_overdue ? 'JATUH TEMPO' : 'TERKIRIM') }}
+                                        </span>
+                                    </div>
+                                    <div class="text-[10px] text-slate-400 font-mono">
+                                        Jatuh Tempo: {{ $inv->due_date ? $inv->due_date->format('d-M-Y') : '-' }}
+                                        @if($inv->paid_at) &bull; Dibayar: {{ $inv->paid_at->format('d-M-Y') }} @endif
+                                    </div>
                                 </div>
-                                <div class="text-[10px] text-slate-400 font-mono">
-                                    Jatuh Tempo: {{ $inv->due_date ? $inv->due_date->format('d-M-Y') : '-' }}
-                                    @if($inv->paid_at) &bull; Dibayar: {{ $inv->paid_at->format('d-M-Y') }} @endif
-                                </div>
-                                <div class="text-xs font-black font-mono text-slate-900">
-                                    Rp {{ number_format($inv->amount, 0, ',', '.') }}
+                                <div class="text-right">
+                                    <div class="text-xs font-black font-mono text-slate-900">
+                                        Rp {{ number_format($inv->amount, 0, ',', '.') }}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-1.5 shrink-0">
-                                @if($inv->status !== 'paid')
-                                <button type="button" wire:click="markInvoiceAsPaid({{ $inv->id }})" 
-                                    class="px-2.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1">
-                                    <x-icon name="check" class="w-3 h-3" />
-                                    <span>Tandai Lunas</span>
-                                </button>
-                                @endif
-                                <button type="button" wire:click="deleteInvoice({{ $inv->id }})" 
-                                    wire:confirm="Yakin ingin menghapus invoice {{ $inv->invoice_number }}?"
-                                    title="Hapus Invoice"
-                                    class="p-2 rounded-xl bg-slate-100/70 hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer active:scale-95 flex items-center justify-center">
-                                    <x-icon name="trash" class="w-4 h-4" strokeWidth="2.2" />
-                                </button>
+
+                            <!-- Invoice Action Buttons -->
+                            <div class="flex items-center justify-between gap-1.5 pt-2 border-t border-slate-200/60">
+                                <div class="flex items-center gap-1.5">
+                                    <!-- View / Print / PDF -->
+                                    <a href="{{ route('invoices.show', $inv->id) }}" target="_blank"
+                                        title="Buka / Cetak PDF Invoice"
+                                        class="px-2.5 py-1.5 rounded-xl bg-white hover:bg-slate-200/80 border border-slate-200 text-slate-700 text-[10px] font-bold transition-all shadow-2xs flex items-center gap-1 active:scale-95">
+                                        <x-icon name="file-text" class="w-3 h-3 text-slate-600" />
+                                        <span>Lihat / Cetak</span>
+                                    </a>
+
+                                    <!-- Send WhatsApp -->
+                                    <a href="{{ $inv->whatsapp_share_url }}" target="_blank"
+                                        title="Kirim Invoice ke WhatsApp Klien"
+                                        class="px-2.5 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 text-[10px] font-bold transition-all flex items-center gap-1 active:scale-95">
+                                        <x-icon name="send" class="w-3 h-3 text-emerald-600" />
+                                        <span>Kirim WA</span>
+                                    </a>
+                                </div>
+
+                                <div class="flex items-center gap-1">
+                                    @if($inv->status !== 'paid')
+                                    <button type="button" wire:click="markInvoiceAsPaid({{ $inv->id }})" 
+                                        title="Tandai Invoice Lunas & Catat Pemasukan"
+                                        class="px-2.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1 active:scale-95">
+                                        <x-icon name="check" class="w-3 h-3" />
+                                        <span>Lunas</span>
+                                    </button>
+                                    @endif
+
+                                    <button type="button" wire:click="deleteInvoice({{ $inv->id }})" 
+                                        wire:confirm="Yakin ingin menghapus invoice {{ $inv->invoice_number }}?"
+                                        title="Hapus Invoice"
+                                        class="p-1.5 rounded-xl bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-200 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer active:scale-95 flex items-center justify-center">
+                                        <x-icon name="trash" class="w-3.5 h-3.5" strokeWidth="2.2" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         @endforeach

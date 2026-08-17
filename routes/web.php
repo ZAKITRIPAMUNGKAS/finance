@@ -68,7 +68,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/ai-copilot', AiCopilotIndex::class)->name('ai-copilot');
     Route::get('/settings', SettingsIndex::class)->name('settings');
 
-    // Financial Reports & Exports
+    // Invoices & Financial Reports
+    Route::get('/invoices/{id}', [\App\Http\Controllers\InvoiceController::class, 'show'])->name('invoices.show');
     Route::get('/reports/financial-statement', [\App\Http\Controllers\ReportExportController::class, 'financialStatement'])->name('reports.financial-statement');
     Route::get('/reports/export-transactions-csv', [\App\Http\Controllers\ReportExportController::class, 'exportTransactionsCsv'])->name('reports.export-csv');
 });
+
+// 5. Public Invoice Share Link (For Clients)
+Route::get('/i/{hash}', [\App\Http\Controllers\InvoiceController::class, 'publicView'])->name('invoices.public');

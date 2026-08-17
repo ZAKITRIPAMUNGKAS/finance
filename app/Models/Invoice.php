@@ -43,4 +43,38 @@ class Invoice extends Model
     {
         return in_array($this->status, ['sent', 'overdue']) && $this->due_date < now()->startOfDay();
     }
+
+    public function getPublicUrlAttribute(): string
+    {
+        $hash = base64_encode($this->id . '-' . substr(md5($this->created_at . config('app.key')), 0, 8));
+        return route('invoices.public', ['hash' => $hash]);
+    }
+
+    public function getWhatsappShareUrlAttribute(): string
+    {
+        $client = $this->project?->client;
+        $clientName = $client?->name ?? 'Klien';
+        $projectName = $this->project?->name ?? 'Project';
+        $formattedAmount = 'Rp ' . number_format($this->amount, 0, ',', '.');
+        $dueDateFormatted = $this->due_date ? $this->due_date->format('d M Y') : '-';
+        $publicUrl = $this->public_url;
+
+        // Primary user account for transfer
+        $user = $this->project?->user;
+        $account = $user ? Account::where('user_id', $user->id)->where('is_active', true)->first() : null;
+        $bankInfo = $account ? "\n\n*Rekening Pembayaran:*\n🏦 {$account->name} ({$account->type})\n💳 No. Rek: {$account->account_number}\n👤 a.n {$user->name}" : "";
+
+        $message = "Halo {$clientName},\n\nBerikut rincian tagihan Invoice untuk project *{$projectName}*:\n\n📄 *No. Invoice:* {$this->invoice_number}\n💰 *Total Tagihan:* {$formattedAmount}\n📅 *Jatuh Tempo:* {$dueDateFormatted}\n\n🔗 *Lihat / Unduh Invoice Lengkap:* \n{$publicUrl}{$bankInfo}\n\nTerima kasih atas kerja samanya! 🙏";
+
+        $phone = $client?->phone ? preg_replace('/[^0-9]/', '', $client->phone) : '';
+        if ($phone && str_starts_with($phone, '0')) {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        if ($phone) {
+            return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+        }
+
+        return 'https://wa.me/?text=' . urlencode($message);
+    }
 }
