@@ -66,7 +66,7 @@
             </div>
 
             <!-- Tier Filter Pills -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none w-full lg:w-auto -mx-1 px-1" style="-webkit-overflow-scrolling: touch;">
                 <button type="button" wire:click="$set('filterTier', 'all')" 
                         class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shrink-0 cursor-pointer {{ $filterTier === 'all' ? 'bg-slate-950 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
                     Semua
@@ -252,58 +252,67 @@
         <!-- MOBILE CARD VIEW (block md:hidden) -->
         <div class="block md:hidden space-y-3">
             @forelse($users as $user)
-            <div class="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/50 space-y-3 {{ $user->is_banned ? 'bg-rose-50/40 border-rose-200' : '' }}">
+            <div class="p-4 rounded-2xl border border-slate-200/80 bg-slate-50/70 space-y-3 shadow-xs {{ $user->is_banned ? 'bg-rose-50/40 border-rose-200' : '' }}">
                 
-                <!-- Card Top: Avatar, Name, Email, Tier -->
-                <div class="flex items-start justify-between gap-2">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-[#C6F24D] border border-slate-700 flex items-center justify-center font-mono font-black text-xs shrink-0 shadow-xs">
-                            {{ strtoupper(substr($user->name, 0, 2)) }}
-                        </div>
-                        <div>
-                            <div class="font-extrabold text-slate-950 text-xs flex items-center gap-1.5">
-                                <span>{{ $user->name }}</span>
-                                @if($user->isAdmin())
-                                    <span class="px-1.5 py-0.5 rounded-md bg-slate-950 text-[#C6F24D] text-[9px] font-mono font-black">ADMIN</span>
-                                @endif
-                                @if($user->is_banned)
-                                    <span class="px-1.5 py-0.5 rounded-md bg-rose-100 text-rose-700 text-[9px] font-mono font-black">BANNED</span>
-                                @endif
-                            </div>
-                            <div class="text-[11px] font-mono text-slate-400">{{ $user->email }}</div>
-                        </div>
+                <!-- Card Top: Avatar, Name & Email -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-[#C6F24D] border border-slate-700 flex items-center justify-center font-mono font-black text-xs shrink-0 shadow-xs">
+                        {{ strtoupper(substr($user->name, 0, 2)) }}
                     </div>
-
-                    <!-- Tier Pill -->
-                    <div>
-                        @if($user->isLifetime())
-                            <span class="px-2.5 py-1 rounded-xl bg-purple-100 text-purple-900 font-extrabold text-[11px]">👑 Lifetime</span>
-                        @elseif($user->subscription_tier === 'pro')
-                            <span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-900 font-extrabold text-[11px]">⭐ PRO</span>
-                        @elseif($user->isTrial())
-                            <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 font-extrabold text-[11px]">🎁 Trial</span>
-                        @else
-                            <span class="px-2.5 py-1 rounded-xl bg-slate-200 text-slate-700 font-bold text-[11px]">Free</span>
-                        @endif
+                    <div class="min-w-0 flex-1">
+                        <div class="font-extrabold text-slate-950 text-xs sm:text-sm truncate">{{ $user->name }}</div>
+                        <div class="text-[11px] font-mono text-slate-400 truncate">{{ $user->email }}</div>
                     </div>
                 </div>
 
-                <!-- Card Middle: Meta Stats -->
+                <!-- Card Badges: Role, Tier, Status (Clean Row) -->
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    @if($user->isAdmin())
+                        <span class="px-2 py-0.5 rounded-lg bg-slate-950 text-[#C6F24D] text-[10px] font-mono font-black border border-slate-800 inline-flex items-center gap-1">
+                            <x-icon name="shield" class="w-2.5 h-2.5 text-[#C6F24D]" />
+                            <span>ADMIN</span>
+                        </span>
+                    @else
+                        <span class="px-2 py-0.5 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-mono font-bold">USER</span>
+                    @endif
+
+                    @if($user->isLifetime())
+                        <span class="px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-900 font-extrabold text-[11px] inline-flex items-center gap-1">
+                            👑 Lifetime VIP
+                        </span>
+                    @elseif($user->subscription_tier === 'pro' && ($user->subscription_ends_at === null || $user->subscription_ends_at->isFuture()))
+                        <span class="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 font-extrabold text-[11px] inline-flex items-center gap-1">
+                            ⭐ PRO Member
+                        </span>
+                    @elseif($user->isTrial())
+                        <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[11px] inline-flex items-center gap-1">
+                            🎁 Trial ({{ $user->remaining_trial_days }}h)
+                        </span>
+                    @else
+                        <span class="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 font-bold text-[11px]">Free Starter</span>
+                    @endif
+
+                    @if($user->is_banned)
+                        <span class="px-2 py-0.5 rounded-lg bg-rose-100 text-rose-700 text-[10px] font-mono font-black">BANNED</span>
+                    @endif
+                </div>
+
+                <!-- Card Middle: Activity Stats & Date -->
                 <div class="flex items-center justify-between text-[11px] font-mono text-slate-500 pt-2 border-t border-slate-200/60">
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-1.5">
                         <span class="px-2 py-0.5 bg-white rounded-lg border border-slate-200 font-bold">{{ $user->transactions_count }} Trx</span>
                         <span class="px-2 py-0.5 bg-white rounded-lg border border-slate-200 font-bold">{{ $user->projects_count }} Proj</span>
                     </div>
-                    <div>
-                        Terdaftar: {{ $user->created_at->format('d M Y') }}
+                    <div class="text-[10px] text-slate-400">
+                        {{ $user->created_at->format('d M Y') }}
                     </div>
                 </div>
 
-                <!-- Card Bottom: Actions -->
-                <div class="flex items-center justify-end gap-2 pt-1">
+                <!-- Card Bottom: Action Buttons -->
+                <div class="flex items-center gap-2 pt-1">
                     <button type="button" 
                             wire:click="openEditModal({{ $user->id }})" 
-                            class="flex-1 py-2 rounded-xl bg-slate-950 text-white text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer active-tap">
+                            class="flex-1 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer active-tap shadow-xs">
                         <x-icon name="edit-3" class="w-3.5 h-3.5" />
                         <span>Ubah Paket</span>
                     </button>
@@ -311,7 +320,8 @@
                     @if($user->id !== auth()->id())
                     <button type="button" 
                             wire:click="impersonateUser({{ $user->id }})" 
-                            class="p-2 rounded-xl bg-white border border-slate-200 text-slate-700 cursor-pointer active-tap">
+                            title="Buka akun sebagai pengguna ini" 
+                            class="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 cursor-pointer active-tap">
                         <x-icon name="log-in" class="w-4 h-4" />
                     </button>
                     @endif
@@ -319,7 +329,8 @@
                     @if($user->id !== auth()->id() && strtolower($user->email) !== 'zakitripamungkas03@gmail.com')
                     <button type="button" 
                             wire:click="toggleBan({{ $user->id }})" 
-                            class="p-2 rounded-xl cursor-pointer active-tap {{ $user->is_banned ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-50 text-rose-700' }}">
+                            title="{{ $user->is_banned ? 'Buka Blokir' : 'Bekukan Akun' }}" 
+                            class="p-2.5 rounded-xl cursor-pointer active-tap {{ $user->is_banned ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-50 text-rose-700' }}">
                         <x-icon name="{{ $user->is_banned ? 'unlock' : 'lock' }}" class="w-4 h-4" />
                     </button>
                     @endif
@@ -327,8 +338,8 @@
 
             </div>
             @empty
-            <div class="py-8 text-center text-slate-400 text-xs">
-                Tidak ada pengguna yang cocok dengan kriteria pencarian.
+            <div class="py-8 text-center text-slate-400 text-xs font-medium">
+                Tidak ada pengguna yang cocok dengan filter atau pencarian Anda.
             </div>
             @endforelse
         </div>
