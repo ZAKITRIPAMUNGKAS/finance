@@ -3,249 +3,728 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice {{ $invoice->invoice_number }} — {{ $invoice->project->name }}</title>
+    <title>Invoice {{ $invoice->invoice_number }} - {{ $user->name }}</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
-    
-    <!-- Fonts -->
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     
+    <!-- Vite Assets for Icons & Alpine -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        :root {
+            --bg-color: #f1f5f9;
+            --white: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --light-bg: #f8fafc;
+            --dark-bg: #0f172a;
+            --green-neon: #a3e635;
+            --green-badge: #dcfce7;
+            --green-badge-text: #166534;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 30px 16px;
+            min-height: 100vh;
+        }
+
+        .action-toolbar {
+            max-width: 850px;
+            margin: 0 auto 24px auto;
+            background-color: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border: none;
+        }
+
+        .action-btn-back {
+            background-color: #f1f5f9;
+            color: #334155;
+        }
+        .action-btn-back:hover {
+            background-color: #e2e8f0;
+        }
+
+        .action-btn-copy {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            color: #1e293b;
+        }
+        .action-btn-copy:hover {
+            background-color: #f1f5f9;
+        }
+
+        .action-btn-wa {
+            background-color: #10b981;
+            color: #ffffff;
+        }
+        .action-btn-wa:hover {
+            background-color: #059669;
+        }
+
+        .action-btn-print {
+            background-color: #0f172a;
+            color: var(--green-neon);
+        }
+        .action-btn-print:hover {
+            background-color: #1e293b;
+        }
+
+        .invoice-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .invoice-container {
+            background-color: var(--white);
+            width: 100%;
+            max-width: 850px;
+            padding: 50px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Watermark */
+        .watermark {
+            position: absolute;
+            top: 80px;
+            right: 100px;
+            font-size: 72px;
+            font-weight: 800;
+            color: rgba(34, 197, 94, 0.15);
+            transform: rotate(-15deg);
+            pointer-events: none;
+            letter-spacing: 5px;
+            z-index: 0;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .company-info h1 {
+            font-size: 18px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            color: var(--text-main);
+        }
+
+        .company-info h1 svg {
+            width: 26px;
+            height: 26px;
+        }
+
+        .company-info p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .company-info .email {
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+            font-size: 11px;
+        }
+
+        .invoice-title {
+            text-align: right;
+        }
+
+        .invoice-title h2 {
+            font-size: 36px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--text-main);
+        }
+
+        .invoice-title p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+            text-transform: uppercase;
+        }
+
+        .badge-paid {
+            background-color: var(--green-badge);
+            color: var(--green-badge-text);
+        }
+
+        .badge-unpaid {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-overdue {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Info Box */
+        .info-box {
+            background-color: var(--light-bg);
+            border-radius: 12px;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+            border: 1px solid #f1f5f9;
+        }
+
+        .info-col h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        .info-col p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-muted);
+        }
+
+        .info-col strong {
+            font-size: 15px;
+            display: block;
+            margin-bottom: 4px;
+            color: var(--text-main);
+            font-weight: 700;
+        }
+
+        /* Table */
+        .table-container {
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            padding: 12px 10px;
+            border-top: 2px solid var(--text-main);
+            border-bottom: 2px solid var(--text-main);
+            font-weight: 700;
+        }
+
+        th:last-child {
+            text-align: right;
+        }
+
+        td {
+            padding: 20px 10px;
+            font-size: 13px;
+            border-bottom: 2px solid var(--text-main);
+        }
+
+        td:last-child {
+            text-align: right;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .col-no {
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+            font-weight: 700;
+            width: 50px;
+        }
+
+        .item-desc strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .item-desc span {
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+
+        .col-qty, .col-price {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Payment & Total */
+        .payment-summary-section {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .payment-methods {
+            flex: 1;
+        }
+
+        .payment-methods h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .bank-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            background-color: var(--light-bg);
+        }
+
+        .bank-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .bank-card-header strong {
+            font-size: 13px;
+            color: var(--text-main);
+        }
+
+        .bank-card-header span {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .bank-card p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .total-box {
+            background-color: var(--dark-bg);
+            color: var(--white);
+            border-radius: 12px;
+            padding: 25px 30px;
+            width: 320px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .total-box h3 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .total-box .amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--green-neon);
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+
+        .total-box .status {
+            font-size: 11px;
+            color: #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 5px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-note p {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-main);
+        }
+
+        .footer-note span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .signature {
+            text-align: right;
+        }
+
+        .signature p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            font-weight: 700;
+        }
+
+        .signature strong {
+            display: block;
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+            color: var(--text-main);
+            min-width: 140px;
+        }
+
+        .signature span {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px 8px;
+            }
+            .invoice-container {
+                padding: 24px 18px;
+            }
+            .header, .payment-summary-section, .footer {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .info-box {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .invoice-title, .total-box, .signature {
+                text-align: left;
+            }
+            .total-box {
+                width: 100%;
+                align-items: flex-start;
+            }
+            .total-box .status {
+                justify-content: flex-start;
+            }
+            .watermark {
+                font-size: 44px;
+                right: 20px;
+                top: 140px;
+            }
+            .table-container {
+                overflow-x: auto;
+            }
+            table {
+                min-width: 520px;
+            }
+        }
+
+        /* Print Mode */
         @media print {
-            .no-print { display: none !important; }
-            body { background: white !important; padding: 0 !important; color: black !important; }
-            .invoice-card { box-shadow: none !important; border: 1px solid #E2E8F0 !important; border-radius: 0 !important; margin: 0 !important; max-width: 100% !important; padding: 24px !important; }
-            @page { margin: 1cm; size: A4 portrait; }
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: white !important;
+                padding: 0 !important;
+                color: black !important;
+            }
+            .invoice-container {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            @page {
+                margin: 1.2cm;
+                size: A4 portrait;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-900 antialiased min-h-screen py-6 sm:py-10" x-data="{ copied: false }">
+<body x-data="{ copied: false }">
 
-    <!-- TOP ACTION TOOLBAR (NO-PRINT) -->
-    <div class="no-print max-w-4xl mx-auto px-4 mb-6">
-        <div class="p-4 bg-white rounded-3xl border border-slate-200/90 shadow-sm flex flex-wrap items-center justify-between gap-3">
-            <div class="flex items-center gap-3">
-                <a href="{{ route('projects') }}" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors text-xs font-bold flex items-center gap-1.5 cursor-pointer">
-                    <x-icon name="arrow-left" class="w-4 h-4" />
-                    <span>Kembali ke Projects</span>
-                </a>
-                <span class="text-xs font-extrabold text-slate-800 font-mono hidden sm:inline">
-                    {{ $invoice->invoice_number }}
-                </span>
-            </div>
+    <!-- ACTION TOOLBAR (NO-PRINT) -->
+    <div class="no-print action-toolbar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <a href="{{ route('projects') }}" class="action-btn action-btn-back">
+                <x-icon name="arrow-left" style="width: 14px; height: 14px;" />
+                <span>Kembali ke Projects</span>
+            </a>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #64748b;">
+                {{ $invoice->invoice_number }}
+            </span>
+        </div>
 
-            <div class="flex flex-wrap items-center gap-2">
-                <!-- Copy Public Link -->
-                <button type="button" 
-                    @click="navigator.clipboard.writeText('{{ $invoice->public_url }}'); copied = true; setTimeout(() => copied = false, 2500)"
-                    class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer active:scale-95">
-                    <x-icon name="external-link" class="w-3.5 h-3.5 text-slate-600" />
-                    <span x-text="copied ? '✓ Link Tersalin!' : 'Salin Link Klien'">Salin Link Klien</span>
-                </button>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <!-- Copy Public Link -->
+            <button type="button" 
+                @click="navigator.clipboard.writeText('{{ $invoice->public_url }}'); copied = true; setTimeout(() => copied = false, 2500)"
+                class="action-btn action-btn-copy">
+                <x-icon name="external-link" style="width: 14px; height: 14px;" />
+                <span x-text="copied ? '✓ Link Tersalin!' : 'Salin Link Klien'">Salin Link Klien</span>
+            </button>
 
-                <!-- Share via WhatsApp -->
-                <a href="{{ $invoice->whatsapp_share_url }}" target="_blank"
-                    class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
-                    <x-icon name="send" class="w-3.5 h-3.5" />
-                    <span>Kirim via WhatsApp</span>
-                </a>
+            <!-- Share via WhatsApp -->
+            <a href="{{ $invoice->whatsapp_share_url }}" target="_blank" class="action-btn action-btn-wa">
+                <x-icon name="send" style="width: 14px; height: 14px;" />
+                <span>Kirim via WhatsApp</span>
+            </a>
 
-                <!-- Print / Save PDF -->
-                <button onclick="window.print()" 
-                    class="px-4 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-extrabold transition-all flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer">
-                    <x-icon name="file-text" class="w-3.5 h-3.5" />
-                    <span>Cetak / Simpan PDF</span>
-                </button>
-            </div>
+            <!-- Print / Save PDF -->
+            <button onclick="window.print()" class="action-btn action-btn-print">
+                <x-icon name="file-text" style="width: 14px; height: 14px;" />
+                <span>Cetak / Simpan PDF</span>
+            </button>
         </div>
     </div>
 
-    <!-- INVOICE SHEET CONTAINER -->
-    <div class="max-w-4xl mx-auto px-4">
-        <div class="invoice-card bg-white rounded-3xl border border-slate-200/90 shadow-xl p-8 sm:p-12 space-y-8 relative overflow-hidden">
-            
-            <!-- WATERMARK STATUS STAMP (PAID ONLY) -->
+    <!-- INVOICE SHEET -->
+    <div class="invoice-wrapper">
+        <div class="invoice-container">
             @if($invoice->status === 'paid')
-            <div class="absolute right-8 top-28 sm:top-20 pointer-events-none opacity-20 rotate-[-12deg] select-none">
-                <div class="border-4 border-emerald-600 text-emerald-600 px-6 py-2 rounded-2xl text-4xl sm:text-5xl font-black font-mono tracking-widest uppercase">
-                    PAID / LUNAS
-                </div>
-            </div>
+            <div class="watermark">PAID / LUNAS</div>
             @endif
 
-            <!-- 1. HEADER & BRANDING -->
-            <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-6 pb-6 border-b border-slate-100">
-                <div class="space-y-1.5">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center font-black">
-                            <x-icon name="wallet" class="w-5 h-5" />
-                        </div>
-                        <span class="text-xl font-black tracking-tight text-slate-950">{{ $user->name }}</span>
-                    </div>
-                    <p class="text-xs text-slate-500 font-medium">Digital Creative & Freelance Services</p>
-                    <p class="text-xs text-slate-400 font-mono">{{ $user->email }}</p>
+            <div class="header">
+                <div class="company-info">
+                    <h1>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="24" height="24" rx="6" fill="#0f172a"/>
+                            <path d="M7 8H17M7 12H17M7 16H12" stroke="#a3e635" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        {{ $user->name }}
+                    </h1>
+                    <p>Digital Creative & Freelance Services</p>
+                    <p class="email">{{ $user->email }}</p>
                 </div>
-
-                <div class="sm:text-right space-y-1">
-                    <span class="text-3xl sm:text-4xl font-black font-mono text-slate-950 tracking-tight block">INVOICE</span>
-                    <div class="font-mono text-xs text-slate-500">
-                        No: <strong class="text-slate-900">{{ $invoice->invoice_number }}</strong>
-                    </div>
-                    <div>
-                        <span class="inline-block px-3 py-1 rounded-full text-[10px] font-black font-mono uppercase tracking-wider {{ $invoice->status === 'paid' ? 'bg-emerald-100 text-emerald-800' : ($invoice->is_overdue ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
-                            ● {{ $invoice->status === 'paid' ? 'LUNAS (PAID)' : ($invoice->is_overdue ? 'JATUH TEMPO (OVERDUE)' : 'MENUNGGU PEMBAYARAN (UNPAID)') }}
-                        </span>
-                    </div>
+                <div class="invoice-title">
+                    <h2>INVOICE</h2>
+                    <p>No: {{ $invoice->invoice_number }}</p>
+                    @if($invoice->status === 'paid')
+                        <div class="badge badge-paid">• LUNAS (PAID)</div>
+                    @elseif($invoice->is_overdue)
+                        <div class="badge badge-overdue">• JATUH TEMPO (OVERDUE)</div>
+                    @else
+                        <div class="badge badge-unpaid">• MENUNGGU PEMBAYARAN</div>
+                    @endif
                 </div>
             </div>
 
-            <!-- 2. CLIENT & INVOICE META GRID -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-[#F8F9FA] p-6 rounded-2xl border border-slate-100 text-xs">
-                <!-- Bill To -->
-                <div class="space-y-1">
-                    <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-1">Ditagihkan Kepada (Bill To):</span>
-                    <h4 class="text-sm font-extrabold text-slate-900">{{ $invoice->project->client->name ?? 'Klien' }}</h4>
+            <div class="info-box">
+                <div class="info-col">
+                    <h3>DITAGIHKAN KEPADA (BILL TO):</h3>
+                    <strong>{{ $invoice->project->client->name ?? 'Klien' }}</strong>
                     @if($invoice->project->client?->company)
-                    <p class="font-semibold text-slate-700">{{ $invoice->project->client->company }}</p>
-                    @endif
-                    @if($invoice->project->client?->email)
-                    <p class="text-slate-500 font-mono">{{ $invoice->project->client->email }}</p>
+                    <p>{{ $invoice->project->client->company }}</p>
                     @endif
                     @if($invoice->project->client?->phone)
-                    <p class="text-slate-500 font-mono">{{ $invoice->project->client->phone }}</p>
+                    <p>{{ $invoice->project->client->phone }}</p>
+                    @endif
+                    @if($invoice->project->client?->email)
+                    <p class="email" style="font-size: 11px;">{{ $invoice->project->client->email }}</p>
                     @endif
                     @if($invoice->project->client?->address)
-                    <p class="text-slate-500 mt-1">{{ $invoice->project->client->address }}</p>
+                    <p style="margin-top: 2px;">{{ $invoice->project->client->address }}</p>
                     @endif
                 </div>
-
-                <!-- Invoice Meta -->
-                <div class="sm:text-right space-y-2">
-                    <div>
-                        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Project:</span>
-                        <strong class="text-slate-900 font-extrabold text-xs block">{{ $invoice->project->name }}</strong>
-                        <span class="text-[11px] text-slate-500">{{ ucwords(str_replace('_', ' ', $invoice->project->category)) }}</span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/60 sm:border-0 sm:pt-0">
-                        <div>
-                            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Tanggal Terbit:</span>
-                            <span class="font-mono font-bold text-slate-800">{{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : '-' }}</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Jatuh Tempo:</span>
-                            <span class="font-mono font-bold {{ $invoice->is_overdue ? 'text-rose-600' : 'text-slate-800' }}">
-                                {{ $invoice->due_date ? $invoice->due_date->format('d M Y') : '-' }}
-                            </span>
-                        </div>
-                    </div>
+                <div class="info-col">
+                    <h3>TANGGAL TERBIT:</h3>
+                    <strong>{{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : '-' }}</strong>
+                </div>
+                <div class="info-col">
+                    <h3>PROJECT:</h3>
+                    <strong>{{ $invoice->project->name }}</strong>
+                    <p>{{ ucwords(str_replace('_', ' ', $invoice->project->category)) }}</p>
+                    <h3 style="margin-top: 15px;">JATUH TEMPO:</h3>
+                    <strong style="{{ $invoice->is_overdue ? 'color: #e11d48;' : '' }}">
+                        {{ $invoice->due_date ? $invoice->due_date->format('d M Y') : '-' }}
+                    </strong>
                 </div>
             </div>
 
-            <!-- 3. ITEM TABLE -->
-            <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
+            <div class="table-container">
+                <table>
                     <thead>
-                        <tr class="border-b-2 border-slate-900 text-slate-900 font-mono text-[10px] uppercase tracking-wider">
-                            <th class="py-3 px-2">No</th>
-                            <th class="py-3 px-2">Deskripsi Layanan / Item</th>
-                            <th class="py-3 px-2 text-center">Qty</th>
-                            <th class="py-3 px-2 text-right">Harga Satuan</th>
-                            <th class="py-3 px-2 text-right">Subtotal</th>
+                        <tr>
+                            <th class="col-no">NO</th>
+                            <th>DESKRIPSI LAYANAN / ITEM</th>
+                            <th>QTY</th>
+                            <th>HARGA SATUAN</th>
+                            <th>SUBTOTAL</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody>
                         <tr>
-                            <td class="py-4 px-2 font-mono text-slate-400">01</td>
-                            <td class="py-4 px-2">
-                                <strong class="text-slate-900 font-extrabold text-sm block">{{ $invoice->project->name }}</strong>
-                                <span class="text-slate-500 text-[11px]">
-                                    Layanan {{ ucwords(str_replace('_', ' ', $invoice->project->category)) }} &bull; {{ $invoice->notes ?? 'Penagihan jasa & pengerjaan deliverable project' }}
-                                </span>
+                            <td class="col-no">01</td>
+                            <td class="item-desc">
+                                <strong>{{ $invoice->project->name }}</strong>
+                                <span>Layanan {{ ucwords(str_replace('_', ' ', $invoice->project->category)) }} • {{ $invoice->notes ?? 'Penagihan jasa & pengerjaan deliverable project' }}</span>
                             </td>
-                            <td class="py-4 px-2 text-center font-mono font-bold text-slate-700">1x</td>
-                            <td class="py-4 px-2 text-right font-mono font-bold text-slate-700">
-                                Rp {{ number_format($invoice->amount, 0, ',', '.') }}
-                            </td>
-                            <td class="py-4 px-2 text-right font-mono font-black text-slate-950 text-sm">
-                                Rp {{ number_format($invoice->amount, 0, ',', '.') }}
-                            </td>
+                            <td class="col-qty">1x</td>
+                            <td class="col-price">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
+                            <td>Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
-            <!-- 4. TOTAL SUMMARY -->
-            <div class="pt-4 border-t-2 border-slate-900 flex flex-col sm:flex-row sm:items-start justify-between gap-6">
-                <!-- Payment Instructions -->
-                <div class="space-y-2.5 max-w-sm">
-                    <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Metode Pembayaran (Transfer Bank):</span>
+            <div class="payment-summary-section">
+                <div class="payment-methods">
+                    <h3>METODE PEMBAYARAN (TRANSFER BANK):</h3>
                     
                     @if($accounts->count() > 0)
-                    <div class="space-y-2">
                         @foreach($accounts as $acc)
-                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs">
-                            <div class="flex items-center justify-between">
-                                <span class="font-extrabold text-slate-900">{{ $acc->name }} ({{ strtoupper($acc->type) }})</span>
-                                <span class="text-[10px] text-slate-400 font-mono">a.n {{ $user->name }}</span>
+                        <div class="bank-card">
+                            <div class="bank-card-header">
+                                <strong>{{ $acc->name }} ({{ strtoupper($acc->type) }})</strong>
+                                <span>a.n {{ $user->name }}</span>
                             </div>
-                            <div class="font-mono font-black text-sm text-slate-900 mt-1 flex items-center justify-between">
-                                <span>{{ $acc->account_number ?? 'Hubungi Pengirim' }}</span>
-                            </div>
+                            <p>{{ $acc->account_number ?? 'Hubungi Pengirim' }}</p>
                         </div>
                         @endforeach
-                    </div>
                     @else
-                    <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
-                        Silakan hubungi {{ $user->name }} ({{ $user->email }}) untuk konfirmasi rekening pembayaran.
-                    </div>
+                        <div class="bank-card">
+                            <div class="bank-card-header">
+                                <strong>Rekening Pembayaran</strong>
+                                <span>a.n {{ $user->name }}</span>
+                            </div>
+                            <p>Hubungi Pengirim ({{ $user->email }})</p>
+                        </div>
                     @endif
 
                     @if($invoice->notes)
-                    <div class="mt-3 p-3 rounded-2xl bg-amber-50/60 border border-amber-200/60 text-[11px] text-amber-900">
+                    <div style="margin-top: 12px; font-size: 11px; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
                         <strong>Catatan:</strong> {{ $invoice->notes }}
                     </div>
                     @endif
                 </div>
 
-                <!-- Grand Total Box -->
-                <div class="sm:text-right space-y-2 sm:min-w-[240px]">
-                    <div class="p-4 bg-slate-950 text-white rounded-2xl space-y-1">
-                        <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Total Tagihan (Grand Total)</span>
-                        <span class="text-2xl sm:text-3xl font-black font-mono text-[#C6F24D] block">
-                            Rp {{ number_format($invoice->amount, 0, ',', '.') }}
-                        </span>
-                        @if($invoice->status === 'paid')
-                        <span class="text-[11px] text-emerald-400 font-bold block pt-1 border-t border-slate-800">
-                            ✓ Lunas dibayar pada {{ $invoice->paid_at ? $invoice->paid_at->format('d M Y') : '-' }}
-                        </span>
-                        @endif
+                <div class="total-box">
+                    <h3>TOTAL TAGIHAN (GRAND TOTAL)</h3>
+                    <div class="amount">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</div>
+                    @if($invoice->status === 'paid')
+                    <div class="status">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Lunas dibayar pada {{ $invoice->paid_at ? $invoice->paid_at->format('d M Y') : '-' }}
                     </div>
+                    @else
+                    <div class="status" style="color: #94a3b8;">
+                        Status: Belum Terbayar
+                    </div>
+                    @endif
                 </div>
             </div>
 
-            <!-- 5. SIGNATURE & FOOTER -->
-            <div class="pt-8 border-t border-slate-100 flex flex-col sm:flex-row sm:items-end justify-between gap-6 text-xs text-slate-400">
-                <div class="space-y-1">
-                    <p class="font-semibold text-slate-700">Terima kasih atas kerja sama dan kepercayaannya.</p>
-                    <p class="text-[10px]">Invoice ini dibuat secara otomatis melalui platform PortoFinance.</p>
+            <div class="footer">
+                <div class="footer-note">
+                    <p>Terima kasih atas kerja sama dan kepercayaannya.</p>
+                    <span>Invoice ini dibuat secara otomatis melalui platform PortoFinance.</span>
                 </div>
-
-                <div class="sm:text-right space-y-12">
-                    <span class="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">Hormat Kami,</span>
-                    <div>
-                        <strong class="text-slate-900 font-extrabold text-sm block border-b border-slate-300 pb-1 inline-block min-w-[140px]">{{ $user->name }}</strong>
-                        <span class="text-[10px] text-slate-400 block mt-0.5">Freelancer / Creator</span>
-                    </div>
+                <div class="signature">
+                    <p>HORMAT KAMI,</p>
+                    <strong>{{ $user->name }}</strong>
+                    <span>Freelancer / Creator</span>
                 </div>
             </div>
-
         </div>
     </div>
 
