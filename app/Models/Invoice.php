@@ -59,12 +59,25 @@ class Invoice extends Model
         $dueDateFormatted = $this->due_date ? $this->due_date->format('d M Y') : '-';
         $publicUrl = $this->public_url;
 
-        // Primary user account for transfer
+        // Prefer bank account with valid account number
         $user = $this->project?->user;
-        $account = $user ? Account::where('user_id', $user->id)->where('is_active', true)->first() : null;
-        $bankInfo = $account ? "\n\n*Rekening Pembayaran:*\n🏦 {$account->name} ({$account->type})\n💳 No. Rek: {$account->account_number}\n👤 a.n {$user->name}" : "";
+        $account = null;
+        if ($user) {
+            $account = Account::where('user_id', $user->id)
+                ->where('is_active', true)
+                ->whereNotNull('account_number')
+                ->where('account_number', '!=', '')
+                ->where('account_number', '!=', 'Hubungi Pengirim')
+                ->first() 
+                ?? Account::where('user_id', $user->id)->where('is_active', true)->first();
+        }
 
-        $message = "Halo {$clientName},\n\nBerikut rincian tagihan Invoice untuk project *{$projectName}*:\n\n📄 *No. Invoice:* {$this->invoice_number}\n💰 *Total Tagihan:* {$formattedAmount}\n📅 *Jatuh Tempo:* {$dueDateFormatted}\n\n🔗 *Lihat / Unduh Invoice Lengkap:* \n{$publicUrl}{$bankInfo}\n\nTerima kasih atas kerja samanya! 🙏";
+        $bankInfo = "";
+        if ($account && !empty($account->account_number) && $account->account_number !== 'Hubungi Pengirim') {
+            $bankInfo = "\n\n*Rekening Pembayaran:*\nBank: {$account->name} (" . strtoupper($account->type) . ")\nNo. Rek: {$account->account_number}\na.n {$user->name}";
+        }
+
+        $message = "Halo {$clientName},\n\nBerikut rincian tagihan Invoice untuk project *{$projectName}*:\n\n• *No. Invoice:* {$this->invoice_number}\n• *Total Tagihan:* {$formattedAmount}\n• *Jatuh Tempo:* {$dueDateFormatted}\n\n• *Lihat / Unduh Invoice Lengkap:*\n{$publicUrl}{$bankInfo}\n\nTerima kasih atas kerja samanya!";
 
         $phone = $client?->phone ? preg_replace('/[^0-9]/', '', $client->phone) : '';
         if ($phone && str_starts_with($phone, '0')) {
@@ -72,9 +85,9 @@ class Invoice extends Model
         }
 
         if ($phone) {
-            return 'https://wa.me/' . $phone . '?text=' . urlencode($message);
+            return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
         }
 
-        return 'https://wa.me/?text=' . urlencode($message);
+        return 'https://wa.me/?text=' . rawurlencode($message);
     }
 }
