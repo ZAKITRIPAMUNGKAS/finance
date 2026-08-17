@@ -128,7 +128,6 @@
             ],
 
             init() {
-                // Listen for tour completion or direct trigger
                 window.addEventListener('open-financial-guide-modal', () => {
                     this.open();
                 });
@@ -139,6 +138,7 @@
                 this.activeTab = 0;
                 this.activeTipTab = 0;
                 this.showTheory = true;
+                this.scrollTabIntoView();
             },
 
             close() {
@@ -146,6 +146,67 @@
                     localStorage.setItem('pf_theory_intro_seen', 'true');
                 }
                 this.showTheory = false;
+            },
+
+            // Navigation Helpers
+            setTheoryTab(idx) {
+                this.activeTab = idx;
+                this.scrollTabIntoView();
+            },
+
+            setTipTab(idx) {
+                this.activeTipTab = idx;
+                this.scrollTabIntoView();
+            },
+
+            nextStep() {
+                if (this.mainSection === 'theories') {
+                    if (this.activeTab < this.theories.length - 1) {
+                        this.activeTab++;
+                        this.scrollTabIntoView();
+                    } else {
+                        // Switch to tips
+                        this.mainSection = 'tips';
+                        this.activeTipTab = 0;
+                        this.scrollTabIntoView();
+                    }
+                } else {
+                    if (this.activeTipTab < this.tips.length - 1) {
+                        this.activeTipTab++;
+                        this.scrollTabIntoView();
+                    } else {
+                        this.close();
+                    }
+                }
+            },
+
+            prevStep() {
+                if (this.mainSection === 'theories') {
+                    if (this.activeTab > 0) {
+                        this.activeTab--;
+                        this.scrollTabIntoView();
+                    }
+                } else {
+                    if (this.activeTipTab > 0) {
+                        this.activeTipTab--;
+                        this.scrollTabIntoView();
+                    } else {
+                        // Switch back to last theory
+                        this.mainSection = 'theories';
+                        this.activeTab = this.theories.length - 1;
+                        this.scrollTabIntoView();
+                    }
+                }
+            },
+
+            scrollTabIntoView() {
+                this.$nextTick(() => {
+                    const id = this.mainSection === 'theories' ? 'tab-theory-' + this.activeTab : 'tab-tip-' + this.activeTipTab;
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                });
             }
         };
     };
@@ -182,22 +243,22 @@
             <!-- ═══════════════════════════════════════════════════════════ -->
             <!-- 1. HERO BANNER HEADER                                       -->
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <div class="relative px-5 sm:px-8 pt-6 pb-5 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white shrink-0 overflow-hidden border-b border-slate-800">
+            <div class="relative px-5 sm:px-8 pt-5 pb-4 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white shrink-0 overflow-hidden border-b border-slate-800">
                 <!-- Background Glow Accents -->
                 <div class="absolute top-0 right-0 w-64 h-64 bg-[#C6F24D]/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div class="absolute bottom-0 left-1/3 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
                 <div class="relative z-10 flex items-start justify-between gap-4">
                     <div>
-                        <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/30 text-[#C6F24D] text-[10px] font-mono font-bold uppercase tracking-wider mb-2">
+                        <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/30 text-[#C6F24D] text-[10px] font-mono font-bold uppercase tracking-wider mb-1.5">
                             <x-icon name="award" class="w-3 h-3 text-[#C6F24D]" strokeWidth="2.5" />
                             <span>Financial Mastery & Survival Guide</span>
                         </div>
-                        <h2 class="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight">
+                        <h2 class="text-base sm:text-xl font-black tracking-tight text-white leading-tight">
                             Fondasi Keilmuan & <span class="text-[#C6F24D]">Tips Bebas Boncos</span>
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-xl leading-relaxed">
-                            PortoFinance bukan sekadar buku kas biasa. Dirancang dengan formula finansial modern untuk menjamin kebebasan finansial freelancer.
+                        <p class="text-[11px] sm:text-xs text-slate-300 mt-1 max-w-xl leading-relaxed">
+                            PortoFinance bukan sekadar buku kas biasa. Dirancang dengan formula finansial modern untuk kebebasan finansial freelancer.
                         </p>
                     </div>
 
@@ -210,20 +271,20 @@
                 </div>
 
                 <!-- Main Section Toggle (Theories vs Tips & Tricks) -->
-                <div class="flex items-center gap-2 mt-4 pt-3 border-t border-slate-800/80">
-                    <button @click="mainSection = 'theories'" 
+                <div class="flex items-center gap-2 mt-3 pt-3 border-t border-slate-800/80">
+                    <button @click="mainSection = 'theories'; scrollTabIntoView()" 
                             type="button"
-                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                             :class="mainSection === 'theories' ? 'bg-[#C6F24D] text-slate-950 shadow-sm font-extrabold' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'">
                         <x-icon name="cpu" class="w-3.5 h-3.5" />
-                        <span>🧠 5 Pilar Fondasi Keilmuan</span>
+                        <span>🧠 5 Pilar Fondasi</span>
                     </button>
-                    <button @click="mainSection = 'tips'" 
+                    <button @click="mainSection = 'tips'; scrollTabIntoView()" 
                             type="button"
-                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                            class="px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
                             :class="mainSection === 'tips' ? 'bg-[#C6F24D] text-slate-950 shadow-sm font-extrabold' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'">
                         <x-icon name="zap" class="w-3.5 h-3.5" />
-                        <span>💡 5 Tips & Trik Anti-Boncos</span>
+                        <span>💡 5 Tips Anti-Boncos</span>
                     </button>
                 </div>
             </div>
@@ -233,12 +294,14 @@
             <!-- ═══════════════════════════════════════════════════════════ -->
             <template x-if="mainSection === 'theories'">
                 <div class="flex flex-col flex-1 overflow-hidden">
-                    <!-- Theory Tab Navigation -->
-                    <div class="px-4 sm:px-6 py-2.5 bg-[#F8F9FA] border-b border-slate-200/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+                    
+                    <!-- Theory Tab Navigation with Horizontal Scroll & Arrows -->
+                    <div class="relative px-3 sm:px-6 py-2 bg-[#F8F9FA] border-b border-slate-200/80 flex items-center gap-1.5 overflow-x-auto shrink-0 scroll-smooth">
                         <template x-for="(theory, idx) in theories" :key="theory.id">
-                            <button @click="activeTab = idx"
+                            <button :id="'tab-theory-' + idx"
+                                    @click="setTheoryTab(idx)"
                                     type="button"
-                                    class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5"
+                                    class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 shrink-0"
                                     :class="activeTab === idx ? 'bg-slate-950 text-white shadow-sm font-extrabold' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-200/70'">
                                 <span class="font-mono text-[9px] px-1.5 py-0.2 rounded" :class="activeTab === idx ? 'bg-[#C6F24D] text-slate-950 font-black' : 'bg-slate-200 text-slate-600'" x-text="'0' + (idx + 1)"></span>
                                 <span x-text="theory.title"></span>
@@ -247,7 +310,7 @@
                     </div>
 
                     <!-- Detailed Theory Content Body -->
-                    <div class="p-5 sm:p-7 overflow-y-auto flex-1 space-y-5 bg-white text-slate-900">
+                    <div class="p-5 sm:p-7 overflow-y-auto flex-1 space-y-4 bg-white text-slate-900">
                         <template x-for="(theory, idx) in theories" :key="theory.id">
                             <div x-show="activeTab === idx" 
                                  x-transition:enter="transition ease-out duration-200"
@@ -261,13 +324,15 @@
                                         <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block" x-text="theory.badge"></span>
                                         <h3 class="text-base sm:text-lg font-black text-slate-950 tracking-tight" x-text="theory.subtitle"></h3>
                                     </div>
-                                    <span class="px-2.5 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-bold">
-                                        Pilar Finansial #<span x-text="idx + 1"></span>
-                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-2.5 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-bold">
+                                            Pilar <span x-text="idx + 1"></span> dari 5
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Mathematical Formula Card (JetBrains Mono) -->
-                                <div class="p-4 bg-slate-950 rounded-2xl text-slate-100 border border-slate-800 space-y-1.5 shadow-inner">
+                                <div class="p-3.5 sm:p-4 bg-slate-950 rounded-2xl text-slate-100 border border-slate-800 space-y-1 shadow-inner">
                                     <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
                                         <div class="flex items-center gap-1.5 uppercase tracking-wider font-bold">
                                             <x-icon name="calculator" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.5" />
@@ -279,9 +344,9 @@
                                 </div>
 
                                 <!-- Problem vs Solution 2-Column Grid -->
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                                     <!-- Masalah Freelancer Tradisional -->
-                                    <div class="p-4 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-1.5">
+                                    <div class="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-1">
                                         <div class="flex items-center gap-1.5 text-xs font-extrabold text-rose-900">
                                             <x-icon name="alert-circle" class="w-4 h-4 text-rose-600 shrink-0" strokeWidth="2.5" />
                                             <span>Tantangan / Jebakan Klasik</span>
@@ -290,7 +355,7 @@
                                     </div>
 
                                     <!-- Solusi Ilmiah PortoFinance -->
-                                    <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-1.5">
+                                    <div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-1">
                                         <div class="flex items-center gap-1.5 text-xs font-extrabold text-emerald-900">
                                             <x-icon name="check-circle" class="w-4 h-4 text-emerald-600 shrink-0" strokeWidth="2.5" />
                                             <span>Solusi Sistem PortoFinance</span>
@@ -300,7 +365,7 @@
                                 </div>
 
                                 <!-- Real-World Impact Benefit Card -->
-                                <div class="p-3.5 rounded-2xl bg-[#F8F9FA] border border-slate-200 flex items-center gap-3">
+                                <div class="p-3 rounded-2xl bg-[#F8F9FA] border border-slate-200 flex items-center gap-3">
                                     <div class="w-8 h-8 rounded-xl bg-slate-900 text-[#C6F24D] flex items-center justify-center shrink-0 font-bold text-xs">
                                         💡
                                     </div>
@@ -321,12 +386,14 @@
             <!-- ═══════════════════════════════════════════════════════════ -->
             <template x-if="mainSection === 'tips'">
                 <div class="flex flex-col flex-1 overflow-hidden">
-                    <!-- Tips Tab Navigation -->
-                    <div class="px-4 sm:px-6 py-2.5 bg-[#F8F9FA] border-b border-slate-200/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar shrink-0">
+                    
+                    <!-- Tips Tab Navigation with Scroll & Visibility for all 5 tips -->
+                    <div class="relative px-3 sm:px-6 py-2 bg-[#F8F9FA] border-b border-slate-200/80 flex items-center gap-1.5 overflow-x-auto shrink-0 scroll-smooth">
                         <template x-for="(tip, idx) in tips" :key="tip.id">
-                            <button @click="activeTipTab = idx"
+                            <button :id="'tab-tip-' + idx"
+                                    @click="setTipTab(idx)"
                                     type="button"
-                                    class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5"
+                                    class="px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-1.5 shrink-0"
                                     :class="activeTipTab === idx ? 'bg-slate-950 text-white shadow-sm font-extrabold' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-200/70'">
                                 <span class="font-mono text-[9px] px-1.5 py-0.2 rounded" :class="activeTipTab === idx ? 'bg-[#C6F24D] text-slate-950 font-black' : 'bg-slate-200 text-slate-600'" x-text="'Tips 0' + (idx + 1)"></span>
                                 <span x-text="tip.tag"></span>
@@ -335,7 +402,7 @@
                     </div>
 
                     <!-- Detailed Tip Content Body -->
-                    <div class="p-5 sm:p-7 overflow-y-auto flex-1 space-y-5 bg-white text-slate-900">
+                    <div class="p-5 sm:p-7 overflow-y-auto flex-1 space-y-4 bg-white text-slate-900">
                         <template x-for="(tip, idx) in tips" :key="tip.id">
                             <div x-show="activeTipTab === idx" 
                                  x-transition:enter="transition ease-out duration-200"
@@ -350,9 +417,11 @@
                                         <h3 class="text-base sm:text-lg font-black text-slate-950 tracking-tight" x-text="tip.title"></h3>
                                         <p class="text-xs text-slate-500 mt-0.5" x-text="tip.subtitle"></p>
                                     </div>
-                                    <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-[10px] font-mono font-bold">
-                                        Actionable Trick #<span x-text="idx + 1"></span>
-                                    </span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 text-[10px] font-mono font-bold">
+                                            Tips <span x-text="idx + 1"></span> dari 5
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Action Steps Card -->
@@ -389,19 +458,38 @@
             </template>
 
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- 4. FOOTER CONTROLS & CALL TO ACTION                         -->
+            <!-- 4. STEPPER CONTROLS & FOOTER BUTTONS                        -->
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <div class="px-5 sm:px-8 py-4 bg-[#F8F9FA] border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+            <div class="px-5 sm:px-8 py-3.5 bg-[#F8F9FA] border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
                 <label class="flex items-center gap-2 text-xs text-slate-500 cursor-pointer select-none">
                     <input type="checkbox" x-model="dontShowAgain" class="w-4 h-4 rounded border-slate-300 text-slate-950 focus:ring-0">
                     <span>Sudah paham & jangan tampilkan otomatis lagi</span>
                 </label>
 
-                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                <!-- Navigation Controls (Prev, Next, Finish) -->
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    
+                    <!-- Prev Button -->
+                    <button type="button"
+                            x-show="(mainSection === 'theories' && activeTab > 0) || (mainSection === 'tips')"
+                            @click="prevStep()" 
+                            class="px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer flex items-center gap-1 active-tap">
+                        <span>&larr; Kembali</span>
+                    </button>
+
+                    <!-- Next Step Button (When not at the very end of tips) -->
+                    <button type="button"
+                            x-show="!(mainSection === 'tips' && activeTipTab === tips.length - 1)"
+                            @click="nextStep()" 
+                            class="px-4 py-2 rounded-xl text-xs font-bold text-slate-900 bg-[#C6F24D] hover:bg-[#b8e640] transition-all shadow-2xs flex items-center gap-1.5 cursor-pointer active-tap">
+                        <span x-text="mainSection === 'theories' ? (activeTab === theories.length - 1 ? 'Lanjut ke Tips & Trik &rarr;' : 'Pilar Berikutnya (' + (activeTab + 2) + '/5) &rarr;') : 'Tips Berikutnya (' + (activeTipTab + 2) + '/5) &rarr;'"></span>
+                    </button>
+
+                    <!-- Complete / Mulai Kelola Keuangan Button -->
                     <button @click="close()" 
                             type="button"
-                            class="flex-1 sm:flex-initial px-6 py-2.5 rounded-2xl text-xs font-extrabold text-slate-950 bg-[#C6F24D] hover:bg-[#b8e640] transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active-tap">
-                        <span>Mulai Kelola Keuangan 🚀</span>
+                            class="px-4 py-2 rounded-xl text-xs font-extrabold text-slate-950 bg-slate-900 text-[#C6F24D] hover:bg-slate-800 transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer active-tap">
+                        <span>Mulai Kelola 🚀</span>
                     </button>
                 </div>
             </div>
