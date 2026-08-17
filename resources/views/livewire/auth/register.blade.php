@@ -18,34 +18,6 @@
          }
      }"
      class="w-full flex-1 flex flex-col justify-between h-full relative anim-page-enter">
-    
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  FLOATING ANIMATED ORNAMENTS (PROPERLY SPREAD OUT)         -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
-        <!-- Ornament 1: Sparkles (Top Left - Below Header) -->
-        <div class="absolute top-16 -left-2 sm:-left-8 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-12deg] anim-float-1 scale-90 sm:scale-100">
-            <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-            <span class="text-[9px] font-black tracking-wider">NEW</span>
-        </div>
-
-        <!-- Ornament 2: Safe Shield (Top Right - Floating) -->
-        <div class="absolute top-20 -right-2 sm:-right-8 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[10deg] flex items-center gap-1.5 anim-float-2 scale-90 sm:scale-100">
-            <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-            <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
-        </div>
-
-        <!-- Ornament 3: Checkmark Coin (Mid/Bottom Left) -->
-        <div class="absolute bottom-32 -left-2 sm:-left-7 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3 scale-90 sm:scale-100">
-            <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
-        </div>
-
-        <!-- Ornament 4: Cashless Badge (Bottom Right - Near Footer) -->
-        <div class="absolute bottom-12 -right-2 sm:-right-7 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-8deg] flex items-center gap-1 anim-float-1 scale-90 sm:scale-100">
-            <x-icon name="credit-card" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
-            <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">CASH</span>
-        </div>
-    </div>
 
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
     <header class="flex items-center justify-between pt-1 pb-3 shrink-0">
@@ -107,7 +79,7 @@
         <!-- Divider -->
         <div class="relative flex items-center justify-center py-0.5">
             <div class="w-full border-t border-slate-200"></div>
-            <span class="absolute bg-white px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            <span class="absolute bg-slate-50 px-3 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 atau daftar dengan email
             </span>
         </div>
@@ -170,8 +142,12 @@
                                 @click="showPass = !showPass" 
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer p-1"
                                 title="Tampilkan / Sembunyikan Kata Sandi">
-                            <x-icon x-show="!showPass" name="eye" class="w-4 h-4" strokeWidth="2" />
-                            <x-icon x-show="showPass" x-cloak name="eye-off" class="w-4 h-4" strokeWidth="2" />
+                            <span x-show="!showPass" class="flex items-center">
+                                <x-icon name="eye" class="w-4 h-4" strokeWidth="2" />
+                            </span>
+                            <span x-show="showPass" x-cloak class="flex items-center">
+                                <x-icon name="eye-off" class="w-4 h-4" strokeWidth="2" />
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -193,8 +169,12 @@
                                 @click="showConfirmPass = !showConfirmPass" 
                                 class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer p-1"
                                 title="Tampilkan / Sembunyikan Konfirmasi Sandi">
-                            <x-icon x-show="!showConfirmPass" name="eye" class="w-4 h-4" strokeWidth="2" />
-                            <x-icon x-show="showConfirmPass" x-cloak name="eye-off" class="w-4 h-4" strokeWidth="2" />
+                            <span x-show="!showConfirmPass" class="flex items-center">
+                                <x-icon name="eye" class="w-4 h-4" strokeWidth="2" />
+                            </span>
+                            <span x-show="showConfirmPass" x-cloak class="flex items-center">
+                                <x-icon name="eye-off" class="w-4 h-4" strokeWidth="2" />
+                            </span>
                         </button>
                     </div>
                 </div>
@@ -226,7 +206,7 @@
     </main>
 
     <!-- ── FOOTER LOGIN LINK ─────────────────────────────────── -->
-    <footer class="pt-3 pb-2 text-center border-t border-slate-100 shrink-0">
+    <footer class="pt-3 pb-2 text-center border-t border-slate-200/60 shrink-0">
         <p class="text-xs text-slate-500 font-medium">
             Sudah punya akun? 
             <a href="{{ route('login') }}"
