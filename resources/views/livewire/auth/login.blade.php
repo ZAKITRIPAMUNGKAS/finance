@@ -113,8 +113,21 @@
     <!-- ── MAIN GREETING & FORM ──────────────────────────────── -->
     <main class="space-y-5 sm:space-y-6 my-auto py-3">
         
-        <!-- Header Greeting with Aesthetic Pill Badge -->
-        <div class="text-center space-y-2">
+        <!-- Header Greeting with Aesthetic Pill Badge & Side Accents -->
+        <div class="text-center space-y-2 relative">
+            
+            <!-- Left Side Accent: Floating Coin (Desktop/Tablet) -->
+            <div class="hidden sm:flex absolute top-1 left-2 px-2 py-0.5 rounded-lg bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] items-center gap-1 font-black font-mono text-[10px] text-slate-950 rotate-[-10deg] pointer-events-none anim-float-2">
+                <x-icon name="dollar-sign" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
+                <span>Rp OS</span>
+            </div>
+
+            <!-- Right Side Accent: Floating Safe Badge (Desktop/Tablet) -->
+            <div class="hidden sm:flex absolute top-1 right-2 px-2 py-0.5 rounded-lg bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] items-center gap-1 font-black font-mono text-[9px] text-slate-950 rotate-[8deg] pointer-events-none anim-float-3">
+                <x-icon name="shield-check" class="w-3 h-3 text-emerald-600" strokeWidth="2.5" />
+                <span>SAFE</span>
+            </div>
+
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-2xs">
                 <span class="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
                 <span>Porto Secure Gateway</span>
@@ -135,8 +148,14 @@
         </div>
         @endif
 
-        <!-- Google OAuth Instant Login Button -->
-        <div>
+        <!-- Google OAuth Instant Login Button with Anchored Fast Sticker -->
+        <div class="relative">
+            <!-- Anchored Corner Sticker (Never straying, 100% stable) -->
+            <div class="absolute -top-2.5 right-4 z-10 px-2 py-0.5 rounded-md bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[6deg] flex items-center gap-1 font-black font-mono text-[9px] text-slate-950 pointer-events-none anim-float-1">
+                <x-icon name="zap" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
+                <span>INSTANT</span>
+            </div>
+
             <a href="{{ route('google.redirect') }}" 
                @click="startAuth(); sessionStorage.setItem('pf_just_logged_in', 'true')"
                class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 font-bold text-xs sm:text-sm border-2 border-slate-200 hover:border-slate-400 shadow-2xs transition-all flex items-center justify-center gap-3 cursor-pointer">
@@ -212,8 +231,14 @@
                 @enderror
             </div>
 
-            <!-- Primary Log In Button -->
-            <div class="pt-2">
+            <!-- Primary Log In Button with Anchored Verified Badge -->
+            <div class="pt-2 relative">
+                <!-- Anchored Corner Sticker (Never straying, 100% stable) -->
+                <div class="absolute -bottom-2 left-4 z-10 px-2 py-0.5 rounded-md bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-5deg] flex items-center gap-1 font-black font-mono text-[9px] text-slate-950 pointer-events-none anim-float-2">
+                    <x-icon name="check" class="w-2.5 h-2.5 text-emerald-600" strokeWidth="3" />
+                    <span>VERIFIED</span>
+                </div>
+
                 <button type="submit"
                         wire:loading.attr="disabled"
                         class="w-full py-4 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-[0.98] text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-2 border-slate-950">
@@ -226,7 +251,7 @@
         </form>
 
         <!-- Security & Trust Micro-Strip -->
-        <div class="flex items-center justify-center gap-3 pt-1 text-[10px] font-bold text-slate-400">
+        <div class="flex items-center justify-center gap-3 pt-2 text-[10px] font-bold text-slate-400">
             <span class="flex items-center gap-1">
                 <x-icon name="shield-check" class="w-3 h-3 text-emerald-600" />
                 <span>256-Bit SSL</span>
