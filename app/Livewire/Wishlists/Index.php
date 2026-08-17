@@ -87,8 +87,8 @@ class Index extends Component
         $this->wishlistId = $wishlist->id;
         $this->name = $wishlist->name;
         $this->category = $wishlist->category;
-        $this->target_price = (string) $wishlist->target_price;
-        $this->current_price = (string) $wishlist->current_price;
+        $this->target_price = $wishlist->target_price > 0 ? number_format($wishlist->target_price, 0, ',', '.') : '';
+        $this->current_price = $wishlist->current_price > 0 ? number_format($wishlist->current_price, 0, ',', '.') : '';
         $this->product_url = $wishlist->product_url;
         $this->priority = $wishlist->priority;
         $this->target_date = $wishlist->target_date ? Carbon::parse($wishlist->target_date)->format('Y-m-d') : null;
@@ -101,6 +101,9 @@ class Index extends Component
     public function saveWishlist()
     {
         $userId = auth()->id();
+        $this->target_price = (string) str_replace(['.', ',', ' '], '', $this->target_price);
+        $this->current_price = (string) str_replace(['.', ',', ' '], '', $this->current_price);
+
         if (empty($this->current_price) && !empty($this->target_price)) {
             $this->current_price = $this->target_price;
         }
@@ -163,7 +166,7 @@ class Index extends Component
     {
         $wishlist = PurchaseWishlist::where('user_id', auth()->id())->with('priceHistories')->findOrFail($id);
         $this->priceTrackingWishlistId = $wishlist->id;
-        $this->new_price = (string) $wishlist->current_price;
+        $this->new_price = $wishlist->current_price > 0 ? number_format($wishlist->current_price, 0, ',', '.') : '';
         $this->price_note = null;
         $this->priceHistories = $wishlist->priceHistories;
         $this->isPriceModalOpen = true;
@@ -171,6 +174,8 @@ class Index extends Component
 
     public function recordPriceUpdate()
     {
+        $this->new_price = (string) str_replace(['.', ',', ' '], '', $this->new_price);
+
         $this->validate([
             'new_price' => 'required|numeric|min:1',
             'price_note' => 'nullable|string|max:255',
@@ -223,6 +228,8 @@ class Index extends Component
     public function allocateSaving()
     {
         $userId = auth()->id();
+        $this->saving_amount = (string) str_replace(['.', ',', ' '], '', $this->saving_amount);
+
         $this->validate([
             'saving_amount' => 'required|numeric|min:1',
             'saving_date' => 'required|date',

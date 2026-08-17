@@ -208,7 +208,14 @@
     </div>
 
     <!-- MODAL 1: ADD / EDIT WISHLIST -->
-    <div x-data="{ open: @entangle('isFormModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+    <div x-data="{ 
+            open: @entangle('isFormModalOpen'),
+            formatNominal(val) {
+                let num = val.replace(/\D/g, '');
+                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+            }
+         }" 
+         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
         <div @click.outside="$wire.set('isFormModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
                 <h3 class="text-base font-extrabold text-slate-900">{{ $wishlistId ? 'Edit Item Wishlist' : 'Tambah Wishlist Baru' }}</h3>
@@ -246,11 +253,17 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Target Harga (Rp) *</label>
-                        <input type="number" wire:model.defer="target_price" placeholder="8000000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        <input type="text" inputmode="numeric" wire:model.defer="target_price" 
+                            x-on:input="$event.target.value = formatNominal($event.target.value)"
+                            placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        @error('target_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Harga Saat Ini (Rp) *</label>
-                        <input type="number" wire:model.defer="current_price" placeholder="8000000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        <input type="text" inputmode="numeric" wire:model.defer="current_price" 
+                            x-on:input="$event.target.value = formatNominal($event.target.value)"
+                            placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        @error('current_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
@@ -279,7 +292,14 @@
     </div>
 
     <!-- MODAL 2: MANUAL PRICE TRACKING -->
-    <div x-data="{ open: @entangle('isPriceModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+    <div x-data="{ 
+            open: @entangle('isPriceModalOpen'),
+            formatNominal(val) {
+                let num = val.replace(/\D/g, '');
+                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+            }
+         }" 
+         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
         <div @click.outside="$wire.set('isPriceModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
                 <h3 class="text-base font-extrabold text-slate-900">Update Harga (Price Tracking)</h3>
@@ -288,7 +308,10 @@
             <form wire:submit.prevent="recordPriceUpdate" class="p-6 space-y-4 overflow-y-auto">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Harga Terbaru (Rp) *</label>
-                    <input type="number" wire:model.defer="new_price" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    <input type="text" inputmode="numeric" wire:model.defer="new_price" 
+                        x-on:input="$event.target.value = formatNominal($event.target.value)"
+                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    @error('new_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
@@ -319,7 +342,14 @@
     </div>
 
     <!-- MODAL 3: SAVING ALLOCATION -->
-    <div x-data="{ open: @entangle('isSavingModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+    <div x-data="{ 
+            open: @entangle('isSavingModalOpen'),
+            formatNominal(val) {
+                let num = val.replace(/\D/g, '');
+                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+            }
+         }" 
+         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
         <div @click.outside="$wire.set('isSavingModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
                 <h3 class="text-base font-extrabold text-slate-900">Setor Tabungan Wishlist</h3>
@@ -328,7 +358,10 @@
             <form wire:submit.prevent="allocateSaving" class="p-6 space-y-4 overflow-y-auto">
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Setoran (Rp) *</label>
-                    <input type="number" wire:model.defer="saving_amount" placeholder="1000000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    <input type="text" inputmode="numeric" wire:model.defer="saving_amount" 
+                        x-on:input="$event.target.value = formatNominal($event.target.value)"
+                        placeholder="1.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    @error('saving_amount') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
