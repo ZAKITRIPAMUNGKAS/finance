@@ -172,26 +172,6 @@
                 </div>
             </div>
 
-            <!-- Superadmin Section (Exclusive for Admin) -->
-            @if(auth()->check() && auth()->user()->isAdmin())
-            <div>
-                <div class="flex items-center justify-between px-3 mb-2">
-                    <p class="text-[10px] font-mono font-black uppercase tracking-wider text-slate-950">Superadmin</p>
-                    <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-950 text-[#C6F24D] font-mono font-bold">ADMIN</span>
-                </div>
-                <div class="space-y-1">
-                    <a href="{{ route('admin.dashboard') }}" 
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-black transition-all {{ request()->routeIs('admin*') ? 'bg-slate-950 text-[#C6F24D] shadow-sm' : 'text-slate-900 bg-slate-100/80 hover:bg-slate-200' }}">
-                        <div class="flex items-center gap-3">
-                            <x-icon name="shield-check" class="w-4 h-4 text-[#C6F24D]" />
-                            <span>Panel Admin SaaS</span>
-                        </div>
-                        <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-[#C6F24D] text-slate-950 font-mono font-bold">Control</span>
-                    </a>
-                </div>
-            </div>
-            @endif
-
             <!-- System & Account Section -->
             <div>
                 <p class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Akun & Sistem</p>
@@ -292,13 +272,6 @@
             <!-- Right: Available Money Hero Pill, Live Notifications, and Far-Right User Profile -->
             <div class="flex items-center gap-2 sm:gap-2.5">
                 
-                @if(auth()->check() && auth()->user()->isAdmin())
-                <a href="{{ route('admin.dashboard') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 text-[#C6F24D] hover:bg-slate-800 text-[11px] font-mono font-black transition-all shadow-xs border border-slate-800 cursor-pointer">
-                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-[#C6F24D]" />
-                    <span>Admin Panel</span>
-                </a>
-                @endif
-
                 {{-- Live Available Money Bar (auto-updates on transaction-saved) --}}
                 <div id="tour-available-money">
                     <livewire:available-money-bar />
