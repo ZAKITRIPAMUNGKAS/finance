@@ -14,8 +14,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     
-    <!-- Vite Assets for Icons & Alpine -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <!-- Icons & Script -->
+    @vite(['resources/js/app.js'])
 
     <style>
         :root {
@@ -38,20 +38,25 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding: 30px 16px;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
         }
 
-        .action-toolbar {
+        /* Top Action Toolbar */
+        .top-toolbar {
+            width: 100%;
             max-width: 850px;
-            margin: 0 auto 24px auto;
+            margin-bottom: 24px;
             background-color: var(--white);
             border: 1px solid var(--border-color);
             border-radius: 16px;
-            padding: 14px 20px;
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -60,7 +65,7 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
         }
 
-        .action-btn {
+        .btn {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -72,29 +77,26 @@
             text-decoration: none;
             transition: all 0.15s ease;
             border: none;
+            font-family: inherit;
         }
 
-        .action-btn-wa {
+        .btn-wa {
             background-color: #10b981;
             color: #ffffff;
         }
-        .action-btn-wa:hover {
+        .btn-wa:hover {
             background-color: #059669;
         }
 
-        .action-btn-print {
+        .btn-print {
             background-color: #0f172a;
             color: var(--green-neon);
         }
-        .action-btn-print:hover {
+        .btn-print:hover {
             background-color: #1e293b;
         }
 
-        .invoice-wrapper {
-            display: flex;
-            justify-content: center;
-        }
-
+        /* Invoice Container */
         .invoice-container {
             background-color: var(--white);
             width: 100%;
@@ -109,9 +111,9 @@
         /* Watermark */
         .watermark {
             position: absolute;
-            top: 80px;
-            right: 100px;
-            font-size: 72px;
+            top: 70px;
+            right: 80px;
+            font-size: 70px;
             font-weight: 800;
             color: rgba(34, 197, 94, 0.15);
             transform: rotate(-15deg);
@@ -119,14 +121,13 @@
             letter-spacing: 5px;
             z-index: 0;
             font-family: 'JetBrains Mono', monospace;
-            text-transform: uppercase;
         }
 
         /* Header */
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
             margin-bottom: 40px;
             position: relative;
             z-index: 1;
@@ -143,8 +144,8 @@
         }
 
         .company-info h1 svg {
-            width: 26px;
-            height: 26px;
+            width: 24px;
+            height: 24px;
         }
 
         .company-info p {
@@ -160,23 +161,24 @@
         }
 
         .invoice-title {
-            text-align: right;
+            text-align: right !important;
         }
 
         .invoice-title h2 {
             font-size: 36px;
             font-weight: 800;
             letter-spacing: 2px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-family: 'JetBrains Mono', monospace;
             color: var(--text-main);
+            line-height: 1;
         }
 
         .invoice-title p {
             font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
             color: var(--text-main);
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             font-weight: 600;
         }
 
@@ -188,7 +190,6 @@
             font-weight: 700;
             letter-spacing: 1px;
             font-family: 'JetBrains Mono', monospace;
-            text-transform: uppercase;
         }
 
         .badge-paid {
@@ -211,8 +212,8 @@
             background-color: var(--light-bg);
             border-radius: 12px;
             padding: 25px;
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
+            display: grid !important;
+            grid-template-columns: 2fr 1fr 1fr !important;
             gap: 20px;
             margin-bottom: 40px;
             position: relative;
@@ -310,8 +311,9 @@
 
         /* Payment & Total */
         .payment-summary-section {
-            display: flex;
-            justify-content: space-between;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
             gap: 40px;
             margin-bottom: 50px;
             position: relative;
@@ -335,7 +337,7 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 14px 16px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             background-color: var(--light-bg);
         }
 
@@ -370,6 +372,7 @@
             border-radius: 12px;
             padding: 25px 30px;
             width: 320px;
+            min-width: 300px;
             text-align: right;
             display: flex;
             flex-direction: column;
@@ -407,9 +410,9 @@
 
         /* Footer */
         .footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-end !important;
             border-top: 1px dashed var(--border-color);
             padding-top: 30px;
             position: relative;
@@ -429,7 +432,7 @@
         }
 
         .signature {
-            text-align: right;
+            text-align: right !important;
         }
 
         .signature p {
@@ -443,7 +446,7 @@
         }
 
         .signature strong {
-            display: block;
+            display: inline-block;
             font-size: 14px;
             border-bottom: 1px solid var(--border-color);
             padding-bottom: 5px;
@@ -455,48 +458,10 @@
         .signature span {
             font-size: 11px;
             color: var(--text-muted);
+            display: block;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            body {
-                padding: 16px 8px;
-            }
-            .invoice-container {
-                padding: 24px 18px;
-            }
-            .header, .payment-summary-section, .footer {
-                flex-direction: column;
-                gap: 24px;
-            }
-            .info-box {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-            .invoice-title, .total-box, .signature {
-                text-align: left;
-            }
-            .total-box {
-                width: 100%;
-                align-items: flex-start;
-            }
-            .total-box .status {
-                justify-content: flex-start;
-            }
-            .watermark {
-                font-size: 44px;
-                right: 20px;
-                top: 140px;
-            }
-            .table-container {
-                overflow-x: auto;
-            }
-            table {
-                min-width: 520px;
-            }
-        }
-
-        /* Print Mode */
+        /* Print Media */
         @media print {
             .no-print {
                 display: none !important;
@@ -521,17 +486,17 @@
         }
     </style>
 </head>
-<body x-data="{ copiedAcc: null }">
+<body>
 
-    <!-- ACTION TOOLBAR (NO-PRINT) -->
-    <div class="no-print action-toolbar">
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <div style="width: 28px; height: 28px; border-radius: 8px; background: #0f172a; color: #a3e635; display: flex; align-items: center; justify-content: center;">
-                <x-icon name="receipt" style="width: 16px; height: 16px;" />
+    <!-- TOP TOOLBAR (NO-PRINT) -->
+    <div class="no-print top-toolbar">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="width: 26px; height: 26px; border-radius: 6px; background: #0f172a; color: #a3e635; display: flex; align-items: center; justify-content: center;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></svg>
             </div>
             <div>
-                <span style="font-size: 12px; font-weight: 800; color: #0f172a; display: block;">Invoice Resmi</span>
-                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b;">{{ $invoice->invoice_number }}</span>
+                <span style="font-size: 12px; font-weight: 800; color: #0f172a;">Invoice Penagihan Resmi</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #64748b; margin-left: 4px;">{{ $invoice->invoice_number }}</span>
             </div>
         </div>
 
@@ -540,178 +505,163 @@
             @php
                 $confirmMsg = "Halo {$user->name}, saya ingin konfirmasi pembayaran invoice *{$invoice->invoice_number}* untuk project *{$invoice->project->name}* sebesar *Rp " . number_format($invoice->amount, 0, ',', '.') . "*. Berikut bukti transfernya:";
             @endphp
-            <a href="https://wa.me/?text={{ urlencode($confirmMsg) }}" target="_blank" class="action-btn action-btn-wa">
-                <x-icon name="send" style="width: 14px; height: 14px;" />
+            <a href="https://wa.me/?text={{ urlencode($confirmMsg) }}" target="_blank" class="btn btn-wa">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                 <span>Konfirmasi Pembayaran</span>
             </a>
 
             <!-- Print / Save PDF -->
-            <button onclick="window.print()" class="action-btn action-btn-print">
-                <x-icon name="file-text" style="width: 14px; height: 14px;" />
+            <button onclick="window.print()" class="btn btn-print">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg>
                 <span>Cetak / Simpan PDF</span>
             </button>
         </div>
     </div>
 
-    <!-- INVOICE SHEET -->
-    <div class="invoice-wrapper">
-        <div class="invoice-container">
-            @if($invoice->status === 'paid')
-            <div class="watermark">PAID / LUNAS</div>
-            @endif
+    <!-- INVOICE CONTAINER -->
+    <div class="invoice-container">
+        @if($invoice->status === 'paid')
+        <div class="watermark">PAID / LUNAS</div>
+        @endif
 
-            <div class="header">
-                <div class="company-info">
-                    <h1>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="24" height="24" rx="6" fill="#0f172a"/>
-                            <path d="M7 8H17M7 12H17M7 16H12" stroke="#a3e635" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        {{ $user->name }}
-                    </h1>
-                    <p>Digital Creative & Freelance Services</p>
-                    <p class="email">{{ $user->email }}</p>
-                </div>
-                <div class="invoice-title">
-                    <h2>INVOICE</h2>
-                    <p>No: {{ $invoice->invoice_number }}</p>
-                    @if($invoice->status === 'paid')
-                        <div class="badge badge-paid">• LUNAS (PAID)</div>
-                    @elseif($invoice->is_overdue)
-                        <div class="badge badge-overdue">• JATUH TEMPO (OVERDUE)</div>
-                    @else
-                        <div class="badge badge-unpaid">• MENUNGGU PEMBAYARAN</div>
-                    @endif
-                </div>
+        <div class="header">
+            <div class="company-info">
+                <h1>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="6" fill="#0f172a"/>
+                        <path d="M7 8H17M7 12H17M7 16H12" stroke="#a3e635" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    {{ $user->name }}
+                </h1>
+                <p>Digital Creative & Freelance Services</p>
+                <p class="email">{{ $user->email }}</p>
             </div>
-
-            <div class="info-box">
-                <div class="info-col">
-                    <h3>DITAGIHKAN KEPADA (BILL TO):</h3>
-                    <strong>{{ $invoice->project->client->name ?? 'Klien' }}</strong>
-                    @if($invoice->project->client?->company)
-                    <p>{{ $invoice->project->client->company }}</p>
-                    @endif
-                    @if($invoice->project->client?->phone)
-                    <p>{{ $invoice->project->client->phone }}</p>
-                    @endif
-                    @if($invoice->project->client?->email)
-                    <p class="email" style="font-size: 11px;">{{ $invoice->project->client->email }}</p>
-                    @endif
-                    @if($invoice->project->client?->address)
-                    <p style="margin-top: 2px;">{{ $invoice->project->client->address }}</p>
-                    @endif
-                </div>
-                <div class="info-col">
-                    <h3>TANGGAL TERBIT:</h3>
-                    <strong>{{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : '-' }}</strong>
-                </div>
-                <div class="info-col">
-                    <h3>PROJECT:</h3>
-                    <strong>{{ $invoice->project->name }}</strong>
-                    <p>{{ ucwords(str_replace('_', ' ', $invoice->project->category)) }}</p>
-                    <h3 style="margin-top: 15px;">JATUH TEMPO:</h3>
-                    <strong style="{{ $invoice->is_overdue ? 'color: #e11d48;' : '' }}">
-                        {{ $invoice->due_date ? $invoice->due_date->format('d M Y') : '-' }}
-                    </strong>
-                </div>
+            <div class="invoice-title">
+                <h2>INVOICE</h2>
+                <p>No: {{ $invoice->invoice_number }}</p>
+                @if($invoice->status === 'paid')
+                    <div class="badge badge-paid">• LUNAS (PAID)</div>
+                @elseif($invoice->is_overdue)
+                    <div class="badge badge-overdue">• JATUH TEMPO (OVERDUE)</div>
+                @else
+                    <div class="badge badge-unpaid">• MENUNGGU PEMBAYARAN</div>
+                @endif
             </div>
+        </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="col-no">NO</th>
-                            <th>DESKRIPSI LAYANAN / ITEM</th>
-                            <th>QTY</th>
-                            <th>HARGA SATUAN</th>
-                            <th>SUBTOTAL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="col-no">01</td>
-                            <td class="item-desc">
-                                <strong>{{ $invoice->project->name }}</strong>
-                                <span>Layanan {{ ucwords(str_replace('_', ' ', $invoice->project->category)) }} • {{ $invoice->notes ?? 'Penagihan jasa & pengerjaan deliverable project' }}</span>
-                            </td>
-                            <td class="col-qty">1x</td>
-                            <td class="col-price">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
-                            <td>Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div class="info-box">
+            <div class="info-col">
+                <h3>DITAGIHKAN KEPADA (BILL TO):</h3>
+                <strong>{{ $invoice->project->client->name ?? 'Klien' }}</strong>
+                @if($invoice->project->client?->company)
+                <p>{{ $invoice->project->client->company }}</p>
+                @endif
+                @if($invoice->project->client?->phone)
+                <p>{{ $invoice->project->client->phone }}</p>
+                @endif
+                @if($invoice->project->client?->address)
+                <p style="margin-top: 2px;">{{ $invoice->project->client->address }}</p>
+                @endif
             </div>
+            <div class="info-col">
+                <h3>TANGGAL TERBIT:</h3>
+                <strong>{{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : '-' }}</strong>
+            </div>
+            <div class="info-col">
+                <h3>PROJECT:</h3>
+                <strong>{{ $invoice->project->name }}</strong>
+                <p>{{ ucwords(str_replace('_', ' ', $invoice->project->category)) }}</p>
+                <h3 style="margin-top: 15px;">JATUH TEMPO:</h3>
+                <strong style="{{ $invoice->is_overdue ? 'color: #e11d48;' : '' }}">
+                    {{ $invoice->due_date ? $invoice->due_date->format('d M Y') : '-' }}
+                </strong>
+            </div>
+        </div>
 
-            <div class="payment-summary-section">
-                <div class="payment-methods">
-                    <h3>METODE PEMBAYARAN (TRANSFER BANK):</h3>
-                    
-                    @if($accounts->count() > 0)
-                        @foreach($accounts as $acc)
-                        <div class="bank-card" style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                            <div style="flex: 1;">
-                                <div class="bank-card-header">
-                                    <strong>{{ $acc->name }} ({{ strtoupper($acc->type) }})</strong>
-                                    <span>a.n {{ $user->name }}</span>
-                                </div>
-                                <p>{{ $acc->account_number ?? 'Hubungi Pengirim' }}</p>
-                            </div>
-                            @if($acc->account_number)
-                            <button type="button" 
-                                @click="navigator.clipboard.writeText('{{ $acc->account_number }}'); copiedAcc = {{ $acc->id }}; setTimeout(() => copiedAcc = null, 2000)"
-                                class="no-print"
-                                style="font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; padding: 6px 12px; background: #e2e8f0; border: none; border-radius: 8px; cursor: pointer; color: #1e293b;">
-                                <span x-text="copiedAcc === {{ $acc->id }} ? '✓ Tersalin' : 'Salin'">Salin</span>
-                            </button>
-                            @endif
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-no">NO</th>
+                        <th>DESKRIPSI LAYANAN / ITEM</th>
+                        <th>QTY</th>
+                        <th>HARGA SATUAN</th>
+                        <th>SUBTOTAL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="col-no">01</td>
+                        <td class="item-desc">
+                            <strong>{{ $invoice->project->name }}</strong>
+                            <span>Layanan {{ ucwords(str_replace('_', ' ', $invoice->project->category)) }} • {{ $invoice->notes ?? 'Penagihan jasa & pengerjaan deliverable project' }}</span>
+                        </td>
+                        <td class="col-qty">1x</td>
+                        <td class="col-price">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
+                        <td>Rp {{ number_format($invoice->amount, 0, ',', '.') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="payment-summary-section">
+            <div class="payment-methods">
+                <h3>METODE PEMBAYARAN (TRANSFER BANK):</h3>
+                
+                @if($accounts->count() > 0)
+                    @foreach($accounts as $acc)
+                    <div class="bank-card">
+                        <div class="bank-card-header">
+                            <strong>{{ $acc->name }} ({{ strtoupper($acc->type) }})</strong>
+                            <span>a.n {{ $user->name }}</span>
                         </div>
-                        @endforeach
-                    @else
-                        <div class="bank-card">
-                            <div class="bank-card-header">
-                                <strong>Rekening Pembayaran</strong>
-                                <span>a.n {{ $user->name }}</span>
-                            </div>
-                            <p>Hubungi Pengirim ({{ $user->email }})</p>
+                        <p>{{ $acc->account_number ?? 'Hubungi Pengirim' }}</p>
+                    </div>
+                    @endforeach
+                @else
+                    <div class="bank-card">
+                        <div class="bank-card-header">
+                            <strong>Rekening Pembayaran</strong>
+                            <span>a.n {{ $user->name }}</span>
                         </div>
-                    @endif
+                        <p>Hubungi Pengirim ({{ $user->email }})</p>
+                    </div>
+                @endif
 
-                    @if($invoice->notes)
-                    <div style="margin-top: 12px; font-size: 11px; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
-                        <strong>Catatan:</strong> {{ $invoice->notes }}
-                    </div>
-                    @endif
+                @if($invoice->notes)
+                <div style="margin-top: 12px; font-size: 11px; color: #64748b; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px 12px;">
+                    <strong>Catatan:</strong> {{ $invoice->notes }}
                 </div>
-
-                <div class="total-box">
-                    <h3>TOTAL TAGIHAN (GRAND TOTAL)</h3>
-                    <div class="amount">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</div>
-                    @if($invoice->status === 'paid')
-                    <div class="status">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        Lunas dibayar pada {{ $invoice->paid_at ? $invoice->paid_at->format('d M Y') : '-' }}
-                    </div>
-                    @else
-                    <div class="status" style="color: #94a3b8;">
-                        Status: Belum Terbayar
-                    </div>
-                    @endif
-                </div>
+                @endif
             </div>
 
-            <div class="footer">
-                <div class="footer-note">
-                    <p>Terima kasih atas kerja sama dan kepercayaannya.</p>
-                    <span>Invoice ini dibuat secara otomatis melalui platform PortoFinance.</span>
+            <div class="total-box">
+                <h3>TOTAL TAGIHAN (GRAND TOTAL)</h3>
+                <div class="amount">Rp {{ number_format($invoice->amount, 0, ',', '.') }}</div>
+                @if($invoice->status === 'paid')
+                <div class="status">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#a3e635" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Lunas dibayar pada {{ $invoice->paid_at ? $invoice->paid_at->format('d M Y') : '-' }}
                 </div>
-                <div class="signature">
-                    <p>HORMAT KAMI,</p>
-                    <strong>{{ $user->name }}</strong>
-                    <span>Freelancer / Creator</span>
+                @else
+                <div class="status" style="color: #94a3b8;">
+                    Status: Belum Terbayar
                 </div>
+                @endif
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-note">
+                <p>Terima kasih atas kerja sama dan kepercayaannya.</p>
+                <span>Invoice ini dibuat secara otomatis melalui platform PortoFinance.</span>
+            </div>
+            <div class="signature">
+                <p>HORMAT KAMI,</p>
+                <strong>{{ $user->name }}</strong>
+                <span>Freelancer / Creator</span>
             </div>
         </div>
     </div>
