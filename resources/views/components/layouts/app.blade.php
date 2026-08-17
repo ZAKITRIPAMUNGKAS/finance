@@ -24,6 +24,9 @@
       @keydown.window.prevent.cmd.k="quickAddOpen = true"
       @open-quick-add.window="quickAddOpen = true">
 
+    <!-- Global Top Loading Progress Bar -->
+    <div id="nprogress-bar"></div>
+
     <!-- Splash Screen Initial Animation -->
     <x-splash-screen />
 
@@ -368,8 +371,8 @@
             </div>
         </header>
 
-        <!-- Main Viewport -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl w-full mx-auto pb-28 md:pb-10">
+        <!-- Main Viewport with Silky Smooth View Transition -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl w-full mx-auto pb-28 md:pb-10 main-view-animate">
             {{ $slot }}
         </main>
     </div>
@@ -388,7 +391,7 @@
             </a>
             
             <!-- Mobile Floating Center Action Button -->
-            <button @click="$dispatch('open-quick-add')" id="tour-quick-add-mobile" class="w-11 h-11 rounded-2xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-black shadow-lg shadow-[#C6F24D]/30 active-tap transition-transform">
+            <button @click="$dispatch('open-quick-add')" id="tour-quick-add-mobile" class="w-11 h-11 rounded-2xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-black shadow-lg shadow-[#C6F24D]/30 active-tap transition-transform cursor-pointer">
                 <x-icon name="plus" class="w-6 h-6 text-slate-950" strokeWidth="2.5" />
             </button>
 
@@ -428,13 +431,51 @@
     @livewireScripts
     <script>
         document.addEventListener('livewire:init', () => {
-            Livewire.hook('request', ({ fail }) => {
+            const bar = document.getElementById('nprogress-bar');
+            let timeout;
+
+            Livewire.hook('request', ({ respond, fail }) => {
+                if (bar) {
+                    bar.classList.remove('is-done');
+                    bar.classList.add('is-loading');
+                }
+
+                respond(() => {
+                    if (bar) {
+                        bar.classList.remove('is-loading');
+                        bar.classList.add('is-done');
+                        clearTimeout(timeout);
+                        timeout = setTimeout(() => {
+                            bar.classList.remove('is-done');
+                        }, 350);
+                    }
+                });
+
                 fail(({ status, preventDefault }) => {
+                    if (bar) {
+                        bar.classList.remove('is-loading');
+                        bar.classList.add('is-done');
+                    }
                     if (status === 419) {
                         preventDefault();
                         window.location.reload();
                     }
                 });
+            });
+
+            document.addEventListener('livewire:navigating', () => {
+                if (bar) {
+                    bar.classList.remove('is-done');
+                    bar.classList.add('is-loading');
+                }
+            });
+
+            document.addEventListener('livewire:navigated', () => {
+                if (bar) {
+                    bar.classList.remove('is-loading');
+                    bar.classList.add('is-done');
+                    setTimeout(() => bar.classList.remove('is-done'), 350);
+                }
             });
         });
     </script>
