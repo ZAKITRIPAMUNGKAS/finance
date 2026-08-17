@@ -5,7 +5,6 @@ namespace App\Livewire\Auth;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\User;
-use App\Services\BudgetAllocationService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +24,17 @@ class Register extends Component
         'password' => 'required|string|min:6|confirmed',
     ];
 
-    public function register(BudgetAllocationService $budgetService)
+    protected $messages = [
+        'name.required' => 'Nama lengkap wajib diisi.',
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format alamat email tidak valid.',
+        'email.unique' => 'Email ini sudah terdaftar di PortoFinance.',
+        'password.required' => 'Kata sandi wajib diisi.',
+        'password.min' => 'Kata sandi minimal 6 karakter.',
+        'password.confirmed' => 'Konfirmasi kata sandi tidak cocok.',
+    ];
+
+    public function register()
     {
         $this->validate();
 
@@ -65,20 +74,15 @@ class Register extends Component
             'type' => 'cash',
             'initial_balance' => 0,
             'current_balance' => 0,
-            'color' => '#F59E0B',
-            'icon' => 'banknote',
+            'color' => '#16A34A',
+            'icon' => 'wallet',
             'is_active' => true,
         ]);
 
-        // 2. Initialize Adaptive Budget Profile
-        $budgetService->seedInitialBudgetConfiguration($user->id);
-
-        // 3. Fire registered event to send verification email
         event(new Registered($user));
-
         Auth::login($user);
-        session()->regenerate();
 
+        session()->regenerate();
         return redirect()->route('verification.notice');
     }
 
@@ -86,7 +90,7 @@ class Register extends Component
     {
         return view('livewire.auth.register')
             ->layout('components.layouts.guest', [
-                'title' => 'Daftar Akun Baru • PORTO Finance'
+                'title' => 'Daftar Akun Baru • PortoFinance'
             ]);
     }
 }

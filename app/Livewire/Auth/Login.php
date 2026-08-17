@@ -16,6 +16,12 @@ class Login extends Component
         'password' => 'required|string',
     ];
 
+    protected $messages = [
+        'email.required' => 'Email wajib diisi.',
+        'email.email' => 'Format alamat email tidak valid.',
+        'password.required' => 'Kata sandi wajib diisi.',
+    ];
+
     public function login()
     {
         $this->validate();
@@ -25,7 +31,7 @@ class Login extends Component
             return redirect()->intended(route('dashboard'));
         }
 
-        $this->addError('email', 'Email atau password yang Anda masukkan tidak sesuai.');
+        $this->addError('email', 'Email atau kata sandi yang Anda masukkan tidak sesuai.');
         $this->dispatch('login-failed');
     }
 

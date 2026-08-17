@@ -36,54 +36,51 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 scale-100"
          x-transition:leave-end="opacity-0 scale-95"
-         class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex flex-col items-center justify-center p-6 text-center select-none">
+         class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center select-none">
         
         <!-- Ambient Glowing Aura -->
-        <div class="absolute w-72 h-72 rounded-full bg-[#C6F24D]/25 blur-3xl anim-glow pointer-events-none"></div>
+        <div class="absolute w-72 h-72 rounded-full bg-[#C6F24D]/20 blur-3xl pointer-events-none"></div>
 
         <div class="relative z-10 max-w-sm w-full space-y-6 flex flex-col items-center">
             
             <!-- Animated Icon Core Matrix -->
-            <div class="relative w-24 h-24 flex items-center justify-center">
+            <div class="relative w-20 h-20 flex items-center justify-center">
                 <!-- Outer Pulsing Ring -->
-                <div class="absolute inset-0 rounded-3xl border-2 border-[#C6F24D] animate-ping opacity-30"></div>
+                <div class="absolute inset-0 rounded-3xl border-2 border-[#C6F24D] animate-ping opacity-25"></div>
                 
-                <!-- Rotating Border Halo -->
-                <div class="absolute -inset-2 rounded-3xl border-2 border-dashed border-[#C6F24D]/60 animate-spin" style="animation-duration: 8s;"></div>
-
                 <!-- Central Solid Hub -->
-                <div class="relative w-20 h-20 rounded-3xl bg-slate-900 border-2 border-[#C6F24D] shadow-[0_0_30px_rgba(198,242,77,0.4)] flex items-center justify-center">
-                    <img src="{{ asset('images/logo.svg') }}" class="w-10 h-10 object-contain animate-pulse" alt="PortoFinance">
+                <div class="relative w-16 h-16 rounded-2xl bg-slate-900 border-2 border-[#C6F24D] shadow-[0_0_25px_rgba(198,242,77,0.35)] flex items-center justify-center">
+                    <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain" alt="PortoFinance">
                 </div>
 
                 <!-- Floating Sparkle Badge -->
-                <div class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 flex items-center justify-center shadow-md anim-float-1">
-                    <x-icon name="sparkles" class="w-4 h-4 text-slate-950" strokeWidth="2.5" />
+                <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C6F24D] border-2 border-slate-950 flex items-center justify-center shadow-md">
+                    <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
                 </div>
             </div>
 
             <!-- Dynamic Status Headers -->
-            <div class="space-y-2 text-center">
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/40 text-[#C6F24D] text-[10px] font-mono font-bold tracking-widest uppercase">
+            <div class="space-y-1.5 text-center">
+                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/30 text-[#C6F24D] text-[10px] font-mono font-bold tracking-widest uppercase">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#C6F24D] animate-ping"></span>
-                    <span>PROVISIONING WORKSPACE</span>
+                    <span>MEMBUAT WORKSPACE</span>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">
-                    Mempersiapkan Workspace Anda...
+                <h3 class="text-xl font-black text-white tracking-tight">
+                    Mempersiapkan Akun Anda...
                 </h3>
-                <p class="text-xs text-slate-300 max-w-xs mx-auto leading-relaxed">
-                    Membuat akun awal Rp 0 dan mengaktifkan modul alokasi pintar.
+                <p class="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
+                    Menyiapkan akun awal & profil keuangan pintar.
                 </p>
             </div>
 
             <!-- Neon Progress Bar Indicator -->
             <div class="w-full max-w-xs space-y-2">
-                <div class="w-full h-2 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative">
+                <div class="w-full h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative">
                     <div class="h-full bg-gradient-to-r from-teal-400 via-[#C6F24D] to-[#A4D928] rounded-full animate-pulse w-full"></div>
                 </div>
-                <div class="flex items-center justify-between text-[9px] font-mono text-slate-400">
+                <div class="flex items-center justify-between text-[9px] font-mono text-slate-500">
                     <span>STATUS: ALLOCATING</span>
-                    <span class="text-[#C6F24D] font-bold">READY IN MOMENTS</span>
+                    <span class="text-[#C6F24D] font-bold">READY</span>
                 </div>
             </div>
 
@@ -91,7 +88,7 @@
     </div>
 
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
-    <header class="flex items-center justify-between pt-1 pb-3 shrink-0">
+    <header class="flex items-center justify-between pt-1 pb-2 shrink-0">
         <!-- Back to Login Button -->
         <a href="{{ route('login') }}" 
            class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-700 transition-all shadow-2xs">
@@ -99,8 +96,8 @@
         </a>
 
         <!-- Brand Center -->
-        <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
-            <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain group-hover:scale-105 transition-transform" alt="PortoFinance Logo">
+        <a href="{{ url('/') }}" class="flex items-center gap-2 group">
+            <img src="{{ asset('images/logo.svg') }}" class="w-7 h-7 object-contain group-hover:scale-105 transition-transform" alt="PortoFinance Logo">
             <div class="leading-tight text-left">
                 <span class="font-black text-sm text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
                 <span class="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Financial OS</span>
@@ -112,51 +109,24 @@
     </header>
 
     <!-- ── MAIN GREETING & FORM ──────────────────────────────── -->
-    <main class="space-y-4 sm:space-y-5 my-auto py-2">
+    <main class="space-y-4 my-auto py-2">
         
-        <!-- Header Greeting with Aesthetic Pill Badge & Side Accents -->
-        <div class="text-center space-y-1.5 relative">
-            
-            <!-- Left Side Accent: Floating Coin (Desktop/Tablet) -->
-            <div class="hidden sm:flex absolute top-0.5 left-2 px-2 py-0.5 rounded-lg bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] items-center gap-1 font-black font-mono text-[10px] text-slate-950 rotate-[-10deg] pointer-events-none anim-float-2">
-                <x-icon name="sparkles" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
-                <span>NEW</span>
-            </div>
-
-            <!-- Right Side Accent: Floating Safe Badge (Desktop/Tablet) -->
-            <div class="hidden sm:flex absolute top-0.5 right-2 px-2 py-0.5 rounded-lg bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] items-center gap-1 font-black font-mono text-[9px] text-slate-950 rotate-[8deg] pointer-events-none anim-float-3">
-                <x-icon name="shield-check" class="w-3 h-3 text-emerald-600" strokeWidth="2.5" />
-                <span>SAFE</span>
-            </div>
-
-            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-2xs">
+        <!-- Header Greeting with Aesthetic Pill Badge -->
+        <div class="text-center space-y-1.5">
+            <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-2xs">
                 <span class="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
                 <span>Pro Financial Engine</span>
             </div>
-            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight leading-tight">
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight leading-tight">
                 Buat Akun Baru
             </h1>
-            <p class="text-xs sm:text-sm font-medium text-slate-500 max-w-xs sm:max-w-sm mx-auto leading-relaxed">
+            <p class="text-xs sm:text-sm font-medium text-slate-500 max-w-xs mx-auto leading-relaxed">
                 Mulai kelola keuangan & cash flow Anda secara rapi dan profesional.
             </p>
         </div>
 
-        <!-- Global Auth Error Feedback Banner -->
-        @if ($errors->any())
-        <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2.5 text-xs text-rose-700 font-bold anim-shake shadow-xs">
-            <x-icon name="alert-circle" class="w-4 h-4 text-rose-500 shrink-0" strokeWidth="2.5" />
-            <span>{{ $errors->first() }}</span>
-        </div>
-        @endif
-
-        <!-- Google OAuth Instant Register Button with Anchored Fast Sticker -->
-        <div class="relative">
-            <!-- Anchored Corner Sticker (Never straying, 100% stable) -->
-            <div class="absolute -top-2.5 right-4 z-10 px-2 py-0.5 rounded-md bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[6deg] flex items-center gap-1 font-black font-mono text-[9px] text-slate-950 pointer-events-none anim-float-1">
-                <x-icon name="zap" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
-                <span>INSTANT</span>
-            </div>
-
+        <!-- Google OAuth Instant Register Button -->
+        <div>
             <a href="{{ route('google.redirect') }}" 
                @click="startAuth(); sessionStorage.setItem('pf_just_logged_in', 'true')"
                class="w-full py-3 sm:py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 font-bold text-xs sm:text-sm border-2 border-slate-200 hover:border-slate-400 shadow-2xs transition-all flex items-center justify-center gap-3 cursor-pointer">
@@ -277,16 +247,9 @@
                 <span class="text-[11px] text-rose-500 font-bold px-2 block">{{ $message }}</span> 
             @enderror
 
-            <!-- Submit Registration Button with Anchored Verified Badge -->
-            <div class="pt-2 relative">
-                <!-- Anchored Corner Sticker (Never straying, 100% stable) -->
-                <div class="absolute -bottom-2 left-4 z-10 px-2 py-0.5 rounded-md bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-5deg] flex items-center gap-1 font-black font-mono text-[9px] text-slate-950 pointer-events-none anim-float-2">
-                    <x-icon name="sparkles" class="w-2.5 h-2.5 text-teal-600" strokeWidth="3" />
-                    <span>STARTER Rp 0</span>
-                </div>
-
+            <!-- Submit Registration Button -->
+            <div class="pt-2">
                 <button type="submit" 
-                        wire:loading.attr="disabled"
                         class="w-full py-4 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-[0.98] text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-2 border-slate-950">
                     <span class="flex items-center gap-2">
                         <span>Daftar Akun Baru</span>
@@ -297,14 +260,14 @@
         </form>
 
         <!-- Security & Trust Micro-Strip -->
-        <div class="flex items-center justify-center gap-3 pt-2 text-[10px] font-bold text-slate-400">
+        <div class="flex items-center justify-center gap-3 pt-1 text-[10px] font-bold text-slate-400">
             <span class="flex items-center gap-1">
-                <x-icon name="shield-check" class="w-3 h-3 text-emerald-600" />
+                <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
                 <span>256-Bit SSL</span>
             </span>
             <span>•</span>
             <span class="flex items-center gap-1">
-                <x-icon name="sparkles" class="w-3 h-3 text-teal-600" />
+                <x-icon name="sparkles" class="w-3.5 h-3.5 text-teal-600" strokeWidth="2.5" />
                 <span>Auto Rp 0 Starter</span>
             </span>
         </div>
