@@ -14,11 +14,13 @@
     <meta name="apple-mobile-web-app-title" content="PortoFinance">
 
     <!-- Favicon & PWA Icons -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logofinance.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/logofinance.png') }}">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logofinance.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('images/logofinance.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=4">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}?v=4">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}?v=4">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}?v=4">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/logo.png') }}?v=4">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.png') }}?v=4">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}?v=4">
     
     <!-- Inline critical x-cloak prevention to guarantee zero layout bleeding before JS loads -->
     <style>
