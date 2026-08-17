@@ -90,34 +90,6 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  HARMONIOUS FLOATING ORNAMENTS (AESTHETIC & NON-COLLIDING) -->
-    <!-- ═══════════════════════════════════════════════════════════ -->
-    <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
-        <!-- Floating Ornament 1: Sparkles (Left Margin, Level with Subtitle) -->
-        <div class="absolute top-28 -left-4 sm:-left-8 px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-xs border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-10deg] anim-float-1">
-            <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-            <span class="text-[9px] font-black tracking-wider">NEW</span>
-        </div>
-
-        <!-- Floating Ornament 2: SAFE Shield (Right Margin, Level with Subtitle) -->
-        <div class="absolute top-32 -right-4 sm:-right-8 px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-xs border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[8deg] flex items-center gap-1.5 anim-float-2">
-            <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
-            <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
-        </div>
-
-        <!-- Floating Ornament 3: Checkmark Coin (Left Margin, Beside Submit) -->
-        <div class="absolute bottom-28 -left-4 sm:-left-7 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3">
-            <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
-        </div>
-
-        <!-- Floating Ornament 4: Cash Badge (Right Margin, Beside Submit) -->
-        <div class="absolute bottom-24 -right-4 sm:-right-7 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-6deg] flex items-center gap-1 anim-float-1">
-            <x-icon name="credit-card" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
-            <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">CASH</span>
-        </div>
-    </div>
-
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
     <header class="flex items-center justify-between pt-1 pb-3 shrink-0">
         <!-- Back to Login Button -->
