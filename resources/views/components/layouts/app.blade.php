@@ -28,6 +28,24 @@
           mobileSidebarOpen: false, 
           quickAddOpen: false
       }"
+      x-init="
+          const urlParams = new URLSearchParams(window.location.search);
+          const quickAction = urlParams.get('quick') || urlParams.get('action');
+          if (quickAction) {
+              setTimeout(() => {
+                  if (quickAction === 'voice') {
+                      $dispatch('open-quick-voice');
+                  } else if (quickAction === 'income') {
+                      $dispatch('open-quick-income');
+                  } else if (quickAction === 'transfer') {
+                      $dispatch('open-quick-transfer');
+                  } else {
+                      $dispatch('open-quick-add');
+                  }
+                  window.history.replaceState({}, document.title, window.location.pathname);
+              }, 300);
+          }
+      "
       @keydown.window.prevent.ctrl.k="quickAddOpen = true"
       @keydown.window.prevent.cmd.k="quickAddOpen = true"
       @open-quick-add.window="quickAddOpen = true">

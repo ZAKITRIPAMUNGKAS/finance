@@ -35,23 +35,30 @@
   ],
   "shortcuts": [
     {
-      "name": "Catat Transaksi",
+      "name": "⚡ Catat Transaksi",
       "short_name": "Catat",
-      "description": "Buka modal cepat catat transaksi via Voice & OCR",
-      "url": "/dashboard?action=quick-add",
+      "description": "Catat mutasi pengeluaran & pemasukan instan",
+      "url": "/dashboard?quick=1",
       "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
     },
     {
-      "name": "Lihat Transaksi",
-      "short_name": "Transaksi",
-      "description": "Daftar mutasi pengeluaran & pemasukan",
-      "url": "/transactions",
+      "name": "🎤 Input Suara AI",
+      "short_name": "Suara AI",
+      "description": "Catat otomatis hanya dengan berbicara",
+      "url": "/dashboard?quick=voice",
       "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
     },
     {
-      "name": "Projects & Margin",
-      "short_name": "Projects",
-      "description": "Kelola proyek klien dan profit margin",
+      "name": "📸 Scan Struk OCR",
+      "short_name": "Scan Struk",
+      "description": "Foto nota/struk belanja dengan kamera HP",
+      "url": "/dashboard?quick=scan",
+      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+    },
+    {
+      "name": "🧾 Proyek & Invoice",
+      "short_name": "Invoice",
+      "description": "Kelola tagihan klien & pantau profit margin",
       "url": "/projects",
       "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
     }
