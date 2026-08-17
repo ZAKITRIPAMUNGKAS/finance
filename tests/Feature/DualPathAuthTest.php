@@ -125,11 +125,7 @@ class DualPathAuthTest extends TestCase
 
         $user = User::where('email', 'googleuser@gmail.com')->first();
         $this->assertNotNull($user->email_verified_at);
-        $this->assertDatabaseHas('accounts', [
-            'user_id' => $user->id,
-            'name' => 'BCA Utama',
-            'current_balance' => 0
-        ]);
+        $this->assertFalse((bool) $user->onboarding_completed);
     }
 
     public function test_google_oauth_callback_links_existing_user_account()

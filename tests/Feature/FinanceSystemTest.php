@@ -289,7 +289,7 @@ class FinanceSystemTest extends TestCase
 
         $this->assertDatabaseHas('users', ['email' => 'budi@example.com']);
         $budi = User::where('email', 'budi@example.com')->first();
-        $this->assertDatabaseHas('accounts', ['user_id' => $budi->id, 'name' => 'BCA Utama']);
+        $this->assertFalse((bool) $budi->onboarding_completed);
         $this->assertNull($budi->email_verified_at);
 
         // Verify email

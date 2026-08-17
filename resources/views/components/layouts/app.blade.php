@@ -390,6 +390,9 @@
     <!-- Global Financial Onboarding Setup Wizard (Muncul sebelum Tour) -->
     <livewire:onboarding-wizard />
 
+    <!-- Global Custom In-Website Confirmation Dialog (Replaces Native Browser Says Popups) -->
+    <x-confirm-dialog />
+
     <!-- Global Interactive Onboarding Tour (with spotlight & pointer arrow) -->
     <x-interactive-tour />
 
