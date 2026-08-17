@@ -63,6 +63,11 @@ class Index extends Component
 
     public function openCreateProjectModal()
     {
+        if (!auth()->user()->canCreateProject()) {
+            $this->dispatch('open-upgrade-modal', feature: 'projects');
+            return;
+        }
+
         $this->reset(['projectId', 'name', 'description']);
         $this->total_revenue = '';
         $this->estimated_cost = '';
@@ -86,6 +91,14 @@ class Index extends Component
     public function saveProject()
     {
         $userId = auth()->id();
+
+        if (!$this->projectId && !auth()->user()->canCreateProject()) {
+            $this->isProjectModalOpen = false;
+            $this->dispatch('open-upgrade-modal', feature: 'projects');
+            session()->flash('error', 'Akun Free Starter dibatasi maksimal 2 proyek. Upgrade ke PRO untuk mencatat proyek tanpa batas.');
+            return;
+        }
+
         $this->total_revenue = (string) str_replace(['.', ',', ' '], '', $this->total_revenue);
         if ($this->estimated_cost !== null && $this->estimated_cost !== '') {
             $this->estimated_cost = (string) str_replace(['.', ',', ' '], '', $this->estimated_cost);

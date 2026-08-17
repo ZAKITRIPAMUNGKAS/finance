@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{{ $title ?? 'PortoFinance' }} — Digital Finance for Freelancers</title>
     
+    <!-- PWA Web App Manifest & Mobile Theme -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#0F172A">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PortoFinance">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
     <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
@@ -450,8 +458,24 @@
     <!-- Global Interactive Onboarding Tour (with spotlight & pointer arrow) -->
     <x-interactive-tour />
 
+    <!-- Global Pro Upgrade Paywall Modal -->
+    <x-pro-upgrade-modal />
+
     @livewireScripts
     <script>
+        // Register PWA Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => {
+                        console.log('PortoFinance PWA Service Worker Registered:', reg.scope);
+                    })
+                    .catch((err) => {
+                        console.warn('PWA Service Worker Registration skipped:', err);
+                    });
+            });
+        }
+
         document.addEventListener('livewire:init', () => {
             const bar = document.getElementById('nprogress-bar');
             let timeout;

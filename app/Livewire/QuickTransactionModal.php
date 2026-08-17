@@ -242,6 +242,13 @@ class QuickTransactionModal extends Component
      */
     public function processVoiceInput(string $spokenText)
     {
+        $user = auth()->user();
+        if ($user && !$user->canUseAiVoiceOrScan()) {
+            $this->dispatch('open-upgrade-modal', feature: 'ai_voice');
+            $this->scanSuccessMessage = '⚠️ Batas 5x AI Voice & Scan bulan ini telah tercapai. Upgrade ke PRO untuk akses tanpa batas!';
+            return;
+        }
+
         $scanner = app(ReceiptScannerService::class);
         $safeSpoken = $scanner->sanitizeUtf8($spokenText);
         $result = $scanner->parseVoiceText($safeSpoken, $this->type);
@@ -271,6 +278,10 @@ class QuickTransactionModal extends Component
         $this->scanSuccessMessage = $scanner->sanitizeUtf8("🎙️ Suara diproses: {$this->description}" . ($formattedAmount ? " ({$formattedAmount})" : ""));
         $this->isListeningVoice = false;
 
+        if ($user) {
+            $user->incrementAiUsage();
+        }
+
         $this->recalculateBudgetImpact();
     }
 
@@ -279,10 +290,21 @@ class QuickTransactionModal extends Component
      */
     public function processScannedText(string $rawText)
     {
+        $user = auth()->user();
+        if ($user && !$user->canUseAiVoiceOrScan()) {
+            $this->dispatch('open-upgrade-modal', feature: 'ai_voice');
+            $this->scanSuccessMessage = '⚠️ Batas 5x AI Voice & Scan bulan ini telah tercapai. Upgrade ke PRO untuk akses tanpa batas!';
+            return;
+        }
+
         $scanner = app(ReceiptScannerService::class);
         $safeRawText = $scanner->sanitizeUtf8($rawText);
         $result = $scanner->parseReceiptText($safeRawText, $this->type);
         $this->rawScannedText = $scanner->sanitizeUtf8(!empty($result['cleaned_text']) ? $result['cleaned_text'] : trim($safeRawText));
+
+        if ($user) {
+            $user->incrementAiUsage();
+        }
 
         $this->type = $result['type'];
         if ($result['amount'] && $result['amount'] > 0) {

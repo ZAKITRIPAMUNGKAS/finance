@@ -26,6 +26,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'is_banned',
         'banned_reason',
         'last_login_at',
+        'monthly_ai_usage',
+        'ai_usage_reset_at',
     ];
 
     protected $hidden = [
@@ -40,6 +42,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'trial_ends_at' => 'datetime',
             'subscription_ends_at' => 'datetime',
             'last_login_at' => 'datetime',
+            'ai_usage_reset_at' => 'datetime',
+            'monthly_ai_usage' => 'integer',
             'password' => 'hashed',
             'onboarding_completed' => 'boolean',
             'is_banned' => 'boolean',
@@ -90,6 +94,57 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isFree(): bool
     {
         return !$this->isPro() && !$this->isLifetime() && !$this->isTrial();
+    }
+
+    public function canCreateAccount(): bool
+    {
+        if ($this->isPro()) {
+            return true;
+        }
+        return $this->accounts()->count() < 2;
+    }
+
+    public function canCreateProject(): bool
+    {
+        if ($this->isPro()) {
+            return true;
+        }
+        return $this->projects()->count() < 2;
+    }
+
+    public function getCurrentMonthlyAiUsage(): int
+    {
+        if (!$this->ai_usage_reset_at || $this->ai_usage_reset_at->format('Y-m') !== now()->format('Y-m')) {
+            return 0;
+        }
+        return (int) ($this->monthly_ai_usage ?? 0);
+    }
+
+    public function canUseAiVoiceOrScan(): bool
+    {
+        if ($this->isPro()) {
+            return true;
+        }
+        return $this->getCurrentMonthlyAiUsage() < 5;
+    }
+
+    public function incrementAiUsage(): void
+    {
+        if (!$this->ai_usage_reset_at || $this->ai_usage_reset_at->format('Y-m') !== now()->format('Y-m')) {
+            $this->monthly_ai_usage = 1;
+            $this->ai_usage_reset_at = now();
+        } else {
+            $this->monthly_ai_usage = ($this->monthly_ai_usage ?? 0) + 1;
+        }
+        $this->saveQuietly();
+    }
+
+    public function getRemainingAiScansAttribute(): int
+    {
+        if ($this->isPro()) {
+            return 999999;
+        }
+        return max(0, 5 - $this->getCurrentMonthlyAiUsage());
     }
 
     public function getRemainingTrialDaysAttribute(): int

@@ -36,6 +36,11 @@ class Index extends Component
 
     public function openCreateModal()
     {
+        if (!auth()->user()->canCreateAccount()) {
+            $this->dispatch('open-upgrade-modal', feature: 'accounts');
+            return;
+        }
+
         $this->reset(['accountId', 'name', 'account_number', 'notes']);
         $this->type = 'bank';
         $this->initial_balance = '0';
@@ -66,6 +71,14 @@ class Index extends Component
     public function saveAccount()
     {
         $userId = auth()->id();
+
+        if (!$this->accountId && !auth()->user()->canCreateAccount()) {
+            $this->isModalOpen = false;
+            $this->dispatch('open-upgrade-modal', feature: 'accounts');
+            session()->flash('error', 'Akun Free Starter dibatasi maksimal 2 rekening. Upgrade ke PRO untuk menambah rekening tanpa batas.');
+            return;
+        }
+
         $this->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:bank,ewallet,cash,investment,other',

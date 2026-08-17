@@ -1,0 +1,59 @@
+{
+  "name": "PortoFinance — Digital Finance for Freelancers",
+  "short_name": "PortoFinance",
+  "description": "Operating system finansial komprehensif untuk freelancer, kreator digital, dan studio independen Indonesia.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F8F9FA",
+  "theme_color": "#0F172A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "finance",
+    "business",
+    "productivity"
+  ],
+  "shortcuts": [
+    {
+      "name": "Catat Transaksi",
+      "short_name": "Catat",
+      "description": "Buka modal cepat catat transaksi via Voice & OCR",
+      "url": "/dashboard?action=quick-add",
+      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Lihat Transaksi",
+      "short_name": "Transaksi",
+      "description": "Daftar mutasi pengeluaran & pemasukan",
+      "url": "/transactions",
+      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Projects & Margin",
+      "short_name": "Projects",
+      "description": "Kelola proyek klien dan profit margin",
+      "url": "/projects",
+      "icons": [{ "src": "/images/logo.svg", "sizes": "any" }]
+    }
+  ]
+}
