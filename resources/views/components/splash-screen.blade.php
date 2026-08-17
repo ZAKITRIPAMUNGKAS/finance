@@ -34,10 +34,10 @@
 
     <div class="flex flex-col items-center text-center px-6">
 
-        <!-- Compact Logo (Borderless with Soft Lime Aura) -->
-        <div class="relative mb-4">
-            <div class="absolute -inset-3 rounded-full bg-[#C6F24D]/30 blur-xl"></div>
-            <img src="{{ asset('images/logo.svg') }}" class="relative w-14 h-14 sm:w-16 sm:h-16 object-contain" alt="PortoFinance Logo">
+        <!-- Perfectly Proportioned Logo (Strict Inline Constraints) -->
+        <div class="relative mb-4 flex items-center justify-center mx-auto" style="width: 80px; height: 80px;">
+            <div class="absolute inset-0 rounded-full bg-[#C6F24D]/35 blur-xl"></div>
+            <img src="{{ asset('images/logo.svg') }}" style="width: 64px; height: 64px; max-width: 64px; max-height: 64px; object-fit: contain; display: block;" class="relative" alt="PortoFinance Logo">
         </div>
 
         <!-- Brand Typography -->
@@ -45,13 +45,13 @@
             <h1 class="text-xl sm:text-2xl leading-none font-black tracking-tight text-slate-950">
                 Porto<span class="text-teal-700">Finance</span>
             </h1>
-            <p class="text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.2em] uppercase text-slate-400">
+            <p class="text-[10px] sm:text-xs font-mono font-bold tracking-[0.18em] uppercase text-slate-400">
                 Freelancer Financial OS
             </p>
         </div>
 
         <!-- Animated Dot Wave Loading Indicator -->
-        <div class="mt-6 flex items-center gap-1.5">
+        <div class="mt-6 flex items-center justify-center gap-2">
             <span class="w-2 h-2 rounded-full bg-slate-950 anim-dot-1"></span>
             <span class="w-2 h-2 rounded-full bg-teal-700 anim-dot-2"></span>
             <span class="w-2 h-2 rounded-full bg-[#C6F24D] anim-dot-3"></span>
