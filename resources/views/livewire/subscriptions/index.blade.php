@@ -136,9 +136,11 @@
         @foreach($subscriptions as $sub)
         @php
             $days = $sub->days_remaining;
-            $isDueSoon = $sub->status === 'active' && $days >= 0 && $days <= 7;
+            $isPaidThisMonth = $sub->is_paid_this_month;
+            $isDueSoon = !$isPaidThisMonth && $sub->status === 'active' && $days >= 0 && $days <= 7;
         @endphp
-        <div class="p-5 rounded-3xl bg-white border {{ $isDueSoon ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200/90' }} shadow-2xs space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between">
+        <div class="p-5 rounded-3xl bg-white border {{ $isPaidThisMonth ? 'border-emerald-200 ring-1 ring-emerald-100' : ($isDueSoon ? 'border-amber-300 ring-2 ring-amber-100' : 'border-slate-200/90') }} shadow-2xs space-y-4 hover:border-slate-300 transition-all flex flex-col justify-between"
+             x-data="{ showHistory: false }">
             
             <div class="space-y-3">
                 <!-- Top Row: Icon, Name, Status Badge -->
@@ -187,11 +189,18 @@
                     </div>
                 </div>
 
-                <!-- Due Date Countdown Pill -->
-                <div class="p-2.5 rounded-xl {{ $isDueSoon ? 'bg-amber-50 text-amber-900 border border-amber-200' : 'bg-slate-50 text-slate-600' }} flex items-center justify-between text-xs">
-                    <span class="font-medium text-[11px]">Jatuh Tempo:</span>
+                <!-- Due Date Countdown Pill / Paid Status -->
+                <div class="p-2.5 rounded-xl {{ $isPaidThisMonth ? 'bg-emerald-50 text-emerald-900 border border-emerald-200' : ($isDueSoon ? 'bg-amber-50 text-amber-900 border border-amber-200' : 'bg-slate-50 text-slate-600') }} flex items-center justify-between text-xs">
+                    <span class="font-medium text-[11px]">
+                        {{ $isPaidThisMonth ? 'Status Bulan Ini:' : 'Jatuh Tempo:' }}
+                    </span>
                     <span class="font-bold text-[11px] font-mono">
-                        @if($sub->status === 'paused')
+                        @if($isPaidThisMonth)
+                            <span class="text-emerald-700 font-extrabold flex items-center gap-1">
+                                <x-icon name="check-circle" class="w-3.5 h-3.5 text-emerald-600" />
+                                <span>Lunas ({{ $sub->last_billed_at->translatedFormat('d M') }})</span>
+                            </span>
+                        @elseif($sub->status === 'paused')
                             <span class="text-slate-400">Langganan Dijeda</span>
                         @elseif($days === 0)
                             <strong class="text-rose-600">Hari ini! ({{ $sub->next_billing_date->translatedFormat('d M') }})</strong>
@@ -205,27 +214,83 @@
             </div>
 
             <!-- Action Buttons Footer -->
-            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                <!-- 1-Click Pay & Record -->
-                <button type="button" wire:click="recordPayment({{ $sub->id }})"
-                    class="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] font-extrabold text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-95 transition-all">
-                    <x-icon name="check" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.5" />
-                    <span>Catat Bayar</span>
-                </button>
+            <div class="space-y-3">
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                    
+                    <!-- Left Action: Record Pay OR Paid Button -->
+                    @if($isPaidThisMonth)
+                    <button type="button" wire:click="recordPayment({{ $sub->id }})"
+                        class="px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 font-black text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-95 transition-all"
+                        title="Klik jika ingin mencatat pembayaran ulang">
+                        <x-icon name="check-circle" class="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Lunas Bulan Ini</span>
+                    </button>
+                    @else
+                    <button type="button" wire:click="recordPayment({{ $sub->id }})"
+                        class="px-3 py-1.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] font-extrabold text-xs flex items-center gap-1.5 shadow-2xs cursor-pointer active:scale-95 transition-all">
+                        <x-icon name="check" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.5" />
+                        <span>Catat Bayar</span>
+                    </button>
+                    @endif
 
-                <div class="flex items-center gap-1">
-                    <button type="button" wire:click="openEditModal({{ $sub->id }})"
-                        class="p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-                        title="Edit Langganan">
-                        <x-icon name="edit" class="w-4 h-4" />
-                    </button>
-                    <button type="button" wire:click="deleteSubscription({{ $sub->id }})"
-                        wire:confirm="Hapus langganan '{{ $sub->name }}'?"
-                        class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
-                        title="Hapus Langganan">
-                        <x-icon name="trash-2" class="w-4 h-4" />
-                    </button>
+                    <!-- Right Controls: History Dropdown, Edit, Delete -->
+                    <div class="flex items-center gap-1">
+                        <!-- History Dropdown Toggle -->
+                        <button type="button" @click="showHistory = !showHistory"
+                            class="px-2 py-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                            title="Lihat Riwayat Pembayaran">
+                            <x-icon name="clock" class="w-3.5 h-3.5 text-slate-400" />
+                            <span>Riwayat</span>
+                            <x-icon name="chevron-down" class="w-3 h-3 transition-transform duration-200" ::class="showHistory ? 'rotate-180' : ''" />
+                        </button>
+
+                        <button type="button" wire:click="openEditModal({{ $sub->id }})"
+                            class="p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                            title="Edit Langganan">
+                            <x-icon name="edit" class="w-4 h-4" />
+                        </button>
+                        <button type="button" wire:click="deleteSubscription({{ $sub->id }})"
+                            wire:confirm="Hapus langganan '{{ $sub->name }}'?"
+                            class="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                            title="Hapus Langganan">
+                            <x-icon name="trash-2" class="w-4 h-4" />
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Collapsible Payment History Drawer -->
+                <div x-show="showHistory" x-collapse x-cloak class="pt-2.5 border-t border-slate-100 space-y-2 animate-fade-in">
+                    <div class="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                        <span>Riwayat Pembayaran</span>
+                        <span>{{ $sub->payment_history->count() }} Record</span>
+                    </div>
+
+                    <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                        @forelse($sub->payment_history as $hist)
+                        <div class="p-2 rounded-xl bg-slate-50/80 border border-slate-100 flex items-center justify-between text-xs">
+                            <div class="flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0"></div>
+                                <div>
+                                    <span class="font-bold text-slate-900 text-[11px] block">
+                                        {{ \Carbon\Carbon::parse($hist->date)->translatedFormat('d M Y') }}
+                                    </span>
+                                    <span class="text-[10px] text-slate-400 block truncate max-w-[130px]">
+                                        {{ $hist->account?->name ?? 'Kas Utama' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <span class="font-mono font-black text-slate-900 text-xs">
+                                Rp {{ number_format($hist->amount, 0, ',', '.') }}
+                            </span>
+                        </div>
+                        @empty
+                        <div class="py-3 text-center text-[11px] text-slate-400 italic bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+                            Belum ada riwayat pembayaran tercatat.
+                        </div>
+                        @endforelse
+                    </div>
+                </div>
+
             </div>
 
         </div>

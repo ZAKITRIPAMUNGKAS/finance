@@ -86,16 +86,45 @@ class Subscription extends Model
     }
 
     /**
-     * Normalize amount to monthly cost.
+     * Check if subscription has already been paid this month / cycle.
      */
-    public function getMonthlyEquivalentAttribute(): float
+    public function getIsPaidThisMonthAttribute(): bool
     {
+        if (!$this->last_billed_at) {
+            return false;
+        }
+
+        $last = Carbon::parse($this->last_billed_at);
+        $today = Carbon::today();
+
         if ($this->billing_cycle === 'yearly') {
-            return round($this->amount / 12, 2);
+            return $last->year === $today->year;
         }
+
         if ($this->billing_cycle === 'weekly') {
-            return round($this->amount * 4.33, 2);
+            return $last->diffInDays($today) < 7;
         }
-        return (float) $this->amount;
+
+        // Monthly: paid in current month & year
+        return $last->month === $today->month && $last->year === $today->year;
+    }
+
+    /**
+     * Get recorded payment history transactions for this subscription.
+     */
+    public function getPaymentHistoryAttribute()
+    {
+        return Transaction::where('user_id', $this->user_id)
+            ->where('type', 'expense')
+            ->where(function ($q) {
+                $q->where('description', 'like', 'Pembayaran Langganan: ' . $this->name . '%')
+                  ->orWhere('notes', 'like', '%' . $this->name . '%');
+            })
+            ->with('account')
+            ->orderByDesc('date')
+            ->orderByDesc('id')
+            ->take(6)
+            ->get();
     }
 }
+
