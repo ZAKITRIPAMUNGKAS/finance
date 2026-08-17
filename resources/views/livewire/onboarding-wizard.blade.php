@@ -1,6 +1,9 @@
 <div>
     @if($isOpen)
-    <div class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 transition-all duration-300 select-none animate-fade-in"
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  MODAL BACKDROP (ISOLATED & CENTERED)                       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="fixed inset-0 z-50 overflow-hidden bg-[#0F172A]/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-5 select-none animate-fade-in"
          x-data="{
              step: 1,
              persona: 'employee_salary',
@@ -26,7 +29,7 @@
              rawIncomeInput: '5.000.000',
              isSubmitting: false,
 
-             // Toggle account activation
+             // Toggle account active status
              toggleAcc(key) {
                  this.activeAccounts[key] = !this.activeAccounts[key];
                  if (!this.activeAccounts[key]) {
@@ -34,26 +37,26 @@
                  }
              },
 
-             // Quick Income Chips
+             // Preset Income Chips
              setIncome(val) {
                  this.monthlyIncome = Number(val);
                  this.rawIncomeInput = Number(val).toLocaleString('id-ID');
              },
 
-             // Input handler for income
+             // Raw Income Input Formatter
              onIncomeInput(e) {
                  let num = parseInt(e.target.value.replace(/\D/g, ''), 10) || 0;
                  this.monthlyIncome = num;
                  this.rawIncomeInput = num > 0 ? num.toLocaleString('id-ID') : '';
              },
 
-             // Format balance input
+             // Balance input formatter
              formatBalance(key, e) {
                  let num = parseInt(e.target.value.replace(/\D/g, ''), 10) || 0;
                  this.balances[key] = num > 0 ? num.toLocaleString('id-ID') : '0';
              },
 
-             // Calculated 50/30/20 values
+             // 50/30/20 Smart Formula
              get needsAmount() {
                  return Math.round(this.monthlyIncome * 0.5);
              },
@@ -64,7 +67,7 @@
                  return Math.round(this.monthlyIncome * 0.2);
              },
 
-             // Stepper Navigation
+             // Navigation
              next() {
                  if (this.step === 2) {
                      let hasActive = Object.values(this.activeAccounts).some(Boolean);
@@ -82,11 +85,9 @@
                  }
              },
 
-             // Final Submission
+             // Submit to Livewire
              submit() {
                  this.isSubmitting = true;
-                 
-                 // Clean up balances to raw numeric string
                  let cleanBalances = {};
                  for (let k in this.balances) {
                      cleanBalances[k] = String(this.balances[k]).replace(/\./g, '');
@@ -102,516 +103,546 @@
          }">
         
         <!-- ═══════════════════════════════════════════════════════════ -->
-        <!--  MAIN FINTECH SETUP CARD CONTAINER                          -->
+        <!--  MAIN MODAL CARD (SOLID 3-PART FLEX COLUMN ARCHITECTURE)    -->
         <!-- ═══════════════════════════════════════════════════════════ -->
-        <div class="bg-white rounded-3xl shadow-2xl border-2 border-slate-900 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] transition-all transform animate-scale-up">
+        <div class="bg-white rounded-[24px] shadow-2xl border border-slate-200/90 w-full max-w-[640px] max-h-[90vh] flex flex-col overflow-hidden transition-all transform animate-scale-up">
             
-            <!-- ── TOP BRAND & STEPPER HEADER ───────────────────────── -->
-            <div class="px-6 py-5 border-b border-slate-100 bg-[#F8FAFC] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                
-                <!-- Brand Header -->
-                <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('images/logo.svg') }}" style="width: 28px; height: 28px;" class="object-contain shrink-0" alt="PortoFinance Logo">
-                    <div class="leading-tight">
-                        <span class="font-black text-sm text-[#0F172A] tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
-                        <span class="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Financial Setup</span>
+            <!-- ── PART 1: COMPACT HEADER (STABLE & FIXED TOP) ──────── -->
+            <header class="px-5 py-4 sm:px-6 sm:py-4.5 border-b border-slate-100 bg-[#F8FAFC] shrink-0">
+                <div class="flex items-center justify-between gap-3 mb-3">
+                    <!-- Brand Eyebrow -->
+                    <div class="flex items-center gap-2.5">
+                        <img src="{{ asset('images/logo.svg') }}" style="width: 26px; height: 26px;" class="object-contain shrink-0" alt="PortoFinance Logo">
+                        <div class="leading-none">
+                            <span class="font-black text-sm text-[#0F172A] tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
+                            <span class="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block mt-0.5">Financial Setup</span>
+                        </div>
+                    </div>
+
+                    <!-- Step Badge -->
+                    <div class="px-2.5 py-0.5 rounded-full bg-white border border-slate-200 text-[11px] font-mono font-bold text-slate-600 shadow-2xs">
+                        <span x-text="step"></span> <span class="text-slate-300">/</span> <span>3</span>
                     </div>
                 </div>
-                
-                <!-- Named Stepper Progress Indicator -->
-                <div class="flex items-center gap-2 text-xs font-mono font-extrabold text-slate-400 self-start sm:self-auto">
-                    <!-- Step 1 Indicator -->
-                    <div class="flex items-center gap-1.5 transition-colors" :class="step === 1 ? 'text-[#0F172A]' : (step > 1 ? 'text-teal-600' : 'text-slate-300')">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
-                              :class="step === 1 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : (step > 1 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')"
-                              x-text="step > 1 ? '✓' : '1'">
-                        </span>
-                        <span class="hidden sm:inline">Profil</span>
+
+                <!-- Horizontal Stepper Bar -->
+                <div class="flex items-center justify-between gap-2 pt-1 text-[11px] font-mono font-bold">
+                    
+                    <!-- 01 Profil -->
+                    <div class="flex-1 flex flex-col gap-1.5">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step === 1 ? 'bg-[#0F172A]' : (step > 1 ? 'bg-[#008F83]' : 'bg-slate-200')"></div>
+                        <div class="flex items-center gap-1 transition-colors"
+                             :class="step === 1 ? 'text-[#0F172A]' : (step > 1 ? 'text-[#008F83]' : 'text-slate-400')">
+                            <span class="text-[9px]">01</span>
+                            <span class="truncate">Profil</span>
+                        </div>
                     </div>
 
-                    <span class="w-4 h-0.5 transition-colors" :class="step > 1 ? 'bg-teal-500' : 'bg-slate-200'"></span>
+                    <span class="text-slate-300 text-[9px] mb-3">&bull;</span>
 
-                    <!-- Step 2 Indicator -->
-                    <div class="flex items-center gap-1.5 transition-colors" :class="step === 2 ? 'text-[#0F172A]' : (step > 2 ? 'text-teal-600' : 'text-slate-300')">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
-                              :class="step === 2 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : (step > 2 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')"
-                              x-text="step > 2 ? '✓' : '2'">
-                        </span>
-                        <span class="hidden sm:inline">Rekening</span>
+                    <!-- 02 Rekening -->
+                    <div class="flex-1 flex flex-col gap-1.5">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step === 2 ? 'bg-[#0F172A]' : (step > 2 ? 'bg-[#008F83]' : 'bg-slate-200')"></div>
+                        <div class="flex items-center gap-1 transition-colors"
+                             :class="step === 2 ? 'text-[#0F172A]' : (step > 2 ? 'text-[#008F83]' : 'text-slate-400')">
+                            <span class="text-[9px]">02</span>
+                            <span class="truncate">Rekening</span>
+                        </div>
                     </div>
 
-                    <span class="w-4 h-0.5 transition-colors" :class="step > 2 ? 'bg-teal-500' : 'bg-slate-200'"></span>
+                    <span class="text-slate-300 text-[9px] mb-3">&bull;</span>
 
-                    <!-- Step 3 Indicator -->
-                    <div class="flex items-center gap-1.5 transition-colors" :class="step === 3 ? 'text-[#0F172A]' : 'text-slate-300'">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
-                              :class="step === 3 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : 'border-slate-200 text-slate-400'">
-                            3
-                        </span>
-                        <span class="hidden sm:inline">Anggaran</span>
+                    <!-- 03 Anggaran -->
+                    <div class="flex-1 flex flex-col gap-1.5">
+                        <div class="h-1.5 rounded-full transition-all duration-300"
+                             :class="step === 3 ? 'bg-[#0F172A]' : 'bg-slate-200'"></div>
+                        <div class="flex items-center gap-1 transition-colors"
+                             :class="step === 3 ? 'text-[#0F172A]' : 'text-slate-400'">
+                            <span class="text-[9px]">03</span>
+                            <span class="truncate">Anggaran</span>
+                        </div>
                     </div>
+
                 </div>
-            </div>
+            </header>
 
-            <!-- ── MODAL BODY ───────────────────────────────────────── -->
-            <div class="p-6 sm:p-7 overflow-y-auto space-y-6 flex-1 text-slate-900 custom-scrollbar">
+            <!-- ── PART 2: SCROLLABLE CONTENT AREA ──────────────────── -->
+            <main class="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 space-y-5 text-[#0F172A] custom-scrollbar">
 
-                <!-- ═══════════════════════════════════════════════════════════ -->
-                <!-- STEP 1: PROFIL KEUANGAN (PERSONA)                           -->
-                <!-- ═══════════════════════════════════════════════════════════ -->
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <!-- STEP 1: PROFIL KEUANGAN                                 -->
+                <!-- ═══════════════════════════════════════════════════════ -->
                 <div x-show="step === 1" 
                      x-transition:enter="transition ease-out duration-250 transform"
-                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
-                     class="space-y-5">
+                     class="space-y-4">
                     
-                    <div class="space-y-1.5 text-center sm:text-left">
-                        <span class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-teal-600">Langkah 01</span>
-                        <h2 class="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight leading-snug">
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#008F83] block">Langkah 01</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight leading-snug">
                             Mari kenalan. Bagaimana cara kamu mendapatkan penghasilan?
                         </h2>
-                        <p class="text-xs sm:text-sm font-medium text-slate-500">
-                            Pilih profil yang paling sesuai agar sistem PortoFinance menyiapkan otomatis alokasi idealmu.
+                        <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+                            Pilih profil yang paling sesuai agar PortoFinance dapat menyesuaikan pengaturan keuanganmu.
                         </p>
                     </div>
 
-                    <!-- Persona Neo-Fintech Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                    <!-- 4 Persona Cards (Grid 2 col) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                         
                         <!-- 1. Pekerja Tetap -->
                         <button type="button" @click="persona = 'employee_salary'"
-                                class="p-4.5 rounded-2xl border-2 text-left transition-all cursor-pointer relative flex flex-col justify-between group"
-                                :class="persona === 'employee_salary' ? 'border-[#0F172A] bg-[#F4FFD6] shadow-sm scale-[1.01]' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'">
+                                class="p-4 rounded-2xl text-left transition-all cursor-pointer flex flex-col justify-between group h-full"
+                                :class="persona === 'employee_salary' ? 'border-2 border-[#0F172A] bg-[#F7FFD9] shadow-2xs' : 'border border-[#E2E8F0] bg-white hover:border-slate-300'">
                             <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shadow-2xs">
                                         💼
                                     </div>
-                                    <span x-show="persona === 'employee_salary'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                        ✓ Terpilih
+                                    <span x-show="persona === 'employee_salary'" class="w-5 h-5 rounded-full bg-[#0F172A] text-[#C6F24D] flex items-center justify-center text-[10px] font-black">
+                                        ✓
                                     </span>
                                 </div>
-                                <h3 class="text-sm font-black text-[#0F172A] mb-1">Pekerja Tetap</h3>
-                                <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                                <h3 class="text-sm font-bold text-[#0F172A] mb-1">Pekerja Tetap</h3>
+                                <p class="text-xs text-[#64748B] leading-relaxed">
                                     Menerima gaji rutin bulanan dengan pengeluaran yang terstruktur.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1 text-[11px] font-bold text-slate-700">
-                                <span>Alokasi: Standard 50/30/20</span>
+                            <div class="mt-3.5 pt-2.5 border-t border-slate-200/70 text-[10px] font-bold text-slate-700">
+                                Alokasi · Standard 50/30/20
                             </div>
                         </button>
 
                         <!-- 2. Freelancer / Kreator -->
                         <button type="button" @click="persona = 'freelancer_project'"
-                                class="p-4.5 rounded-2xl border-2 text-left transition-all cursor-pointer relative flex flex-col justify-between group"
-                                :class="persona === 'freelancer_project' ? 'border-[#0F172A] bg-[#F4FFD6] shadow-sm scale-[1.01]' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'">
+                                class="p-4 rounded-2xl text-left transition-all cursor-pointer flex flex-col justify-between group h-full"
+                                :class="persona === 'freelancer_project' ? 'border-2 border-[#0F172A] bg-[#F7FFD9] shadow-2xs' : 'border border-[#E2E8F0] bg-white hover:border-slate-300'">
                             <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shadow-2xs">
                                         💻
                                     </div>
-                                    <span x-show="persona === 'freelancer_project'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                        ✓ Terpilih
+                                    <span x-show="persona === 'freelancer_project'" class="w-5 h-5 rounded-full bg-[#0F172A] text-[#C6F24D] flex items-center justify-center text-[10px] font-black">
+                                        ✓
                                     </span>
                                 </div>
-                                <h3 class="text-sm font-black text-[#0F172A] mb-1">Freelancer / Kreator</h3>
-                                <p class="text-xs text-slate-500 font-medium leading-relaxed">
-                                    Pendapatan berbasis proyek atau komisi dengan nominal fluktuatif.
+                                <h3 class="text-sm font-bold text-[#0F172A] mb-1">Freelancer / Kreator</h3>
+                                <p class="text-xs text-[#64748B] leading-relaxed">
+                                    Pendapatan berbasis proyek dengan nominal yang fluktuatif.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1 text-[11px] font-bold text-teal-700">
-                                <span>Fitur: Income Floor P25 Guard</span>
+                            <div class="mt-3.5 pt-2.5 border-t border-slate-200/70 text-[10px] font-bold text-[#008F83]">
+                                Fitur · Income Floor Guard
                             </div>
                         </button>
 
-                        <!-- 3. Pebisnis / Merchant -->
+                        <!-- 3. Pebisnis / Usaha -->
                         <button type="button" @click="persona = 'merchant_business'"
-                                class="p-4.5 rounded-2xl border-2 text-left transition-all cursor-pointer relative flex flex-col justify-between group"
-                                :class="persona === 'merchant_business' ? 'border-[#0F172A] bg-[#F4FFD6] shadow-sm scale-[1.01]' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'">
+                                class="p-4 rounded-2xl text-left transition-all cursor-pointer flex flex-col justify-between group h-full"
+                                :class="persona === 'merchant_business' ? 'border-2 border-[#0F172A] bg-[#F7FFD9] shadow-2xs' : 'border border-[#E2E8F0] bg-white hover:border-slate-300'">
                             <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shadow-2xs">
                                         🏪
                                     </div>
-                                    <span x-show="persona === 'merchant_business'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                        ✓ Terpilih
+                                    <span x-show="persona === 'merchant_business'" class="w-5 h-5 rounded-full bg-[#0F172A] text-[#C6F24D] flex items-center justify-center text-[10px] font-black">
+                                        ✓
                                     </span>
                                 </div>
-                                <h3 class="text-sm font-black text-[#0F172A] mb-1">Pebisnis / Usaha</h3>
-                                <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                                <h3 class="text-sm font-bold text-[#0F172A] mb-1">Pebisnis / Usaha</h3>
+                                <p class="text-xs text-[#64748B] leading-relaxed">
                                     Memisahkan cash flow operasional bisnis dengan pengeluaran pribadi.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1 text-[11px] font-bold text-blue-700">
-                                <span>Fitur: Multi-Account Separation</span>
+                            <div class="mt-3.5 pt-2.5 border-t border-slate-200/70 text-[10px] font-bold text-blue-700">
+                                Fitur · Multi-Account Split
                             </div>
                         </button>
 
                         <!-- 4. Mahasiswa / Pelajar -->
                         <button type="button" @click="persona = 'student_creator'"
-                                class="p-4.5 rounded-2xl border-2 text-left transition-all cursor-pointer relative flex flex-col justify-between group"
-                                :class="persona === 'student_creator' ? 'border-[#0F172A] bg-[#F4FFD6] shadow-sm scale-[1.01]' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'">
+                                class="p-4 rounded-2xl text-left transition-all cursor-pointer flex flex-col justify-between group h-full"
+                                :class="persona === 'student_creator' ? 'border-2 border-[#0F172A] bg-[#F7FFD9] shadow-2xs' : 'border border-[#E2E8F0] bg-white hover:border-slate-300'">
                             <div>
-                                <div class="flex items-center justify-between mb-3">
-                                    <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
+                                <div class="flex items-center justify-between mb-2.5">
+                                    <div class="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-lg shadow-2xs">
                                         🎓
                                     </div>
-                                    <span x-show="persona === 'student_creator'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                        ✓ Terpilih
+                                    <span x-show="persona === 'student_creator'" class="w-5 h-5 rounded-full bg-[#0F172A] text-[#C6F24D] flex items-center justify-center text-[10px] font-black">
+                                        ✓
                                     </span>
                                 </div>
-                                <h3 class="text-sm font-black text-[#0F172A] mb-1">Mahasiswa / Pemula</h3>
-                                <p class="text-xs text-slate-500 font-medium leading-relaxed">
+                                <h3 class="text-sm font-bold text-[#0F172A] mb-1">Mahasiswa / Pemula</h3>
+                                <p class="text-xs text-[#64748B] leading-relaxed">
                                     Mengelola uang saku bulanan dan melatih kebiasaan menabung rutin.
                                 </p>
                             </div>
-                            <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center gap-1 text-[11px] font-bold text-amber-700">
-                                <span>Alokasi: Smart Pocket Control</span>
+                            <div class="mt-3.5 pt-2.5 border-t border-slate-200/70 text-[10px] font-bold text-amber-700">
+                                Alokasi · Pocket Control
                             </div>
                         </button>
 
                     </div>
                 </div>
 
-                <!-- ═══════════════════════════════════════════════════════════ -->
-                <!-- STEP 2: REKENING & DOMPET DIGITAL                           -->
-                <!-- ═══════════════════════════════════════════════════════════ -->
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <!-- STEP 2: REKENING & DOMPET                               -->
+                <!-- ═══════════════════════════════════════════════════════ -->
                 <div x-show="step === 2" 
                      x-transition:enter="transition ease-out duration-250 transform"
-                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
-                     class="space-y-5">
+                     class="space-y-4">
                     
-                    <div class="space-y-1.5 text-center sm:text-left">
-                        <span class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-teal-600">Langkah 02</span>
-                        <h2 class="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight leading-snug">
-                            Rekening & Dompetmu
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#008F83] block">Langkah 02</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight leading-snug">
+                            Rekening & dompetmu
                         </h2>
-                        <p class="text-xs sm:text-sm font-medium text-slate-500">
-                            Pilih akun yang ingin kamu gunakan dan masukkan saldo awal (opsional).
+                        <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+                            Pilih akun yang ingin kamu gunakan. Saldo awal bersifat opsional.
                         </p>
                     </div>
 
-                    <!-- Accounts Neo-Fintech Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <!-- Accounts Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                         
                         <!-- 1. BCA -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.bca ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.bca ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bca')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#003B70] text-white font-black text-xs flex items-center justify-center shadow-2xs">
+                                    <span class="w-8 h-8 rounded-xl bg-[#003B70] text-white font-black text-[11px] flex items-center justify-center shadow-2xs">
                                         BCA
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">BCA Utama</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">Bank Transfer</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">BCA Utama</h4>
+                                        <span class="text-[10px] text-slate-400">Bank Transfer</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.bca ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.bca ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <!-- Inline Saldo Awal input when active -->
-                            <div x-show="activeAccounts.bca" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.bca"
-                                       @input="formatBalance('bca', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <!-- Saldo Awal input only when active -->
+                            <div x-show="activeAccounts.bca" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.bca"
+                                           @input="formatBalance('bca', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                         <!-- 2. Mandiri -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.mandiri ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.mandiri ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('mandiri')">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-8 h-8 rounded-xl bg-[#002D62] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
                                         MDR
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">Bank Mandiri</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">Livin' by Mandiri</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">Bank Mandiri</h4>
+                                        <span class="text-[10px] text-slate-400">Livin' by Mandiri</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.mandiri ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.mandiri ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.mandiri" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.mandiri"
-                                       @input="formatBalance('mandiri', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <div x-show="activeAccounts.mandiri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.mandiri"
+                                           @input="formatBalance('mandiri', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                         <!-- 3. GoPay -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.gopay ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.gopay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('gopay')">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-8 h-8 rounded-xl bg-[#00AA13] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
                                         GPY
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">GoPay</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">E-Wallet</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">GoPay</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.gopay ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.gopay ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.gopay" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.gopay"
-                                       @input="formatBalance('gopay', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.gopay"
+                                           @input="formatBalance('gopay', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                         <!-- 4. DANA -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.dana ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.dana ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('dana')">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-8 h-8 rounded-xl bg-[#118EEA] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
                                         DNA
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">DANA</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">E-Wallet</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">DANA</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.dana ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.dana ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.dana" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.dana"
-                                       @input="formatBalance('dana', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.dana"
+                                           @input="formatBalance('dana', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                         <!-- 5. Bank Jago -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.jago ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.jago ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('jago')">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-8 h-8 rounded-xl bg-[#845EC2] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
                                         JGO
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">Bank Jago</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">Digital Banking</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">Bank Jago</h4>
+                                        <span class="text-[10px] text-slate-400">Digital Banking</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.jago ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.jago ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.jago" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.jago"
-                                       @input="formatBalance('jago', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <div x-show="activeAccounts.jago" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.jago"
+                                           @input="formatBalance('jago', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                         <!-- 6. Dompet Tunai -->
-                        <div class="p-3.5 rounded-2xl border-2 transition-all"
-                             :class="activeAccounts.cash ? 'border-[#0F172A] bg-[#F4FFD6]/60 shadow-2xs' : 'border-slate-200 bg-white hover:border-slate-300'">
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.cash ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('cash')">
                                 <div class="flex items-center gap-2.5">
                                     <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-2xs">
                                         💵
                                     </span>
                                     <div>
-                                        <h4 class="text-xs font-black text-[#0F172A]">Dompet Tunai</h4>
-                                        <span class="text-[10px] font-bold text-slate-400">Cash Fisik</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">Dompet Tunai</h4>
+                                        <span class="text-[10px] text-slate-400">Cash Fisik</span>
                                     </div>
                                 </div>
-                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs"
-                                      :class="activeAccounts.cash ? 'bg-slate-900 border-slate-900 text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.cash ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.cash" class="mt-3 pt-2.5 border-t border-slate-200/80">
-                                <label class="block text-[10px] font-extrabold uppercase tracking-wider text-slate-600 mb-1">Saldo Awal (Rp)</label>
-                                <input type="text" 
-                                       :value="balances.cash"
-                                       @input="formatBalance('cash', $event)"
-                                       placeholder="0"
-                                       class="w-full px-3 py-1.5 rounded-xl bg-white border border-slate-300 text-xs font-mono font-bold text-slate-950 focus:outline-none focus:border-slate-950">
+                            <div x-show="activeAccounts.cash" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.cash"
+                                           @input="formatBalance('cash', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
                     </div>
                 </div>
 
-                <!-- ═══════════════════════════════════════════════════════════ -->
-                <!-- STEP 3: ESTIMASI PEMASUKAN & SMART 50/30/20 ALLOCATION      -->
-                <!-- ═══════════════════════════════════════════════════════════ -->
+                <!-- ═══════════════════════════════════════════════════════ -->
+                <!-- STEP 3: ANGGARAN & ALOKASI 50/30/20                     -->
+                <!-- ═══════════════════════════════════════════════════════ -->
                 <div x-show="step === 3" 
                      x-transition:enter="transition ease-out duration-250 transform"
-                     x-transition:enter-start="opacity-0 translate-y-2"
+                     x-transition:enter-start="opacity-0 translate-y-1"
                      x-transition:enter-end="opacity-100 translate-y-0"
-                     class="space-y-5">
+                     class="space-y-4">
                     
-                    <div class="space-y-1.5 text-center sm:text-left">
-                        <span class="text-[10px] font-mono font-extrabold uppercase tracking-widest text-teal-600">Langkah 03</span>
-                        <h2 class="text-xl sm:text-2xl font-black text-[#0F172A] tracking-tight leading-snug">
-                            Pendapatan & Alokasi Anggaran
+                    <div class="space-y-1">
+                        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-[#008F83] block">Langkah 03</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight leading-snug">
+                            Atur pemasukanmu
                         </h2>
-                        <p class="text-xs sm:text-sm font-medium text-slate-500">
-                            Masukkan estimasi pemasukan bulanan untuk melihat pembagian alokasi finansial idealmu.
+                        <p class="text-xs sm:text-sm text-[#64748B] leading-relaxed">
+                            Masukkan estimasi pemasukan bulanan untuk melihat pembagian anggaran idealmu.
                         </p>
                     </div>
 
-                    <!-- Monthly Income Input Box -->
-                    <div class="p-5 rounded-2xl bg-[#F8FAFC] border-2 border-slate-200 space-y-3">
-                        <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700">
-                            Estimasi Pendapatan Bulanan
+                    <!-- Income Input Card -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-[#F8FAFC] border border-[#E2E8F0] space-y-3">
+                        <label class="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">
+                            ESTIMASI PENDAPATAN BULANAN
                         </label>
+                        
+                        <!-- Strictly Non-Overlapping Currency Input -->
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base font-extrabold font-mono text-slate-400">
+                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base sm:text-lg font-bold font-mono text-slate-400">
                                 Rp
                             </span>
                             <input type="text" 
                                    :value="rawIncomeInput"
                                    @input="onIncomeInput($event)"
                                    placeholder="5.000.000"
-                                   class="w-full pl-12 pr-4 py-3 rounded-xl bg-white border-2 border-slate-900 text-lg sm:text-xl font-black font-mono text-[#0F172A] focus:outline-none shadow-2xs">
+                                   class="w-full pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white border-2 border-slate-900 text-lg sm:text-xl font-black font-mono text-[#0F172A] focus:outline-none shadow-2xs">
                         </div>
 
-                        <!-- Quick Preset Chips -->
-                        <div class="flex flex-wrap items-center gap-2 pt-1">
+                        <!-- Quick Chips -->
+                        <div class="flex flex-wrap items-center gap-1.5 pt-1">
                             <button type="button" @click="setIncome(3000000)"
-                                    class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 3000000 ? 'bg-slate-900 text-[#C6F24D] border-slate-900 shadow-2xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 3000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
                                 Rp 3 Jt
                             </button>
                             <button type="button" @click="setIncome(5000000)"
-                                    class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 5000000 ? 'bg-slate-900 text-[#C6F24D] border-slate-900 shadow-2xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 5000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
                                 Rp 5 Jt
                             </button>
                             <button type="button" @click="setIncome(10000000)"
-                                    class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 10000000 ? 'bg-slate-900 text-[#C6F24D] border-slate-900 shadow-2xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 10000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
                                 Rp 10 Jt
                             </button>
                             <button type="button" @click="setIncome(20000000)"
-                                    class="px-3 py-1 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 20000000 ? 'bg-slate-900 text-[#C6F24D] border-slate-900 shadow-2xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
+                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 20000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
                                 Rp 20 Jt
                             </button>
                         </div>
                     </div>
 
-                    <!-- Visual Segmented Allocation Meter -->
-                    <div class="space-y-2">
+                    <!-- Budget Visual Breakdown Section -->
+                    <div class="space-y-3">
                         <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                            <span>Breakdown Alokasi 50 / 30 / 20</span>
-                            <span class="font-mono text-slate-900">Total: 100%</span>
+                            <span>Pembagian Anggaran</span>
+                            <span class="font-mono text-[#0F172A] font-extrabold" x-text="'Rp ' + Number(monthlyIncome).toLocaleString('id-ID')"></span>
                         </div>
-                        <div class="w-full h-3 rounded-full overflow-hidden flex bg-slate-100 border border-slate-200 shadow-2xs">
+
+                        <!-- Segmented Progress Bar -->
+                        <div class="w-full h-2.5 rounded-full overflow-hidden flex bg-slate-100 border border-slate-200">
                             <div class="bg-blue-600 h-full transition-all duration-300" style="width: 50%;"></div>
                             <div class="bg-purple-600 h-full transition-all duration-300" style="width: 30%;"></div>
                             <div class="bg-[#A4D928] h-full transition-all duration-300" style="width: 20%;"></div>
                         </div>
-                    </div>
 
-                    <!-- 3 Cards: Needs, Wants, Savings -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        
-                        <!-- 50% Needs -->
-                        <div class="p-3.5 rounded-2xl bg-blue-50/70 border-2 border-blue-200 flex flex-col justify-between">
-                            <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-[10px] font-black uppercase tracking-wider text-blue-700">Kebutuhan</span>
-                                <span class="px-2 py-0.5 rounded-md bg-blue-200/80 text-blue-900 font-mono font-black text-[10px]">50%</span>
+                        <!-- 3 Detail Allocation Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                            
+                            <!-- 50% Kebutuhan -->
+                            <div class="p-3 rounded-xl bg-blue-50/60 border border-blue-200/80">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-bold uppercase text-blue-700">Kebutuhan</span>
+                                    <span class="text-[10px] font-mono font-black text-blue-900 bg-blue-100 px-1.5 py-0.5 rounded">50%</span>
+                                </div>
+                                <div class="text-sm font-black font-mono text-[#0F172A]"
+                                     x-text="'Rp ' + needsAmount.toLocaleString('id-ID')"></div>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Makan, listrik, sewa</span>
                             </div>
-                            <div>
-                                <span class="text-sm sm:text-base font-black font-mono text-[#0F172A] block"
-                                      x-text="'Rp ' + needsAmount.toLocaleString('id-ID')"></span>
-                                <span class="text-[10px] text-slate-500 leading-tight block mt-0.5">Makan, sewa, listrik & tagihan</span>
+
+                            <!-- 30% Keinginan -->
+                            <div class="p-3 rounded-xl bg-purple-50/60 border border-purple-200/80">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-bold uppercase text-purple-700">Keinginan</span>
+                                    <span class="text-[10px] font-mono font-black text-purple-900 bg-purple-100 px-1.5 py-0.5 rounded">30%</span>
+                                </div>
+                                <div class="text-sm font-black font-mono text-[#0F172A]"
+                                     x-text="'Rp ' + wantsAmount.toLocaleString('id-ID')"></div>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Hiburan, belanja & hobi</span>
                             </div>
+
+                            <!-- 20% Tabungan -->
+                            <div class="p-3 rounded-xl bg-[#F7FFD9] border border-lime-300">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10px] font-bold uppercase text-emerald-800">Tabungan</span>
+                                    <span class="text-[10px] font-mono font-black text-emerald-950 bg-lime-200 px-1.5 py-0.5 rounded">20%</span>
+                                </div>
+                                <div class="text-sm font-black font-mono text-[#0F172A]"
+                                     x-text="'Rp ' + savingsAmount.toLocaleString('id-ID')"></div>
+                                <span class="text-[10px] text-slate-500 block mt-0.5">Dana darurat & investasi</span>
+                            </div>
+
                         </div>
-
-                        <!-- 30% Wants -->
-                        <div class="p-3.5 rounded-2xl bg-purple-50/70 border-2 border-purple-200 flex flex-col justify-between">
-                            <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-[10px] font-black uppercase tracking-wider text-purple-700">Keinginan</span>
-                                <span class="px-2 py-0.5 rounded-md bg-purple-200/80 text-purple-900 font-mono font-black text-[10px]">30%</span>
-                            </div>
-                            <div>
-                                <span class="text-sm sm:text-base font-black font-mono text-[#0F172A] block"
-                                      x-text="'Rp ' + wantsAmount.toLocaleString('id-ID')"></span>
-                                <span class="text-[10px] text-slate-500 leading-tight block mt-0.5">Hiburan, belanja & hobi</span>
-                            </div>
-                        </div>
-
-                        <!-- 20% Savings -->
-                        <div class="p-3.5 rounded-2xl bg-[#F4FFD6] border-2 border-lime-300 flex flex-col justify-between">
-                            <div class="flex items-center justify-between mb-1.5">
-                                <span class="text-[10px] font-black uppercase tracking-wider text-emerald-800">Tabungan</span>
-                                <span class="px-2 py-0.5 rounded-md bg-lime-200 text-emerald-950 font-mono font-black text-[10px]">20%</span>
-                            </div>
-                            <div>
-                                <span class="text-sm sm:text-base font-black font-mono text-[#0F172A] block"
-                                      x-text="'Rp ' + savingsAmount.toLocaleString('id-ID')"></span>
-                                <span class="text-[10px] text-slate-500 leading-tight block mt-0.5">Dana darurat & investasi</span>
-                            </div>
-                        </div>
-
                     </div>
 
                     <!-- Smart Recommendation Box -->
-                    <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-1.5 shadow-md">
-                        <div class="flex items-center gap-2">
-                            <span class="text-sm">✨</span>
-                            <h4 class="text-xs font-black text-[#C6F24D] uppercase tracking-wider">Rekomendasi PortoFinance</h4>
+                    <div class="p-3.5 rounded-xl bg-[#0F172A] text-white space-y-1 shadow-sm">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xs">✨</span>
+                            <h4 class="text-[10px] font-mono font-black text-[#C6F24D] uppercase tracking-wider">Rekomendasi PortoFinance</h4>
                         </div>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Dengan pemasukan <span class="font-bold text-white font-mono" x-text="'Rp ' + monthlyIncome.toLocaleString('id-ID')"></span>/bulan, sistem otomatis mengatur alokasi idealmu. Kamu bisa menyesuaikan kategori dan budget ini kapan saja di dashboard.
+                        <p class="text-[11px] text-slate-300 leading-relaxed">
+                            Dengan pemasukan <span class="font-bold text-white font-mono" x-text="'Rp ' + Number(monthlyIncome).toLocaleString('id-ID')"></span>/bulan, sistem otomatis mengatur alokasi idealmu. Kamu bisa menyesuaikannya kapan saja.
                         </p>
                     </div>
 
                 </div>
 
-            </div>
+            </main>
 
-            <!-- ── MODAL FOOTER ─────────────────────────────────────── -->
-            <div class="px-6 py-4.5 border-t border-slate-100 bg-[#F8FAFC] flex items-center justify-between gap-3">
+            <!-- ── PART 3: STABLE FOOTER (NEVER OVERLAPPING CONTENT) ── -->
+            <footer class="px-5 py-3.5 sm:px-6 sm:py-4 border-t border-slate-100 bg-[#F8FAFC] shrink-0 flex items-center justify-between gap-3">
                 
                 <!-- Back Button -->
                 <div>
                     <button type="button" x-show="step > 1" @click="prev()"
-                            class="px-4 py-2.5 rounded-xl border-2 border-slate-200 bg-white font-black text-xs text-slate-700 hover:border-slate-300 hover:bg-slate-50 cursor-pointer transition-all active:scale-95 shadow-2xs">
+                            class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white font-bold text-xs text-slate-700 hover:border-slate-300 hover:bg-slate-50 cursor-pointer transition-all active:scale-95 shadow-2xs">
                         &larr; Kembali
                     </button>
                 </div>
@@ -620,20 +651,20 @@
                 <div>
                     <!-- Step 1 & 2: Lanjutkan -->
                     <button type="button" x-show="step < 3" @click="next()"
-                            class="px-6 py-3 rounded-2xl bg-slate-900 hover:bg-slate-800 text-[#C6F24D] font-black text-xs sm:text-sm cursor-pointer shadow-md transition-all active:scale-95 flex items-center gap-2">
+                            class="px-5 py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-[#C6F24D] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all active:scale-95 flex items-center gap-1.5">
                         <span>Lanjutkan</span>
                         <span>&rarr;</span>
                     </button>
 
                     <!-- Step 3: Mulai PortoFinance -->
                     <button type="button" x-show="step === 3" @click="submit()" :disabled="isSubmitting"
-                            class="px-6 py-3.5 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-95 border-2 border-slate-900 text-slate-950 font-black text-xs sm:text-sm cursor-pointer shadow-md transition-all flex items-center gap-2">
-                        <span x-show="!isSubmitting" class="flex items-center gap-2">
+                            class="px-6 py-2.5 rounded-xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-95 border-2 border-[#0F172A] text-[#0F172A] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all flex items-center gap-2">
+                        <span x-show="!isSubmitting" class="flex items-center gap-1.5">
                             <span>Mulai PortoFinance</span>
                             <span>&rarr;</span>
                         </span>
                         <span x-show="isSubmitting" class="flex items-center gap-2">
-                            <svg class="animate-spin h-4 w-4 text-slate-950" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg class="animate-spin h-4 w-4 text-[#0F172A]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
@@ -642,7 +673,7 @@
                     </button>
                 </div>
 
-            </div>
+            </footer>
 
         </div>
     </div>
