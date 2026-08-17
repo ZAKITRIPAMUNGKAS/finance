@@ -122,10 +122,9 @@
                 <div class="flex items-center gap-2 text-xs font-mono font-extrabold text-slate-400 self-start sm:self-auto">
                     <!-- Step 1 Indicator -->
                     <div class="flex items-center gap-1.5 transition-colors" :class="step === 1 ? 'text-[#0F172A]' : (step > 1 ? 'text-teal-600' : 'text-slate-300')">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all"
-                              :class="step === 1 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 font-black shadow-2xs' : (step > 1 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')">
-                            <template x-if="step > 1">✓</template>
-                            <template x-if="step <= 1">1</template>
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
+                              :class="step === 1 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : (step > 1 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')"
+                              x-text="step > 1 ? '✓' : '1'">
                         </span>
                         <span class="hidden sm:inline">Profil</span>
                     </div>
@@ -134,10 +133,9 @@
 
                     <!-- Step 2 Indicator -->
                     <div class="flex items-center gap-1.5 transition-colors" :class="step === 2 ? 'text-[#0F172A]' : (step > 2 ? 'text-teal-600' : 'text-slate-300')">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all"
-                              :class="step === 2 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 font-black shadow-2xs' : (step > 2 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')">
-                            <template x-if="step > 2">✓</template>
-                            <template x-if="step <= 2">2</template>
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
+                              :class="step === 2 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : (step > 2 ? 'border-teal-600 bg-teal-600 text-white' : 'border-slate-200 text-slate-400')"
+                              x-text="step > 2 ? '✓' : '2'">
                         </span>
                         <span class="hidden sm:inline">Rekening</span>
                     </div>
@@ -146,8 +144,8 @@
 
                     <!-- Step 3 Indicator -->
                     <div class="flex items-center gap-1.5 transition-colors" :class="step === 3 ? 'text-[#0F172A]' : 'text-slate-300'">
-                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all"
-                              :class="step === 3 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 font-black shadow-2xs' : 'border-slate-200 text-slate-400'">
+                        <span class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] border transition-all font-mono font-black"
+                              :class="step === 3 ? 'border-slate-900 bg-[#C6F24D] text-slate-950 shadow-2xs' : 'border-slate-200 text-slate-400'">
                             3
                         </span>
                         <span class="hidden sm:inline">Anggaran</span>
@@ -189,11 +187,9 @@
                                     <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
                                         💼
                                     </div>
-                                    <template x-if="persona === 'employee_salary'">
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                            ✓ Terpilih
-                                        </span>
-                                    </template>
+                                    <span x-show="persona === 'employee_salary'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
+                                        ✓ Terpilih
+                                    </span>
                                 </div>
                                 <h3 class="text-sm font-black text-[#0F172A] mb-1">Pekerja Tetap</h3>
                                 <p class="text-xs text-slate-500 font-medium leading-relaxed">
@@ -214,11 +210,9 @@
                                     <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
                                         💻
                                     </div>
-                                    <template x-if="persona === 'freelancer_project'">
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                            ✓ Terpilih
-                                        </span>
-                                    </template>
+                                    <span x-show="persona === 'freelancer_project'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
+                                        ✓ Terpilih
+                                    </span>
                                 </div>
                                 <h3 class="text-sm font-black text-[#0F172A] mb-1">Freelancer / Kreator</h3>
                                 <p class="text-xs text-slate-500 font-medium leading-relaxed">
@@ -239,11 +233,9 @@
                                     <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
                                         🏪
                                     </div>
-                                    <template x-if="persona === 'merchant_business'">
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                            ✓ Terpilih
-                                        </span>
-                                    </template>
+                                    <span x-show="persona === 'merchant_business'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
+                                        ✓ Terpilih
+                                    </span>
                                 </div>
                                 <h3 class="text-sm font-black text-[#0F172A] mb-1">Pebisnis / Usaha</h3>
                                 <p class="text-xs text-slate-500 font-medium leading-relaxed">
@@ -264,11 +256,9 @@
                                     <div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-xl shadow-2xs">
                                         🎓
                                     </div>
-                                    <template x-if="persona === 'student_creator'">
-                                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
-                                            ✓ Terpilih
-                                        </span>
-                                    </template>
+                                    <span x-show="persona === 'student_creator'" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-900 text-[#C6F24D] text-[10px] font-mono font-black uppercase">
+                                        ✓ Terpilih
+                                    </span>
                                 </div>
                                 <h3 class="text-sm font-black text-[#0F172A] mb-1">Mahasiswa / Pemula</h3>
                                 <p class="text-xs text-slate-500 font-medium leading-relaxed">
