@@ -159,13 +159,12 @@
                         <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Check</span>
                     </a>
                     <a href="{{ route('reports.financial-statement') }}" 
-                       target="_blank"
-                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 transition-all">
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('reports*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
                         <div class="flex items-center gap-3">
                             <x-icon name="file-text" class="w-4 h-4" />
                             <span>Laporan & Cetak PDF</span>
                         </div>
-                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-bold">PDF</span>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full {{ request()->routeIs('reports*') ? 'bg-slate-950 text-[#C6F24D]' : 'bg-blue-100 text-blue-800' }} font-bold">PDF</span>
                     </a>
                 </div>
             </div>
