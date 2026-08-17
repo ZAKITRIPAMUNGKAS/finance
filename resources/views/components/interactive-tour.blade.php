@@ -101,6 +101,10 @@
         finish() {
             this.showTour = false;
             localStorage.setItem('portofinance_guided_tour_done', 'true');
+            // Trigger Fondasi Keilmuan & Tips and Tricks modal right after tour
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent('open-finance-theory'));
+            }, 300);
         },
         skip() {
             this.finish();
