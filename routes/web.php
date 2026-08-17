@@ -20,13 +20,15 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// 1. Landing Welcome Page (Direct to Dashboard if Authenticated)
+// 1. Landing Welcome Page & Pricing (Accessible to all)
 Route::get('/', function () {
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
     return view('welcome');
 })->name('welcome');
+
+Route::get('/pricing', \App\Livewire\Pricing::class)->name('pricing');
 
 // 2. Auth Routes (Guest Only)
 Route::middleware('guest')->group(function () {

@@ -843,7 +843,7 @@
         <div class="footer">
             <div class="footer-note">
                 <p>Terima kasih atas kerja sama dan kepercayaannya.</p>
-                <span>Invoice resmi ini diterbitkan secara otomatis via PortoFinance.</span>
+                <span>Invoice resmi ini diterbitkan secara otomatis.</span>
             </div>
             <div class="signature">
                 <p>HORMAT KAMI,</p>
@@ -851,6 +851,16 @@
                 <span>Freelancer / Studio Kreatif</span>
             </div>
         </div>
+
+        @if($user->isFree())
+        <div style="margin-top: 28px; padding: 14px 18px; border-radius: 16px; background: #0f172a; color: #ffffff; display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="color: #c6f24d; font-size: 16px;">⚡</span>
+                <span style="color: #cbd5e1; font-weight: 500;">Dibuat dengan <strong style="color: #ffffff; font-weight: 800;">PortoFinance</strong> — Operating System Finansial & Invoice Freelance</span>
+            </div>
+            <a href="https://finance.tepegrafi.id" target="_blank" style="padding: 6px 14px; border-radius: 10px; background: #c6f24d; color: #020617; font-weight: 800; text-decoration: none; font-size: 11px; white-space: nowrap; transition: opacity 0.15s ease;">Buat Invoice Gratis →</a>
+        </div>
+        @endif
     </div>
 
 </body>

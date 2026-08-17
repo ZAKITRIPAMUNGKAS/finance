@@ -330,8 +330,8 @@
                             </div>
                             <div class="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between">
                                 <span class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400">Paket Akun</span>
-                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black {{ $currentUser->isAdmin() ? 'bg-slate-950 text-[#C6F24D]' : ($currentUser->isLifetime() ? 'bg-purple-100 text-purple-900' : ($currentUser->isPro() ? 'bg-emerald-100 text-emerald-900' : ($currentUser->isTrial() ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-700'))) }}">
-                                    {{ $currentUser->tier_label }}
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black {{ ($currentUser?->isAdmin() ?? false) ? 'bg-slate-950 text-[#C6F24D]' : (($currentUser?->isLifetime() ?? false) ? 'bg-purple-100 text-purple-900' : (($currentUser?->isPro() ?? false) ? 'bg-emerald-100 text-emerald-900' : (($currentUser?->isTrial() ?? false) ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-700'))) }}">
+                                    {{ $currentUser?->tier_label ?? 'Free Starter' }}
                                 </span>
                             </div>
                         </div>
@@ -346,6 +346,13 @@
                                 <span>Panel Superadmin</span>
                             </a>
                             @endif
+
+                            <a href="{{ route('pricing') }}" 
+                               @click="userMenuOpen = false"
+                               class="flex items-center gap-2.5 px-3 py-2 rounded-xl font-extrabold text-slate-950 bg-slate-100 hover:bg-slate-200 transition-colors">
+                                <x-icon name="crown" class="w-4 h-4 text-amber-500" />
+                                <span>Pilihan Paket & Upgrade PRO</span>
+                            </a>
 
                             <a href="{{ route('settings') }}" 
                                @click="userMenuOpen = false"

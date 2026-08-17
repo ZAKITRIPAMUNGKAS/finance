@@ -73,6 +73,90 @@ class Index extends Component
         session()->flash('password_success', 'Password keamanan berhasil diubah!');
     }
 
+    // Delete Account
+    public string $delete_password = '';
+    public bool $showDeleteModal = false;
+
+    public function exportAllData()
+    {
+        $user = Auth::user();
+        if (!$user) return;
+
+        $user->load([
+            'accounts',
+            'categories',
+            'transactions.category',
+            'transactions.account',
+            'projects.client',
+            'projects.invoices',
+            'clients',
+            'wishlists'
+        ]);
+
+        $exportData = [
+            'app' => 'PortoFinance',
+            'version' => '2.0',
+            'exported_at' => now()->toIso8601String(),
+            'user' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'subscription_tier' => $user->subscription_tier,
+                'created_at' => $user->created_at,
+            ],
+            'accounts' => $user->accounts,
+            'categories' => $user->categories,
+            'transactions' => $user->transactions,
+            'projects' => $user->projects,
+            'clients' => $user->clients,
+            'wishlists' => $user->wishlists,
+        ];
+
+        $json = json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $filename = 'portofinance-data-backup-' . now()->format('Y-m-d-His') . '.json';
+
+        return response()->streamDownload(function () use ($json) {
+            echo $json;
+        }, $filename, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
+
+    public function confirmDeleteAccount()
+    {
+        $this->showDeleteModal = true;
+        $this->delete_password = '';
+    }
+
+    public function deleteAccount()
+    {
+        $user = Auth::user();
+        if (!$user) return;
+
+        if (strtolower($user->email) === 'zakitripamungkas03@gmail.com') {
+            session()->flash('data_error', 'Akun Superadmin Utama tidak dapat dihapus.');
+            $this->showDeleteModal = false;
+            return;
+        }
+
+        $this->validate([
+            'delete_password' => 'required',
+        ]);
+
+        if (!Hash::check($this->delete_password, $user->password)) {
+            $this->addError('delete_password', 'Password konfirmasi salah.');
+            return;
+        }
+
+        // Delete user cascade
+        Auth::logout();
+        $user->delete();
+
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect()->route('login')->with('status', 'Akun dan seluruh data Anda telah dihapus secara permanen.');
+    }
+
     public function logout()
     {
         Auth::logout();
