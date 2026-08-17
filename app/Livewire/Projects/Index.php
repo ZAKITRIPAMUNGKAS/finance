@@ -83,6 +83,11 @@ class Index extends Component
     public function saveProject()
     {
         $userId = auth()->id();
+        $this->total_revenue = (string) str_replace(['.', ',', ' '], '', $this->total_revenue);
+        if ($this->estimated_cost !== null) {
+            $this->estimated_cost = (string) str_replace(['.', ',', ' '], '', $this->estimated_cost);
+        }
+
         $this->validate([
             'client_id' => 'required|exists:clients,id',
             'name' => 'required|string|max:255',
@@ -93,6 +98,8 @@ class Index extends Component
             'status' => 'required|in:prospect,in_progress,completed,cancelled',
         ]);
 
+        $cleanRev = (float) $this->total_revenue;
+
         if ($this->projectId) {
             $project = Project::where('user_id', $userId)->findOrFail($this->projectId);
             $project->update([
@@ -100,7 +107,7 @@ class Index extends Component
                 'name' => $this->name,
                 'category' => $this->category,
                 'description' => $this->description,
-                'total_revenue' => $this->total_revenue,
+                'total_revenue' => $cleanRev,
                 'start_date' => $this->start_date,
                 'deadline' => $this->deadline,
                 'status' => $this->status,
@@ -112,7 +119,7 @@ class Index extends Component
                 'name' => $this->name,
                 'category' => $this->category,
                 'description' => $this->description,
-                'total_revenue' => $this->total_revenue,
+                'total_revenue' => $cleanRev,
                 'start_date' => $this->start_date,
                 'deadline' => $this->deadline,
                 'status' => $this->status,
@@ -138,6 +145,8 @@ class Index extends Component
 
     public function saveCost()
     {
+        $this->cost_amount = (string) str_replace(['.', ',', ' '], '', $this->cost_amount);
+
         $this->validate([
             'cost_description' => 'required|string|max:255',
             'cost_amount' => 'required|numeric|min:1',
@@ -151,7 +160,7 @@ class Index extends Component
             'project_id' => $project->id,
             'category_id' => $this->cost_category_id,
             'description' => $this->cost_description,
-            'amount' => $this->cost_amount,
+            'amount' => (float) $this->cost_amount,
             'date' => $this->cost_date,
         ]);
 
@@ -165,12 +174,15 @@ class Index extends Component
         $project = Project::where('user_id', auth()->id())->findOrFail($projId);
         $this->invoiceProjectId = $project->id;
         $this->invoice_number = 'INV-' . date('Y-m') . '-' . rand(100, 999);
-        $this->invoice_amount = (string) max(0, $project->total_revenue - $project->paid_invoices_total);
+        $remaining = max(0, $project->total_revenue - $project->paid_invoices_total);
+        $this->invoice_amount = $remaining > 0 ? number_format($remaining, 0, ',', '.') : '';
         $this->isInvoiceModalOpen = true;
     }
 
     public function saveInvoice()
     {
+        $this->invoice_amount = (string) str_replace(['.', ',', ' '], '', $this->invoice_amount);
+
         $this->validate([
             'invoice_number' => 'required|string|unique:invoices,invoice_number',
             'invoice_amount' => 'required|numeric|min:1',
@@ -184,7 +196,7 @@ class Index extends Component
         Invoice::create([
             'project_id' => $project->id,
             'invoice_number' => $this->invoice_number,
-            'amount' => $this->invoice_amount,
+            'amount' => (float) $this->invoice_amount,
             'issue_date' => $this->issue_date,
             'due_date' => $this->due_date,
             'status' => $this->invoice_status,

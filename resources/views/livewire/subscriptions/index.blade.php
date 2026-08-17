@@ -301,6 +301,14 @@
     <!-- MODAL TAMBAH / EDIT LANGGANAN -->
     @if($isModalOpen)
     <div class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in"
+         x-data="{
+             formatNominal(val) {
+                 if (!val) return '';
+                 let clean = String(val).replace(/\D/g, '');
+                 if (!clean) return '';
+                 return new Intl.NumberFormat('id-ID').format(clean);
+             }
+         }"
          x-cloak>
         <div class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col anim-scale-up">
             
@@ -352,8 +360,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Biaya (Rp) *</label>
-                            <input type="number" wire:model="amount" placeholder="350000"
-                                class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                            <input type="text" 
+                                   inputmode="numeric"
+                                   wire:model="amount" 
+                                   x-on:input="$el.value = formatNominal($el.value)"
+                                   placeholder="350.000"
+                                   class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                             @error('amount') <span class="text-xs text-rose-500 font-bold mt-1 block">{{ $message }}</span> @enderror
                         </div>
 

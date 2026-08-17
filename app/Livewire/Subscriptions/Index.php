@@ -196,10 +196,11 @@ class Index extends Component
 
     public function saveSubscription()
     {
+        $this->amount = (string) str_replace(['.', ',', ' '], '', $this->amount);
         $this->validate();
 
         $userId = auth()->id();
-        $cleanAmount = (float) str_replace(['.', ',', ' '], '', $this->amount);
+        $cleanAmount = (float) $this->amount;
 
         if ($this->subscriptionId) {
             $sub = Subscription::where('user_id', $userId)->findOrFail($this->subscriptionId);
