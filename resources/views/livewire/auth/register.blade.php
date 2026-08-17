@@ -19,6 +19,34 @@
      }"
      class="w-full flex-1 flex flex-col justify-between h-full relative anim-page-enter">
 
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  HARMONIOUS FLOATING ORNAMENTS (AESTHETIC & NON-COLLIDING) -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
+        <!-- Floating Ornament 1: Sparkles (Left Margin, Level with Subtitle) -->
+        <div class="absolute top-28 -left-4 sm:-left-8 px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-xs border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-10deg] anim-float-1">
+            <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
+            <span class="text-[9px] font-black tracking-wider">NEW</span>
+        </div>
+
+        <!-- Floating Ornament 2: SAFE Shield (Right Margin, Level with Subtitle) -->
+        <div class="absolute top-32 -right-4 sm:-right-8 px-2.5 py-1 rounded-xl bg-white/95 backdrop-blur-xs border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[8deg] flex items-center gap-1.5 anim-float-2">
+            <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
+            <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
+        </div>
+
+        <!-- Floating Ornament 3: Checkmark Coin (Left Margin, Beside Submit) -->
+        <div class="absolute bottom-28 -left-4 sm:-left-7 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3">
+            <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
+        </div>
+
+        <!-- Floating Ornament 4: Cash Badge (Right Margin, Beside Submit) -->
+        <div class="absolute bottom-24 -right-4 sm:-right-7 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-6deg] flex items-center gap-1 anim-float-1">
+            <x-icon name="credit-card" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
+            <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">CASH</span>
+        </div>
+    </div>
+
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
     <header class="flex items-center justify-between pt-1 pb-3 shrink-0">
         <!-- Back to Login Button -->
@@ -43,8 +71,12 @@
     <!-- ── MAIN GREETING & FORM ──────────────────────────────── -->
     <main class="space-y-4 sm:space-y-5 my-auto py-2">
         
-        <!-- Header Greeting -->
-        <div class="text-center space-y-1">
+        <!-- Header Greeting with Aesthetic Pill Badge -->
+        <div class="text-center space-y-1.5">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] font-mono font-extrabold uppercase tracking-wider shadow-2xs">
+                <span class="w-1.5 h-1.5 rounded-full bg-teal-600 animate-pulse"></span>
+                <span>Pro Financial Engine</span>
+            </div>
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight leading-tight">
                 Buat Akun Baru
             </h1>
@@ -202,6 +234,19 @@
                 </button>
             </div>
         </form>
+
+        <!-- Security & Trust Micro-Strip -->
+        <div class="flex items-center justify-center gap-3 pt-1 text-[10px] font-bold text-slate-400">
+            <span class="flex items-center gap-1">
+                <x-icon name="shield-check" class="w-3 h-3 text-emerald-600" />
+                <span>256-Bit SSL</span>
+            </span>
+            <span>•</span>
+            <span class="flex items-center gap-1">
+                <x-icon name="sparkles" class="w-3 h-3 text-teal-600" />
+                <span>Auto Rp 0 Starter</span>
+            </span>
+        </div>
 
     </main>
 
