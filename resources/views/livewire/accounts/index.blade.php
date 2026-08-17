@@ -238,20 +238,14 @@
                         @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Tipe Akun *</label>
-                            <select wire:model.live="type" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
-                                <option value="bank">Bank</option>
-                                <option value="ewallet">E-Wallet</option>
-                                <option value="cash">Cash Dompet</option>
-                                <option value="investment">Investasi</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Warna Label</label>
-                            <input type="color" wire:model.defer="color" class="w-full h-9 bg-[#F8F9FA] border border-slate-200 rounded-xl p-1 cursor-pointer">
-                        </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tipe Akun *</label>
+                        <select wire:model.live="type" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
+                            <option value="bank">Bank</option>
+                            <option value="ewallet">E-Wallet</option>
+                            <option value="cash">Cash Dompet</option>
+                            <option value="investment">Investasi</option>
+                        </select>
                     </div>
 
                     <div>

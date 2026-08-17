@@ -71,8 +71,10 @@ class Index extends Component
             'type' => 'required|in:bank,ewallet,cash,investment,other',
             'account_number' => 'nullable|string|max:100',
             'initial_balance' => 'required|numeric|min:0',
-            'color' => 'required|string',
+            'color' => 'nullable|string',
         ]);
+
+        $safeColor = $this->color ?: '#0F172A';
 
         if ($this->accountId) {
             $account = Account::where('user_id', $userId)->findOrFail($this->accountId);
@@ -80,7 +82,7 @@ class Index extends Component
                 'name' => $this->name,
                 'type' => $this->type,
                 'account_number' => $this->account_number,
-                'color' => $this->color,
+                'color' => $safeColor,
                 'notes' => $this->notes,
             ]);
         } else {
@@ -91,7 +93,7 @@ class Index extends Component
                 'account_number' => $this->account_number,
                 'initial_balance' => $this->initial_balance,
                 'current_balance' => $this->initial_balance,
-                'color' => $this->color,
+                'color' => $safeColor,
                 'notes' => $this->notes,
                 'is_active' => true,
             ]);
