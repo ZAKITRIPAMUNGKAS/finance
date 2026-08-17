@@ -1,88 +1,69 @@
 <div id="login-container" 
      x-data="{ 
          showPass: false,
-         isShaking: false,
-         isAuthenticating: false,
-         
-         init() {
-             window.addEventListener('login-failed', () => {
-                 this.isAuthenticating = false;
-                 this.triggerShake();
-             });
-         },
-
-         startAuth() {
-             this.isAuthenticating = true;
-         },
-
-         triggerShake() {
-             this.isShaking = true;
-             setTimeout(() => {
-                 this.isShaking = false;
-             }, 500);
-         }
+         isGoogleLoading: false
      }"
-     class="w-full flex-1 flex flex-col justify-between h-full relative anim-page-enter">
+     class="w-full flex-1 flex flex-col justify-between h-full relative">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  FULLSCREEN AUTHENTICATION & VERIFICATION LOADING OVERLAY   -->
+    <!--  1. LIVEWIRE FORM SUBMISSION LOADING OVERLAY                -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div x-show="isAuthenticating" 
-         x-cloak
-         x-transition:enter="transition ease-out duration-300"
-         x-transition:enter-start="opacity-0 scale-95"
-         x-transition:enter-end="opacity-100 scale-100"
-         x-transition:leave="transition ease-in duration-200"
-         x-transition:leave-start="opacity-100 scale-100"
-         x-transition:leave-end="opacity-0 scale-95"
-         class="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center select-none">
+    <div wire:loading.flex 
+         wire:target="login"
+         style="display: none;"
+         class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
         
-        <!-- Ambient Glowing Aura -->
-        <div class="absolute w-72 h-72 rounded-full bg-[#C6F24D]/20 blur-3xl pointer-events-none"></div>
-
-        <div class="relative z-10 max-w-sm w-full space-y-6 flex flex-col items-center">
-            
-            <!-- Animated Icon Core Matrix -->
-            <div class="relative w-20 h-20 flex items-center justify-center">
-                <!-- Outer Pulsing Ring -->
-                <div class="absolute inset-0 rounded-3xl border-2 border-[#C6F24D] animate-ping opacity-25"></div>
-                
-                <!-- Central Solid Hub -->
-                <div class="relative w-16 h-16 rounded-2xl bg-slate-900 border-2 border-[#C6F24D] shadow-[0_0_25px_rgba(198,242,77,0.35)] flex items-center justify-center">
-                    <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain" alt="PortoFinance">
-                </div>
-
-                <!-- Floating Lock Success Badge -->
-                <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#C6F24D] border-2 border-slate-950 flex items-center justify-center shadow-md">
-                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
-                </div>
+        <div class="relative z-10 max-w-sm w-full space-y-4 flex flex-col items-center">
+            <!-- Central Animated Brand Hub -->
+            <div class="relative w-16 h-16 rounded-2xl bg-slate-900 border-2 border-[#C6F24D] shadow-[0_0_25px_rgba(198,242,77,0.35)] flex items-center justify-center">
+                <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain animate-pulse" alt="PortoFinance">
             </div>
 
-            <!-- Dynamic Status Headers -->
-            <div class="space-y-1.5 text-center">
-                <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/30 text-[#C6F24D] text-[10px] font-mono font-bold tracking-widest uppercase">
-                    <span class="w-1.5 h-1.5 rounded-full bg-[#C6F24D] animate-ping"></span>
-                    <span>MEMVERIFIKASI AKSES</span>
-                </div>
-                <h3 class="text-xl font-black text-white tracking-tight">
-                    Menghubungkan Akun...
+            <div class="space-y-1 text-center">
+                <h3 class="text-lg font-black text-white tracking-tight">
+                    Memverifikasi Akun...
                 </h3>
-                <p class="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
-                    Membuka brankas data keuangan Anda secara aman.
+                <p class="text-xs text-slate-300">
+                    Menghubungkan ke workspace keuangan Anda.
                 </p>
             </div>
 
-            <!-- Neon Progress Bar Indicator -->
-            <div class="w-full max-w-xs space-y-2">
-                <div class="w-full h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden relative">
-                    <div class="h-full bg-gradient-to-r from-teal-400 via-[#C6F24D] to-[#A4D928] rounded-full animate-pulse w-full"></div>
-                </div>
-                <div class="flex items-center justify-between text-[9px] font-mono text-slate-500">
-                    <span>SSL 256-BIT ENCRYPTION</span>
-                    <span class="text-[#C6F24D] font-bold">SECURED</span>
-                </div>
+            <div class="w-48 h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-teal-400 to-[#C6F24D] rounded-full animate-pulse w-full"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  2. GOOGLE OAUTH REDIRECT LOADING OVERLAY                   -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div x-show="isGoogleLoading" 
+         x-cloak
+         style="display: none;"
+         class="fixed inset-0 z-50 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
+        
+        <div class="relative z-10 max-w-sm w-full space-y-4 flex flex-col items-center">
+            <div class="relative w-16 h-16 rounded-2xl bg-white border-2 border-slate-900 shadow-md flex items-center justify-center">
+                <svg class="w-8 h-8" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
             </div>
 
+            <div class="space-y-1 text-center">
+                <h3 class="text-lg font-black text-white tracking-tight">
+                    Membuka Google OAuth...
+                </h3>
+                <p class="text-xs text-slate-300">
+                    Mengarahkan ke akun Google Anda.
+                </p>
+            </div>
+
+            <div class="w-48 h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden">
+                <div class="h-full bg-[#4285F4] rounded-full animate-pulse w-full"></div>
+            </div>
         </div>
     </div>
 
@@ -127,7 +108,7 @@
         <!-- Google OAuth Instant Login Button -->
         <div>
             <a href="{{ route('google.redirect') }}" 
-               @click="startAuth(); sessionStorage.setItem('pf_just_logged_in', 'true')"
+               @click="isGoogleLoading = true; sessionStorage.setItem('pf_just_logged_in', 'true')"
                class="w-full py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 font-bold text-xs sm:text-sm border-2 border-slate-200 hover:border-slate-400 shadow-2xs transition-all flex items-center justify-center gap-3 cursor-pointer">
                 <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -148,7 +129,7 @@
         </div>
 
         <!-- Login Form -->
-        <form wire:submit="login" @submit="startAuth(); sessionStorage.setItem('pf_just_logged_in', 'true')" class="space-y-4" :class="isShaking ? 'anim-shake' : ''">
+        <form wire:submit="login" @submit="sessionStorage.setItem('pf_just_logged_in', 'true')" class="space-y-4">
             
             <!-- Email Input Field -->
             <div class="space-y-1.5">
@@ -204,6 +185,7 @@
             <!-- Primary Log In Button -->
             <div class="pt-2">
                 <button type="submit"
+                        wire:loading.attr="disabled"
                         class="w-full py-4 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-[0.98] text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-2 border-slate-950">
                     <span class="flex items-center gap-2">
                         <span>Masuk ke Akun</span>
