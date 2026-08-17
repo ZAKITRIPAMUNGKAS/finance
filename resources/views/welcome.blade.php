@@ -201,7 +201,8 @@
                         <!-- Left Column (Desktop): Text & Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>🔒 Smart Liquidity Formula</span>
+                                <x-icon name="lock" class="w-3.5 h-3.5 text-emerald-800" strokeWidth="2.5" />
+                                <span>Smart Liquidity Formula</span>
                             </div>
 
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
@@ -272,7 +273,8 @@
                         <!-- Left Column (Desktop): Text & Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-100 text-indigo-900 text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>🎯 Goal & Project Tracking</span>
+                                <x-icon name="target" class="w-3.5 h-3.5 text-indigo-800" strokeWidth="2.5" />
+                                <span>Goal & Project Tracking</span>
                             </div>
 
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">
@@ -342,7 +344,8 @@
                         <!-- Left Column (Desktop): Text & Copy -->
                         <div class="md:col-span-7 order-2 md:order-1 space-y-3 sm:space-y-4 text-left">
                             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBFAD2] text-slate-900 border border-[#D4F66C] text-[10px] sm:text-xs font-mono font-extrabold uppercase tracking-wider shadow-xs">
-                                <span>📐 Applied Financial Engineering</span>
+                                <x-icon name="calculator" class="w-3.5 h-3.5 text-slate-900" strokeWidth="2.5" />
+                                <span>Applied Financial Engineering</span>
                             </div>
 
                             <h1 class="text-2xl sm:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight leading-[1.12]">

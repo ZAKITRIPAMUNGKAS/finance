@@ -129,7 +129,7 @@
                 <div class="relative z-10 flex items-start justify-between gap-4">
                     <div>
                         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#C6F24D]/15 border border-[#C6F24D]/30 text-[#C6F24D] text-[10px] font-mono font-bold uppercase tracking-wider mb-2.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#C6F24D] animate-pulse"></span>
+                            <x-icon name="calculator" class="w-3 h-3 text-[#C6F24D]" strokeWidth="2.5" />
                             <span>Applied Financial Engineering</span>
                         </div>
                         <h2 class="text-lg sm:text-2xl font-black tracking-tight text-white leading-tight">
@@ -189,7 +189,10 @@
                         <!-- Mathematical Formula Card (JetBrains Mono) -->
                         <div class="p-4 bg-slate-950 rounded-2xl text-slate-100 border border-slate-800 space-y-1.5 shadow-inner">
                             <div class="flex items-center justify-between text-[10px] font-mono text-slate-400">
-                                <span class="uppercase tracking-wider font-bold">📐 Mathematical Model & Formula</span>
+                                <div class="flex items-center gap-1.5 uppercase tracking-wider font-bold">
+                                    <x-icon name="calculator" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.5" />
+                                    <span>Mathematical Model & Formula</span>
+                                </div>
                                 <span class="text-[#C6F24D] font-bold">Porto Algorithm</span>
                             </div>
                             <div class="font-mono text-xs sm:text-sm font-bold text-[#C6F24D] break-words" x-text="theory.formula"></div>
