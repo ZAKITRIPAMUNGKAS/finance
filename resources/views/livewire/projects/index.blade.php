@@ -97,26 +97,106 @@
             </div>
 
             <!-- Invoices & Cost Items Sub-bar -->
-            <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <div class="flex flex-wrap items-center gap-3 font-mono text-[11px]">
-                    <span class="text-slate-500">Lunas: <strong class="text-emerald-600">Rp {{ number_format($proj->paid_invoices_total, 0, ',', '.') }}</strong></span>
-                    @if($proj->outstanding_invoices_total > 0)
-                    <span class="text-slate-500">Piutang: <strong class="text-amber-600">Rp {{ number_format($proj->outstanding_invoices_total, 0, ',', '.') }}</strong></span>
-                    @endif
+            <div x-data="{ showInvoices: false, showCosts: false }" class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex flex-wrap items-center gap-3 font-mono text-[11px]">
+                        <span class="text-slate-500">Lunas: <strong class="text-emerald-600">Rp {{ number_format($proj->paid_invoices_total, 0, ',', '.') }}</strong></span>
+                        @if($proj->outstanding_invoices_total > 0)
+                        <span class="text-slate-500">Piutang: <strong class="text-amber-600">Rp {{ number_format($proj->outstanding_invoices_total, 0, ',', '.') }}</strong></span>
+                        @endif
+
+                        @if($proj->invoices->count() > 0)
+                        <button type="button" @click="showInvoices = !showInvoices" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold font-sans transition-colors cursor-pointer">
+                            <x-icon name="file-text" class="w-3 h-3" />
+                            <span>{{ $proj->invoices->count() }} Invoice</span>
+                            <x-icon name="chevron-down" class="w-2.5 h-2.5 transition-transform" ::class="showInvoices ? 'rotate-180' : ''" />
+                        </button>
+                        @endif
+
+                        @if($proj->costs->count() > 0)
+                        <button type="button" @click="showCosts = !showCosts" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-[10px] font-bold font-sans transition-colors cursor-pointer">
+                            <x-icon name="tag" class="w-3 h-3" />
+                            <span>{{ $proj->costs->count() }} Biaya (Rp {{ number_format($proj->total_cost, 0, ',', '.') }})</span>
+                            <x-icon name="chevron-down" class="w-2.5 h-2.5 transition-transform" ::class="showCosts ? 'rotate-180' : ''" />
+                        </button>
+                        @endif
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button wire:click="openAddCostModal({{ $proj->id }})" 
+                            class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95">
+                            <x-icon name="plus" class="w-3.5 h-3.5 text-slate-600" />
+                            <span>Catat Biaya</span>
+                        </button>
+                        <button wire:click="openAddInvoiceModal({{ $proj->id }})" 
+                            class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 shadow-sm">
+                            <x-icon name="file-text" class="w-3.5 h-3.5" />
+                            <span>Buat Invoice</span>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <button wire:click="openAddCostModal({{ $proj->id }})" 
-                        class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                        <x-icon name="plus" class="w-3.5 h-3.5 text-slate-600" />
-                        <span>Catat Biaya</span>
-                    </button>
-                    <button wire:click="openAddInvoiceModal({{ $proj->id }})" 
-                        class="flex-1 sm:flex-initial px-3.5 py-2 rounded-xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer">
-                        <x-icon name="file-text" class="w-3.5 h-3.5" />
-                        <span>Buat Invoice</span>
-                    </button>
+                <!-- INVOICES DRAWER -->
+                <div x-show="showInvoices" x-collapse x-cloak class="pt-2 border-t border-dashed border-slate-200 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Daftar Invoice ({{ $proj->invoices->count() }})</span>
+                        <span class="text-[10px] text-slate-400">Klik "Tandai Lunas" untuk mencatat pemasukan</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        @foreach($proj->invoices as $inv)
+                        <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3">
+                            <div class="space-y-0.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-mono font-bold text-slate-900 text-xs">{{ $inv->invoice_number }}</span>
+                                    <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase {{ $inv->status === 'paid' ? 'bg-emerald-100 text-emerald-800' : ($inv->is_overdue ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800') }}">
+                                        {{ $inv->status === 'paid' ? 'LUNAS' : ($inv->is_overdue ? 'JATUH TEMPO' : 'TERKIRIM') }}
+                                    </span>
+                                </div>
+                                <div class="text-[10px] text-slate-400 font-mono">
+                                    Jatuh Tempo: {{ $inv->due_date ? $inv->due_date->format('d-M-Y') : '-' }}
+                                    @if($inv->paid_at) &bull; Dibayar: {{ $inv->paid_at->format('d-M-Y') }} @endif
+                                </div>
+                                <div class="text-xs font-black font-mono text-slate-900">
+                                    Rp {{ number_format($inv->amount, 0, ',', '.') }}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                @if($inv->status !== 'paid')
+                                <button type="button" wire:click="markInvoiceAsPaid({{ $inv->id }})" 
+                                    class="px-2.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-[10px] font-bold transition-all shadow-xs cursor-pointer flex items-center gap-1">
+                                    <x-icon name="check" class="w-3 h-3" />
+                                    <span>Tandai Lunas</span>
+                                </button>
+                                @endif
+                                <button type="button" wire:click="deleteInvoice({{ $inv->id }})" 
+                                    wire:confirm="Yakin ingin menghapus invoice {{ $inv->invoice_number }}?"
+                                    class="p-1.5 rounded-xl hover:bg-rose-50 text-slate-400 hover:text-rose-600 transition-colors cursor-pointer">
+                                    <x-icon name="trash" class="w-3.5 h-3.5" />
+                                </button>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
                 </div>
+
+                <!-- COSTS DRAWER -->
+                <div x-show="showCosts" x-collapse x-cloak class="pt-2 border-t border-dashed border-slate-200 space-y-2">
+                    <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Daftar Biaya Operasional ({{ $proj->costs->count() }})</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        @foreach($proj->costs as $cst)
+                        <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-3 text-xs">
+                            <div class="space-y-0.5">
+                                <span class="font-bold text-slate-800 block text-[11px]">{{ $cst->description }}</span>
+                                <span class="text-[10px] text-slate-400 font-mono">{{ $cst->date ? $cst->date->format('d-M-Y') : '-' }} &bull; {{ $cst->category->name ?? 'Biaya Operasional' }}</span>
+                            </div>
+                            <span class="font-mono font-bold text-rose-600 text-xs shrink-0">
+                                - Rp {{ number_format($cst->amount, 0, ',', '.') }}
+                            </span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
             </div>
         </div>
         @empty
@@ -137,7 +217,7 @@
                 <div>
                     <label class="block text-xs font-bold text-slate-700 mb-1">Nama Project *</label>
                     <input type="text" wire:model.defer="name" placeholder="e.g. Multi-Cam Livestreaming Muswil" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    @error('name') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-3">
@@ -298,6 +378,7 @@
     <!-- MODAL 3: ADD INVOICE TO PROJECT -->
     <div x-data="{ 
             open: @entangle('isInvoiceModalOpen'),
+            status: @entangle('invoice_status'),
             formatNominal(val) {
                 if (!val) return '';
                 let clean = String(val).replace(/\D/g, '');
@@ -307,12 +388,21 @@
          }" 
          x-show="open" 
          class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isInvoiceModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 class="text-base font-extrabold text-slate-900">Terbitkan Invoice Penagihan</h3>
+        <div @click.outside="$wire.set('isInvoiceModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center">
+                        <x-icon name="file-text" class="w-4 h-4" />
+                    </div>
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900">Terbitkan Invoice Penagihan</h3>
+                        <p class="text-[11px] text-slate-400">Buat invoice resmi untuk ditagihkan ke klien</p>
+                    </div>
+                </div>
                 <button wire:click="$set('isInvoiceModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
             </div>
-            <form wire:submit.prevent="saveInvoice" class="p-6 space-y-4">
+
+            <form wire:submit.prevent="saveInvoice" class="p-6 space-y-4 overflow-y-auto">
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Invoice *</label>
@@ -320,7 +410,7 @@
                         @error('invoice_number') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Tagihan *</label>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Tagihan (Rp) *</label>
                         <input type="text" 
                                inputmode="numeric"
                                wire:model.defer="invoice_amount" 
@@ -333,23 +423,44 @@
 
                 <div class="grid grid-cols-2 gap-3">
                     <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Terbit *</label>
+                        <input type="date" wire:model.defer="issue_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        @error('issue_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Jatuh Tempo (Due Date) *</label>
                         <input type="date" wire:model.defer="due_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
                         @error('due_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Status Pembayaran</label>
-                        <select wire:model.defer="invoice_status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        <select wire:model.live="invoice_status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
                             <option value="sent">Terkirim (Menunggu Bayar)</option>
                             <option value="paid">Lunas (Sudah Diterima)</option>
                             <option value="draft">Draft</option>
                         </select>
                     </div>
+                    <div x-show="status === 'paid'">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Masuk ke Rekening / Kas</label>
+                        <select wire:model.defer="invoice_paid_to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @foreach($accounts as $acc)
+                                <option value="{{ $acc->id }}">{{ $acc->name }} ({{ $acc->type }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Tambahan / Term of Payment</label>
+                    <textarea wire:model.defer="invoice_notes" rows="2" placeholder="e.g. Pembayaran DP 50%, sisa dilunasi setelah serah terima file final..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 resize-none"></textarea>
                 </div>
 
                 <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
                     <button type="button" wire:click="$set('isInvoiceModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm">Simpan Invoice</button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm active:scale-95">Simpan Invoice</button>
                 </div>
             </form>
         </div>

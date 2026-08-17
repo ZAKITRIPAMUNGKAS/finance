@@ -49,6 +49,8 @@ class Index extends Component
     public string $issue_date = '';
     public string $due_date = '';
     public string $invoice_status = 'sent';
+    public ?int $invoice_paid_to_account_id = null;
+    public ?string $invoice_notes = null;
 
     protected $listeners = ['refresh-data' => '$refresh'];
 
@@ -63,6 +65,7 @@ class Index extends Component
     {
         $this->reset(['projectId', 'name', 'description']);
         $this->total_revenue = '';
+        $this->estimated_cost = '';
         $this->category = 'photo_video';
         $this->status = 'in_progress';
         $this->start_date = now()->format('Y-m-d');
@@ -84,7 +87,7 @@ class Index extends Component
     {
         $userId = auth()->id();
         $this->total_revenue = (string) str_replace(['.', ',', ' '], '', $this->total_revenue);
-        if ($this->estimated_cost !== null) {
+        if ($this->estimated_cost !== null && $this->estimated_cost !== '') {
             $this->estimated_cost = (string) str_replace(['.', ',', ' '], '', $this->estimated_cost);
         }
 
@@ -173,7 +176,14 @@ class Index extends Component
     {
         $project = Project::where('user_id', auth()->id())->findOrFail($projId);
         $this->invoiceProjectId = $project->id;
-        $this->invoice_number = 'INV-' . date('Y-m') . '-' . rand(100, 999);
+        $this->invoice_number = 'INV-' . date('Ymd') . '-' . rand(100, 999);
+        $this->issue_date = now()->format('Y-m-d');
+        $this->due_date = now()->addDays(7)->format('Y-m-d');
+        $this->invoice_status = 'sent';
+        $this->invoice_notes = null;
+        $defaultAccount = Account::where('user_id', auth()->id())->where('is_active', true)->first();
+        $this->invoice_paid_to_account_id = $defaultAccount?->id;
+
         $remaining = max(0, $project->total_revenue - $project->paid_invoices_total);
         $this->invoice_amount = $remaining > 0 ? number_format($remaining, 0, ',', '.') : '';
         $this->isInvoiceModalOpen = true;
@@ -183,26 +193,114 @@ class Index extends Component
     {
         $this->invoice_amount = (string) str_replace(['.', ',', ' '], '', $this->invoice_amount);
 
+        if (empty($this->issue_date)) {
+            $this->issue_date = now()->format('Y-m-d');
+        }
+        if (empty($this->due_date)) {
+            $this->due_date = now()->addDays(7)->format('Y-m-d');
+        }
+
         $this->validate([
             'invoice_number' => 'required|string|unique:invoices,invoice_number',
             'invoice_amount' => 'required|numeric|min:1',
             'issue_date' => 'required|date',
             'due_date' => 'required|date',
             'invoice_status' => 'required|in:draft,sent,paid,overdue,cancelled',
+            'invoice_paid_to_account_id' => 'nullable|exists:accounts,id',
         ]);
 
         $project = Project::where('user_id', auth()->id())->findOrFail($this->invoiceProjectId);
+        $cleanAmount = (float) $this->invoice_amount;
 
-        Invoice::create([
+        $invoice = Invoice::create([
             'project_id' => $project->id,
             'invoice_number' => $this->invoice_number,
-            'amount' => (float) $this->invoice_amount,
+            'amount' => $cleanAmount,
             'issue_date' => $this->issue_date,
             'due_date' => $this->due_date,
             'status' => $this->invoice_status,
+            'paid_at' => $this->invoice_status === 'paid' ? now() : null,
+            'paid_to_account_id' => $this->invoice_status === 'paid' ? $this->invoice_paid_to_account_id : null,
+            'notes' => $this->invoice_notes,
         ]);
 
+        // If marked as paid immediately, create an income transaction and update account balance
+        if ($this->invoice_status === 'paid' && $this->invoice_paid_to_account_id) {
+            $account = Account::where('user_id', auth()->id())->find($this->invoice_paid_to_account_id);
+            if ($account) {
+                $cat = Category::firstOrCreate(
+                    ['user_id' => auth()->id(), 'name' => 'Pendapatan Project'],
+                    ['type' => 'income', 'icon' => 'briefcase', 'color' => '#10B981', 'is_business' => true]
+                );
+
+                Transaction::create([
+                    'user_id' => auth()->id(),
+                    'account_id' => $account->id,
+                    'category_id' => $cat->id,
+                    'type' => 'income',
+                    'amount' => $cleanAmount,
+                    'date' => $this->issue_date,
+                    'description' => "Pembayaran Invoice {$this->invoice_number} ({$project->name})",
+                ]);
+
+                $account->increment('balance', $cleanAmount);
+            }
+        }
+
         $this->isInvoiceModalOpen = false;
+        $this->dispatch('refresh-data');
+    }
+
+    public function markInvoiceAsPaid(int $invoiceId, ?int $accountId = null)
+    {
+        $invoice = Invoice::whereHas('project', function($q) {
+            $q->where('user_id', auth()->id());
+        })->with('project')->findOrFail($invoiceId);
+
+        if ($invoice->status === 'paid') return;
+
+        $account = null;
+        if ($accountId) {
+            $account = Account::where('user_id', auth()->id())->find($accountId);
+        } else {
+            $account = Account::where('user_id', auth()->id())->where('is_active', true)->first();
+        }
+
+        $invoice->update([
+            'status' => 'paid',
+            'paid_at' => now(),
+            'paid_to_account_id' => $account?->id,
+        ]);
+
+        if ($account) {
+            $cat = Category::firstOrCreate(
+                ['user_id' => auth()->id(), 'name' => 'Pendapatan Project'],
+                ['type' => 'income', 'icon' => 'briefcase', 'color' => '#10B981', 'is_business' => true]
+            );
+
+            Transaction::create([
+                'user_id' => auth()->id(),
+                'account_id' => $account->id,
+                'category_id' => $cat->id,
+                'type' => 'income',
+                'amount' => $invoice->amount,
+                'date' => now()->format('Y-m-d'),
+                'description' => "Pelunasan Invoice {$invoice->invoice_number} ({$invoice->project->name})",
+            ]);
+
+            $account->increment('balance', $invoice->amount);
+        }
+
+        $this->dispatch('refresh-data');
+    }
+
+    public function deleteInvoice(int $invoiceId)
+    {
+        $invoice = Invoice::whereHas('project', function($q) {
+            $q->where('user_id', auth()->id());
+        })->findOrFail($invoiceId);
+
+        $invoice->delete();
         $this->dispatch('refresh-data');
     }
 
