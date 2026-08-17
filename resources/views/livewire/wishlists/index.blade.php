@@ -208,189 +208,204 @@
     </div>
 
     <!-- MODAL 1: ADD / EDIT WISHLIST -->
-    <div x-data="{ 
-            open: @entangle('isFormModalOpen'),
-            formatNominal(val) {
-                let num = val.replace(/\D/g, '');
-                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
-            }
-         }" 
-         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isFormModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-base font-extrabold text-slate-900">{{ $wishlistId ? 'Edit Item Wishlist' : 'Tambah Wishlist Baru' }}</h3>
-                <button wire:click="$set('isFormModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-            <form wire:submit.prevent="saveWishlist" class="p-6 space-y-4 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Barang *</label>
-                    <input type="text" wire:model.defer="name" placeholder="e.g. DJI Pocket 4 Creator Combo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                    @error('name') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+    <template x-teleport="body">
+        <div x-data="{ 
+                open: @entangle('isFormModalOpen'),
+                formatNominal(val) {
+                    let num = (val || '').toString().replace(/\D/g, '');
+                    return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+                }
+             }" 
+             x-show="open" 
+             x-transition.opacity.duration.200ms
+             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" 
+             x-cloak>
+            <div @click.outside="$wire.set('isFormModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <h3 class="text-base font-extrabold text-slate-900">{{ $wishlistId ? 'Edit Item Wishlist' : 'Tambah Wishlist Baru' }}</h3>
+                    <button wire:click="$set('isFormModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3">
+                <form wire:submit.prevent="saveWishlist" class="p-6 pb-8 sm:pb-6 space-y-4 overflow-y-auto">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori *</label>
-                        <select wire:model.defer="category" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                            <option value="Alat Kerja">Alat Kerja</option>
-                            <option value="Gadget">Gadget & Monitor</option>
-                            <option value="Hobi">Hobi</option>
-                            <option value="Kendaraan">Kendaraan</option>
-                            <option value="Lainnya">Lainnya</option>
-                        </select>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Barang *</label>
+                        <input type="text" wire:model.defer="name" placeholder="e.g. DJI Pocket 4 Creator Combo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        @error('name') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Prioritas *</label>
-                        <select wire:model.defer="priority" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                            <option value="critical">🔴 Critical</option>
-                            <option value="high">🟠 High</option>
-                            <option value="medium">🟡 Medium</option>
-                            <option value="low">⚪ Low</option>
-                        </select>
-                    </div>
-                </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Target Harga (Rp) *</label>
-                        <input type="text" inputmode="numeric" wire:model.defer="target_price" 
-                            x-on:input="$event.target.value = formatNominal($event.target.value)"
-                            placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                        @error('target_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Harga Saat Ini (Rp) *</label>
-                        <input type="text" inputmode="numeric" wire:model.defer="current_price" 
-                            x-on:input="$event.target.value = formatNominal($event.target.value)"
-                            placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                        @error('current_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Target Tanggal Beli</label>
-                        <input type="date" wire:model.defer="target_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Link Marketplace</label>
-                        <input type="url" wire:model.defer="product_url" placeholder="https://..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
-                    <textarea wire:model.defer="notes" rows="2" placeholder="Catatan kegunaan..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white"></textarea>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isFormModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-extrabold">Simpan Wishlist</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 2: MANUAL PRICE TRACKING -->
-    <div x-data="{ 
-            open: @entangle('isPriceModalOpen'),
-            formatNominal(val) {
-                let num = val.replace(/\D/g, '');
-                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
-            }
-         }" 
-         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isPriceModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-base font-extrabold text-slate-900">Update Harga (Price Tracking)</h3>
-                <button wire:click="$set('isPriceModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-            <form wire:submit.prevent="recordPriceUpdate" class="p-6 space-y-4 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Harga Terbaru (Rp) *</label>
-                    <input type="text" inputmode="numeric" wire:model.defer="new_price" 
-                        x-on:input="$event.target.value = formatNominal($event.target.value)"
-                        class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
-                    @error('new_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
-                    <input type="text" wire:model.defer="price_note" placeholder="Diskon tanggal kembar / flash sale" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
-                </div>
-
-                @if(count($priceHistories) > 0)
-                <div class="pt-2">
-                    <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Riwayat Harga:</label>
-                    <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                        @foreach($priceHistories as $ph)
-                        <div class="flex items-center justify-between text-xs p-2.5 bg-[#F8F9FA] rounded-xl border border-slate-100 font-mono">
-                            <span class="text-slate-500 text-[11px]">{{ \Carbon\Carbon::parse($ph->recorded_at)->translatedFormat('d M Y') }}</span>
-                            <span class="font-bold text-slate-900">Rp {{ number_format($ph->price, 0, ',', '.') }}</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kategori *</label>
+                            <select wire:model.defer="category" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                                <option value="Alat Kerja">Alat Kerja</option>
+                                <option value="Gadget">Gadget & Monitor</option>
+                                <option value="Hobi">Hobi</option>
+                                <option value="Kendaraan">Kendaraan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
                         </div>
-                        @endforeach
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Prioritas *</label>
+                            <select wire:model.defer="priority" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                                <option value="critical">🔴 Critical</option>
+                                <option value="high">🟠 High</option>
+                                <option value="medium">🟡 Medium</option>
+                                <option value="low">⚪ Low</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-                @endif
 
-                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isPriceModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">Tutup</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-2xl bg-slate-950 text-white text-xs font-extrabold">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 3: SAVING ALLOCATION -->
-    <div x-data="{ 
-            open: @entangle('isSavingModalOpen'),
-            formatNominal(val) {
-                let num = val.replace(/\D/g, '');
-                return num ? new Intl.NumberFormat('id-ID').format(num) : '';
-            }
-         }" 
-         x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isSavingModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-base font-extrabold text-slate-900">Setor Tabungan Wishlist</h3>
-                <button wire:click="$set('isSavingModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-            <form wire:submit.prevent="allocateSaving" class="p-6 space-y-4 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Setoran (Rp) *</label>
-                    <input type="text" inputmode="numeric" wire:model.defer="saving_amount" 
-                        x-on:input="$event.target.value = formatNominal($event.target.value)"
-                        placeholder="1.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
-                    @error('saving_amount') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Dari Rekening / Wallet (Opsional)</label>
-                    <select wire:model.defer="savingAccountId" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
-                        <option value="">Alokasi Virtual</option>
-                        @foreach($accounts as $acc)
-                            <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                        <input type="date" wire:model.defer="saving_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Target Harga (Rp) *</label>
+                            <input type="text" inputmode="numeric" wire:model.defer="target_price" 
+                                x-on:input="$event.target.value = formatNominal($event.target.value)"
+                                placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                            @error('target_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Harga Saat Ini (Rp) *</label>
+                            <input type="text" inputmode="numeric" wire:model.defer="current_price" 
+                                x-on:input="$event.target.value = formatNominal($event.target.value)"
+                                placeholder="8.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                            @error('current_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                        </div>
                     </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Target Tanggal Beli</label>
+                            <input type="date" wire:model.defer="target_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Link Marketplace</label>
+                            <input type="url" wire:model.defer="product_url" placeholder="https://..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white">
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
-                        <input type="text" wire:model.defer="saving_note" placeholder="Profit project" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        <textarea wire:model.defer="notes" rows="2" placeholder="Catatan kegunaan..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white"></textarea>
                     </div>
-                </div>
 
-                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isSavingModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-2xl bg-[#C6F24D] text-slate-950 text-xs font-extrabold shadow-sm active-tap">Setor Dana</button>
-                </div>
-            </form>
+                    <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
+                        <button type="button" wire:click="$set('isFormModalOpen', false)" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-extrabold shadow-sm active-tap cursor-pointer">Simpan Wishlist</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </template>
+
+    <!-- MODAL 2: MANUAL PRICE TRACKING -->
+    <template x-teleport="body">
+        <div x-data="{ 
+                open: @entangle('isPriceModalOpen'),
+                formatNominal(val) {
+                    let num = (val || '').toString().replace(/\D/g, '');
+                    return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+                }
+             }" 
+             x-show="open" 
+             x-transition.opacity.duration.200ms
+             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" 
+             x-cloak>
+            <div @click.outside="$wire.set('isPriceModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <h3 class="text-base font-extrabold text-slate-900">Update Harga (Price Tracking)</h3>
+                    <button wire:click="$set('isPriceModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
+                </div>
+                <form wire:submit.prevent="recordPriceUpdate" class="p-6 pb-8 sm:pb-6 space-y-4 overflow-y-auto">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Harga Terbaru (Rp) *</label>
+                        <input type="text" inputmode="numeric" wire:model.defer="new_price" 
+                            x-on:input="$event.target.value = formatNominal($event.target.value)"
+                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        @error('new_price') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
+                        <input type="text" wire:model.defer="price_note" placeholder="Diskon tanggal kembar / flash sale" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                    </div>
+
+                    @if(count($priceHistories) > 0)
+                    <div class="pt-2">
+                        <label class="block text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">Riwayat Harga:</label>
+                        <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+                            @foreach($priceHistories as $ph)
+                            <div class="flex items-center justify-between text-xs p-2.5 bg-[#F8F9FA] rounded-xl border border-slate-100 font-mono">
+                                <span class="text-slate-500 text-[11px]">{{ \Carbon\Carbon::parse($ph->recorded_at)->translatedFormat('d M Y') }}</span>
+                                <span class="font-bold text-slate-900">Rp {{ number_format($ph->price, 0, ',', '.') }}</span>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+
+                    <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
+                        <button type="button" wire:click="$set('isPriceModalOpen', false)" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Tutup</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-2xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold shadow-sm active-tap cursor-pointer">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <!-- MODAL 3: SAVING ALLOCATION -->
+    <template x-teleport="body">
+        <div x-data="{ 
+                open: @entangle('isSavingModalOpen'),
+                formatNominal(val) {
+                    let num = (val || '').toString().replace(/\D/g, '');
+                    return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+                }
+             }" 
+             x-show="open" 
+             x-transition.opacity.duration.200ms
+             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" 
+             x-cloak>
+            <div @click.outside="$wire.set('isSavingModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <h3 class="text-base font-extrabold text-slate-900">Setor Tabungan Wishlist</h3>
+                    <button wire:click="$set('isSavingModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
+                </div>
+                <form wire:submit.prevent="allocateSaving" class="p-6 pb-8 sm:pb-6 space-y-4 overflow-y-auto">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Setoran (Rp) *</label>
+                        <input type="text" inputmode="numeric" wire:model.defer="saving_amount" 
+                            x-on:input="$event.target.value = formatNominal($event.target.value)"
+                            placeholder="1.000.000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        @error('saving_amount') <span class="text-xs text-rose-500 mt-1 block">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Dari Rekening / Wallet (Opsional)</label>
+                        <select wire:model.defer="savingAccountId" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                            <option value="">Alokasi Virtual</option>
+                            @foreach($accounts as $acc)
+                                <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" wire:model.defer="saving_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
+                            <input type="text" wire:model.defer="saving_note" placeholder="Profit project" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
+                        <button type="button" wire:click="$set('isSavingModalOpen', false)" class="px-4 py-2.5 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-6 py-2.5 rounded-2xl bg-[#C6F24D] text-slate-950 text-xs font-extrabold shadow-sm active-tap cursor-pointer">Setor Dana</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
 
 </div>

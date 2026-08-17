@@ -233,266 +233,233 @@
             Tidak ada project ditemukan.
         </div>
         @endforelse
-    </div>
-
-    <!-- MODAL 1: ADD PROJECT -->
-    <div x-data="{ open: @entangle('isProjectModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isProjectModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <h3 class="text-base font-extrabold text-slate-900">Project Freelance Baru</h3>
-                <button wire:click="$set('isProjectModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-            <form wire:submit.prevent="saveProject" class="p-6 space-y-4 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Project *</label>
-                    <input type="text" wire:model.defer="name" placeholder="e.g. Multi-Cam Livestreaming Muswil" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+    </div>    <!-- MODAL 1: ADD PROJECT -->
+    <template x-teleport="body">
+        <div x-data="{ open: @entangle('isProjectModalOpen') }" x-show="open" 
+            x-transition.opacity.duration.200ms
+            class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+            <div @click.outside="$wire.set('isProjectModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <h3 class="text-base font-extrabold text-slate-900">Project Freelance Baru</h3>
+                    <button wire:click="$set('isProjectModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
                 </div>
-
-                <div class="grid grid-cols-2 gap-3">
+                <form wire:submit.prevent="saveProject" class="p-6 pb-8 sm:pb-6 space-y-4 overflow-y-auto">
                     <div>
-                        <div class="flex items-center justify-between mb-1">
-                            <label class="block text-xs font-bold text-slate-700">Klien *</label>
-                            <a href="{{ route('clients') }}" class="text-[10px] font-bold text-teal-700 hover:text-teal-900 hover:underline flex items-center gap-0.5">
-                                <span>+ Tambah</span>
-                            </a>
-                        </div>
-                        <select wire:model.live="client_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 cursor-pointer">
-                            <option value="">-- Pilih Klien --</option>
-                            @foreach($clients as $c)
-                                <option value="{{ $c->id }}">{{ $c->name }} ({{ $c->company ?? 'Individu' }})</option>
-                            @endforeach
-                            <option value="new_client" class="font-bold text-teal-700 bg-teal-50">
-                                ➕ + Tambah Klien Baru &rarr;
-                            </option>
-                        </select>
-                        @if($clients->isEmpty())
-                            <div class="mt-1.5 p-2 rounded-xl bg-amber-50 border border-amber-200 text-[10px] text-amber-900 flex items-center justify-between gap-1">
-                                <span>Belum ada klien.</span>
-                                <a href="{{ route('clients') }}" class="font-bold underline text-amber-950 hover:text-black">Tambah &rarr;</a>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Project *</label>
+                        <input type="text" wire:model.defer="name" placeholder="e.g. Multi-Cam Livestreaming Muswil" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-xs font-bold text-slate-700">Klien *</label>
+                                <button type="button" @click="quickAddClient = true" class="text-[10px] text-teal-600 font-bold hover:underline">+ Baru</button>
                             </div>
-                        @endif
-                        @error('client_id') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                            <select wire:model.defer="client_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                                <option value="">-- Pilih Klien --</option>
+                                @foreach($clients as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('client_id') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nilai Project / Omzet (Rp) *</label>
+                            <input type="text" 
+                                   inputmode="numeric"
+                                   wire:model.defer="total_revenue" 
+                                   x-on:input="$el.value = formatNominal($el.value)"
+                                   placeholder="e.g. 5.000.000" 
+                                   class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('total_revenue') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
                     </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Target Selesai / Deadline</label>
+                            <input type="date" wire:model.defer="deadline" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Mulai</label>
+                            <input type="date" wire:model.defer="start_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        </div>
+                    </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Layanan *</label>
-                        <select wire:model.defer="category" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                            <option value="photo_video">Fotografi / Videografi</option>
-                            <option value="livestreaming">Livestreaming / Broadcast</option>
-                            <option value="design_branding">Desain & Branding</option>
-                            <option value="web_dev">Web & Software Dev</option>
-                            <option value="social_media">Social Media Management</option>
-                            <option value="other">Lainnya</option>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Status Awal</label>
+                        <select wire:model.defer="status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                            <option value="prospect">Prospect (Penawaran / Proposal)</option>
+                            <option value="in_progress">In Progress (Sedang Dikerjakan)</option>
+                            <option value="completed">Completed (Selesai)</option>
                         </select>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-2 gap-3"
-                     x-data="{
-                         formatNominal(val) {
-                             if (!val) return '';
-                             let clean = String(val).replace(/\D/g, '');
-                             if (!clean) return '';
-                             return new Intl.NumberFormat('id-ID').format(clean);
-                         }
-                     }">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Total Revenue (Nilai Kontrak) *</label>
-                        <input type="text" 
-                               inputmode="numeric"
-                               wire:model.defer="total_revenue" 
-                               x-on:input="$el.value = formatNominal($el.value)"
-                               placeholder="0" 
-                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('total_revenue') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <button type="button" wire:click="$set('isProjectModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm">Simpan Project</button>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Estimasi Biaya Operasional</label>
-                        <input type="text" 
-                               inputmode="numeric"
-                               wire:model.defer="estimated_cost" 
-                               x-on:input="$el.value = formatNominal($el.value)"
-                               placeholder="0" 
-                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Mulai</label>
-                        <input type="date" wire:model.defer="start_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Deadline / Selesai</label>
-                        <input type="date" wire:model.defer="deadline" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Status Awal</label>
-                    <select wire:model.defer="status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                        <option value="prospect">Prospect (Penawaran / Proposal)</option>
-                        <option value="in_progress">In Progress (Sedang Dikerjakan)</option>
-                        <option value="completed">Completed (Selesai)</option>
-                    </select>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
-                    <button type="button" wire:click="$set('isProjectModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm">Simpan Project</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
+    </template>
 
     <!-- MODAL 2: ADD COST TO PROJECT -->
-    <div x-data="{ 
-            open: @entangle('isCostModalOpen'),
-            formatNominal(val) {
-                if (!val) return '';
-                let clean = String(val).replace(/\D/g, '');
-                if (!clean) return '';
-                return new Intl.NumberFormat('id-ID').format(clean);
-            }
-         }" 
-         x-show="open" 
-         class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isCostModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h3 class="text-base font-extrabold text-slate-900">Catat Biaya Project</h3>
-                <button wire:click="$set('isCostModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-            <form wire:submit.prevent="saveCost" class="p-6 space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Deskripsi Pengeluaran *</label>
-                    <input type="text" wire:model.defer="cost_description" placeholder="e.g. Sewa Lensa Sony GM 70-200" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    @error('cost_description') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+    <template x-teleport="body">
+        <div x-data="{ 
+                open: @entangle('isCostModalOpen'),
+                formatNominal(val) {
+                    if (!val) return '';
+                    let clean = String(val).replace(/\D/g, '');
+                    if (!clean) return '';
+                    return new Intl.NumberFormat('id-ID').format(clean);
+                }
+             }" 
+             x-show="open" 
+             x-transition.opacity.duration.200ms
+             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+            <div @click.outside="$wire.set('isCostModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+                    <h3 class="text-base font-extrabold text-slate-900">Catat Biaya Project</h3>
+                    <button wire:click="$set('isCostModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
                 </div>
+                <form wire:submit.prevent="saveCost" class="p-6 pb-8 sm:pb-6 space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Deskripsi Pengeluaran *</label>
+                        <input type="text" wire:model.defer="cost_description" placeholder="e.g. Sewa Lensa Sony GM 70-200" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        @error('cost_description') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    </div>
 
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal (Rp) *</label>
-                        <input type="text" 
-                               inputmode="numeric"
-                               wire:model.defer="cost_amount" 
-                               x-on:input="$el.value = formatNominal($el.value)"
-                               placeholder="0" 
-                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('cost_amount') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nominal (Rp) *</label>
+                            <input type="text" 
+                                   inputmode="numeric"
+                                   wire:model.defer="cost_amount" 
+                                   x-on:input="$el.value = formatNominal($el.value)"
+                                   placeholder="0" 
+                                   class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('cost_amount') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" wire:model.defer="cost_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                        <input type="date" wire:model.defer="cost_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                    </div>
-                </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Pengeluaran</label>
-                    <select wire:model.defer="cost_category_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                        <option value="">-- Pilih Kategori --</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
-                    <button type="button" wire:click="$set('isCostModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm">Simpan Biaya</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 3: ADD INVOICE TO PROJECT -->
-    <div x-data="{ 
-            open: @entangle('isInvoiceModalOpen'),
-            status: @entangle('invoice_status'),
-            formatNominal(val) {
-                if (!val) return '';
-                let clean = String(val).replace(/\D/g, '');
-                if (!clean) return '';
-                return new Intl.NumberFormat('id-ID').format(clean);
-            }
-         }" 
-         x-show="open" 
-         class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isInvoiceModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center">
-                        <x-icon name="file-text" class="w-4 h-4" />
-                    </div>
                     <div>
-                        <h3 class="text-base font-extrabold text-slate-900">Terbitkan Invoice Penagihan</h3>
-                        <p class="text-[11px] text-slate-400">Buat invoice resmi untuk ditagihkan ke klien</p>
-                    </div>
-                </div>
-                <button wire:click="$set('isInvoiceModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
-            </div>
-
-            <form wire:submit.prevent="saveInvoice" class="p-6 space-y-4 overflow-y-auto">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Invoice *</label>
-                        <input type="text" wire:model.defer="invoice_number" placeholder="INV/2026/001" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('invoice_number') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Tagihan (Rp) *</label>
-                        <input type="text" 
-                               inputmode="numeric"
-                               wire:model.defer="invoice_amount" 
-                               x-on:input="$el.value = formatNominal($el.value)"
-                               placeholder="0" 
-                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('invoice_amount') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Terbit *</label>
-                        <input type="date" wire:model.defer="issue_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('issue_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Jatuh Tempo (Due Date) *</label>
-                        <input type="date" wire:model.defer="due_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                        @error('due_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Status Pembayaran</label>
-                        <select wire:model.live="invoice_status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                            <option value="sent">Terkirim (Menunggu Bayar)</option>
-                            <option value="paid">Lunas (Sudah Diterima)</option>
-                            <option value="draft">Draft</option>
-                        </select>
-                    </div>
-                    <div x-show="status === 'paid'">
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Masuk ke Rekening / Kas</label>
-                        <select wire:model.defer="invoice_paid_to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                            @foreach($accounts as $acc)
-                                <option value="{{ $acc->id }}">{{ $acc->name }} ({{ $acc->type }})</option>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Pengeluaran</label>
+                        <select wire:model.defer="cost_category_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach($categories as $cat)
+                                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div>
 
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Tambahan / Term of Payment</label>
-                    <textarea wire:model.defer="invoice_notes" rows="2" placeholder="e.g. Pembayaran DP 50%, sisa dilunasi setelah serah terima file final..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 resize-none"></textarea>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
-                    <button type="button" wire:click="$set('isInvoiceModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm active:scale-95">Simpan Invoice</button>
-                </div>
-            </form>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <button type="button" wire:click="$set('isCostModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm">Simpan Biaya</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
+    </template>
+
+    <!-- MODAL 3: ADD INVOICE TO PROJECT -->
+    <template x-teleport="body">
+        <div x-data="{ 
+                open: @entangle('isInvoiceModalOpen'),
+                status: @entangle('invoice_status'),
+                formatNominal(val) {
+                    if (!val) return '';
+                    let clean = String(val).replace(/\D/g, '');
+                    if (!clean) return '';
+                    return new Intl.NumberFormat('id-ID').format(clean);
+                }
+             }" 
+             x-show="open" 
+             x-transition.opacity.duration.200ms
+             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+            <div @click.outside="$wire.set('isInvoiceModalOpen', false)" class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[32px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-slate-950 text-[#C6F24D] flex items-center justify-center">
+                            <x-icon name="file-text" class="w-4 h-4" />
+                        </div>
+                        <div>
+                            <h3 class="text-base font-extrabold text-slate-900">Terbitkan Invoice Penagihan</h3>
+                            <p class="text-[11px] text-slate-400">Buat invoice resmi untuk ditagihkan ke klien</p>
+                        </div>
+                    </div>
+                    <button wire:click="$set('isInvoiceModalOpen', false)" class="text-slate-400 hover:text-slate-700 p-1 cursor-pointer"><x-icon name="x" class="w-5 h-5" /></button>
+                </div>
+
+                <form wire:submit.prevent="saveInvoice" class="p-6 pb-8 sm:pb-6 space-y-4 overflow-y-auto">
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Invoice *</label>
+                            <input type="text" wire:model.defer="invoice_number" placeholder="INV/2026/001" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('invoice_number') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Tagihan (Rp) *</label>
+                            <input type="text" 
+                                   inputmode="numeric"
+                                   wire:model.defer="invoice_amount" 
+                                   x-on:input="$el.value = formatNominal($el.value)"
+                                   placeholder="0" 
+                                   class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('invoice_amount') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Terbit *</label>
+                            <input type="date" wire:model.defer="invoice_issue_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('invoice_issue_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Jatuh Tempo (Due Date) *</label>
+                            <input type="date" wire:model.defer="invoice_due_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                            @error('invoice_due_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Status Pembayaran</label>
+                            <select wire:model="invoice_status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                                <option value="sent">Terkirim (Menunggu Bayar)</option>
+                                <option value="paid">Lunas (Sudah Diterima)</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                        </div>
+                        <div x-show="status === 'paid'">
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Masuk ke Rekening / Kas</label>
+                            <select wire:model.defer="invoice_paid_to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                                @foreach($accounts as $acc)
+                                    <option value="{{ $acc->id }}">{{ $acc->name }} ({{ $acc->type }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Catatan Tambahan / Term of Payment</label>
+                        <textarea wire:model.defer="invoice_notes" rows="2" placeholder="e.g. Pembayaran DP 50%, sisa dilunasi setelah serah terima file final..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 resize-none"></textarea>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                        <button type="button" wire:click="$set('isInvoiceModalOpen', false)" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-extrabold hover:bg-slate-800 cursor-pointer shadow-sm active:scale-95">Simpan Invoice</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
 
 </div>

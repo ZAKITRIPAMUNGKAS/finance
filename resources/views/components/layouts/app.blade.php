@@ -435,7 +435,7 @@
     </div>
 
     <!-- MOBILE FLOATING BOTTOM NAVIGATION BAR (FinTech Style) -->
-    <div class="fixed bottom-3 inset-x-3 z-40 md:hidden">
+    <div class="fixed bottom-3 inset-x-3 z-30 md:hidden">
         <nav class="bg-slate-950 text-white rounded-3xl shadow-2xl border border-slate-800/80 px-3 py-2 flex items-center justify-between">
             <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all {{ request()->routeIs('dashboard') ? 'text-[#C6F24D] font-bold' : 'text-slate-400 hover:text-slate-200' }}">
                 <x-icon name="layout-dashboard" class="w-5 h-5" />

@@ -87,12 +87,14 @@
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!--  MODAL 1: ADD / EDIT ACCOUNT (CLEAN NEAT COMPACT LAYOUT)    -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" 
-        class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" 
-        x-cloak>
-        
-        <div @click.outside="$wire.set('isModalOpen', false)" 
-            class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col anim-scale-up">
+    <template x-teleport="body">
+        <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" 
+            x-transition.opacity.duration.200ms
+            class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" 
+            x-cloak>
+            
+            <div @click.outside="$wire.set('isModalOpen', false)" 
+                class="relative w-full max-w-lg bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
             
             <!-- Drag indicator (mobile only) -->
             <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
@@ -277,72 +279,77 @@
                     
                     <div class="flex items-center gap-2">
                         <button type="button" wire:click="$set('isModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-white text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-slate-800 transition-all">Simpan Akun</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-slate-800 transition-all">Simpan Akun</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
+    </template>
 
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!--  MODAL 2: TRANSFER ANTAR REKENING                           -->
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <div x-data="{ open: @entangle('isTransferModalOpen') }" x-show="open" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
-        <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col anim-scale-up">
-            <!-- Drag indicator (mobile only) -->
-            <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
+    <template x-teleport="body">
+        <div x-data="{ open: @entangle('isTransferModalOpen') }" x-show="open" 
+            x-transition.opacity.duration.200ms
+            class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
+            <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
+                <!-- Drag indicator (mobile only) -->
+                <div class="sm:hidden w-10 h-1 bg-slate-200 rounded-full mx-auto my-2"></div>
 
-            <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-2xs">
-                        <x-icon name="arrow-right-left" class="w-4 h-4" strokeWidth="2.5" />
+                <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-2xs">
+                            <x-icon name="arrow-right-left" class="w-4 h-4" strokeWidth="2.5" />
+                        </div>
+                        <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Transfer Antar Rekening</h3>
                     </div>
-                    <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Transfer Antar Rekening</h3>
+                    <button wire:click="$set('isTransferModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"><x-icon name="x" class="w-4 h-4" /></button>
                 </div>
-                <button wire:click="$set('isTransferModalOpen', false)" type="button" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"><x-icon name="x" class="w-4 h-4" /></button>
+
+                <form wire:submit.prevent="executeTransfer" class="p-5 pb-8 sm:pb-5 space-y-3.5 overflow-y-auto">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Dari Rekening Sumber *</label>
+                        <select wire:model.defer="from_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
+                            @foreach($accounts as $acc)
+                                <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Ke Rekening Tujuan *</label>
+                        <select wire:model.defer="to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
+                            @foreach($accounts as $acc)
+                                <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Transfer (Rp) *</label>
+                        <input type="number" wire:model.defer="transfer_amount" placeholder="500000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
+                            <input type="date" wire:model.defer="transfer_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
+                            <input type="text" wire:model.defer="transfer_note" placeholder="Top up / Pindah saldo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        </div>
+                    </div>
+
+                    <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
+                        <button type="button" wire:click="$set('isTransferModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#C6F24D] text-slate-950 text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-[#b8e640] transition-all">Kirim Transfer</button>
+                    </div>
+                </form>
             </div>
-
-            <form wire:submit.prevent="executeTransfer" class="p-5 space-y-3.5 overflow-y-auto">
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Dari Rekening Sumber *</label>
-                    <select wire:model.defer="from_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
-                        @foreach($accounts as $acc)
-                            <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Ke Rekening Tujuan *</label>
-                    <select wire:model.defer="to_account_id" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 cursor-pointer">
-                        @foreach($accounts as $acc)
-                            <option value="{{ $acc->id }}">{{ $acc->name }} (Rp {{ number_format($acc->current_balance, 0, ',', '.') }})</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Transfer (Rp) *</label>
-                    <input type="number" wire:model.defer="transfer_amount" placeholder="500000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
-                        <input type="date" wire:model.defer="transfer_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
-                        <input type="text" wire:model.defer="transfer_note" placeholder="Top up / Pindah saldo" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
-                    </div>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
-                    <button type="button" wire:click="$set('isTransferModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
-                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#C6F24D] text-slate-950 text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-[#b8e640] transition-all">Kirim Transfer</button>
-                </div>
-            </form>
         </div>
-    </div>
+    </template>
 
 </div>
