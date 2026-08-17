@@ -307,7 +307,7 @@
                         </p>
                     </div>
 
-                    <!-- Accounts Grid -->
+                    <!-- All 11 Accounts Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                         
                         <!-- 1. BCA -->
@@ -315,9 +315,7 @@
                              :class="activeAccounts.bca ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bca')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#003B70] text-white font-black text-[11px] flex items-center justify-center shadow-2xs">
-                                        BCA
-                                    </span>
+                                    <x-account-logo name="BCA" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">BCA Utama</h4>
                                         <span class="text-[10px] text-slate-400">Bank Transfer</span>
@@ -329,16 +327,15 @@
                                 </span>
                             </div>
                             
-                            <!-- Saldo Awal input only when active -->
                             <div x-show="activeAccounts.bca" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
                                            :value="balances.bca"
                                            @input="formatBalance('bca', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
@@ -348,9 +345,7 @@
                              :class="activeAccounts.mandiri ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('mandiri')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#002D62] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
-                                        MDR
-                                    </span>
+                                    <x-account-logo name="Mandiri" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank Mandiri</h4>
                                         <span class="text-[10px] text-slate-400">Livin' by Mandiri</span>
@@ -365,76 +360,72 @@
                             <div x-show="activeAccounts.mandiri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
                                            :value="balances.mandiri"
                                            @input="formatBalance('mandiri', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 3. GoPay -->
+                        <!-- 3. BRI -->
                         <div class="p-3.5 rounded-2xl transition-all"
-                             :class="activeAccounts.gopay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
-                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('gopay')">
+                             :class="activeAccounts.bri ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bri')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#00AA13] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
-                                        GPY
-                                    </span>
+                                    <x-account-logo name="BRI" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
-                                        <h4 class="text-xs font-bold text-[#0F172A]">GoPay</h4>
-                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">Bank BRI</h4>
+                                        <span class="text-[10px] text-slate-400">BRImo</span>
                                     </div>
                                 </div>
                                 <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
-                                      :class="activeAccounts.gopay ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                      :class="activeAccounts.bri ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                            <div x-show="activeAccounts.bri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
-                                           :value="balances.gopay"
-                                           @input="formatBalance('gopay', $event)"
+                                           :value="balances.bri"
+                                           @input="formatBalance('bri', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 4. DANA -->
+                        <!-- 4. BNI -->
                         <div class="p-3.5 rounded-2xl transition-all"
-                             :class="activeAccounts.dana ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
-                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('dana')">
+                             :class="activeAccounts.bni ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('bni')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#118EEA] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
-                                        DNA
-                                    </span>
+                                    <x-account-logo name="BNI" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
-                                        <h4 class="text-xs font-bold text-[#0F172A]">DANA</h4>
-                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">Bank BNI</h4>
+                                        <span class="text-[10px] text-slate-400">BNI Mobile</span>
                                     </div>
                                 </div>
                                 <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
-                                      :class="activeAccounts.dana ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                      :class="activeAccounts.bni ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
                                     ✓
                                 </span>
                             </div>
                             
-                            <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                            <div x-show="activeAccounts.bni" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
-                                           :value="balances.dana"
-                                           @input="formatBalance('dana', $event)"
+                                           :value="balances.bni"
+                                           @input="formatBalance('bni', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
@@ -444,9 +435,7 @@
                              :class="activeAccounts.jago ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('jago')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-[#845EC2] text-white font-black text-[10px] flex items-center justify-center shadow-2xs">
-                                        JGO
-                                    </span>
+                                    <x-account-logo name="Bank Jago" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Bank Jago</h4>
                                         <span class="text-[10px] text-slate-400">Digital Banking</span>
@@ -461,24 +450,172 @@
                             <div x-show="activeAccounts.jago" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
                                            :value="balances.jago"
                                            @input="formatBalance('jago', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 6. Dompet Tunai -->
+                        <!-- 6. SeaBank -->
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.seabank ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('seabank')">
+                                <div class="flex items-center gap-2.5">
+                                    <x-account-logo name="SeaBank" type="bank" class="w-8 h-8 rounded-xl shrink-0" />
+                                    <div>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">SeaBank</h4>
+                                        <span class="text-[10px] text-slate-400">Digital Banking</span>
+                                    </div>
+                                </div>
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.seabank ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                    ✓
+                                </span>
+                            </div>
+                            
+                            <div x-show="activeAccounts.seabank" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.seabank"
+                                           @input="formatBalance('seabank', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. GoPay -->
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.gopay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('gopay')">
+                                <div class="flex items-center gap-2.5">
+                                    <x-account-logo name="GoPay" type="ewallet" class="w-8 h-8 rounded-xl shrink-0" />
+                                    <div>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">GoPay</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                    </div>
+                                </div>
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.gopay ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                    ✓
+                                </span>
+                            </div>
+                            
+                            <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.gopay"
+                                           @input="formatBalance('gopay', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. OVO -->
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.ovo ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('ovo')">
+                                <div class="flex items-center gap-2.5">
+                                    <x-account-logo name="OVO" type="ewallet" class="w-8 h-8 rounded-xl shrink-0" />
+                                    <div>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">OVO</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                    </div>
+                                </div>
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.ovo ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                    ✓
+                                </span>
+                            </div>
+                            
+                            <div x-show="activeAccounts.ovo" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.ovo"
+                                           @input="formatBalance('ovo', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 9. DANA -->
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.dana ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('dana')">
+                                <div class="flex items-center gap-2.5">
+                                    <x-account-logo name="DANA" type="ewallet" class="w-8 h-8 rounded-xl shrink-0" />
+                                    <div>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">DANA</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                    </div>
+                                </div>
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.dana ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                    ✓
+                                </span>
+                            </div>
+                            
+                            <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.dana"
+                                           @input="formatBalance('dana', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 10. ShopeePay -->
+                        <div class="p-3.5 rounded-2xl transition-all"
+                             :class="activeAccounts.shopeepay ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
+                            <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('shopeepay')">
+                                <div class="flex items-center gap-2.5">
+                                    <x-account-logo name="ShopeePay" type="ewallet" class="w-8 h-8 rounded-xl shrink-0" />
+                                    <div>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">ShopeePay</h4>
+                                        <span class="text-[10px] text-slate-400">E-Wallet</span>
+                                    </div>
+                                </div>
+                                <span class="w-5 h-5 rounded-full border flex items-center justify-center text-xs transition-colors"
+                                      :class="activeAccounts.shopeepay ? 'bg-[#0F172A] border-[#0F172A] text-[#C6F24D]' : 'border-slate-300 bg-white text-transparent'">
+                                    ✓
+                                </span>
+                            </div>
+                            
+                            <div x-show="activeAccounts.shopeepay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
+                                <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <input type="text" 
+                                           :value="balances.shopeepay"
+                                           @input="formatBalance('shopeepay', $event)"
+                                           placeholder="0"
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 11. Dompet Tunai -->
                         <div class="p-3.5 rounded-2xl transition-all"
                              :class="activeAccounts.cash ? 'border-2 border-[#0F172A] bg-white shadow-2xs' : 'border border-[#E2E8F0] bg-white opacity-70 hover:opacity-100'">
                             <div class="flex items-center justify-between cursor-pointer" @click="toggleAcc('cash')">
                                 <div class="flex items-center gap-2.5">
-                                    <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-2xs">
-                                        💵
-                                    </span>
+                                    <x-account-logo name="Dompet Tunai" type="cash" class="w-8 h-8 rounded-xl shrink-0" />
                                     <div>
                                         <h4 class="text-xs font-bold text-[#0F172A]">Dompet Tunai</h4>
                                         <span class="text-[10px] text-slate-400">Cash Fisik</span>
@@ -493,12 +630,12 @@
                             <div x-show="activeAccounts.cash" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
                                     <input type="text" 
                                            :value="balances.cash"
                                            @input="formatBalance('cash', $event)"
                                            placeholder="0"
-                                           class="w-full pl-8 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
                                 </div>
                             </div>
                         </div>
