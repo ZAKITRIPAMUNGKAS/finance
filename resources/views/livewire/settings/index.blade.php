@@ -43,34 +43,34 @@
         </button>
     </div>
 
-    <!-- SEGMENTED TABS (Clean Mobile-First Navigation) -->
-    <div class="flex items-center p-1.5 bg-white border border-slate-200/80 rounded-2xl shadow-xs gap-1 overflow-x-auto scrollbar-none">
+    <!-- SEGMENTED TABS (Clean 2x2 Mobile Grid & 4-Col Desktop) -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200/70">
         <button @click="activeTab = 'profile'"
-            :class="activeTab === 'profile' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/60'"
-            class="flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0">
-            <x-icon name="user" class="w-4 h-4" />
-            <span>Profil</span>
+            :class="activeTab === 'profile' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'bg-white text-slate-700 hover:text-slate-950 hover:bg-slate-50 border border-slate-200/60'"
+            class="py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer active-tap">
+            <x-icon name="user" class="w-4 h-4 shrink-0" />
+            <span class="truncate">Profil Akun</span>
         </button>
 
         <button @click="activeTab = 'security'"
-            :class="activeTab === 'security' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/60'"
-            class="flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0">
-            <x-icon name="lock" class="w-4 h-4" />
-            <span>Kata Sandi</span>
+            :class="activeTab === 'security' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'bg-white text-slate-700 hover:text-slate-950 hover:bg-slate-50 border border-slate-200/60'"
+            class="py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer active-tap">
+            <x-icon name="lock" class="w-4 h-4 shrink-0" />
+            <span class="truncate">Kata Sandi</span>
         </button>
 
         <button @click="activeTab = 'preferences'"
-            :class="activeTab === 'preferences' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/60'"
-            class="flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0">
-            <x-icon name="settings" class="w-4 h-4" />
-            <span>Preferensi</span>
+            :class="activeTab === 'preferences' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'bg-white text-slate-700 hover:text-slate-950 hover:bg-slate-50 border border-slate-200/60'"
+            class="py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer active-tap">
+            <x-icon name="settings" class="w-4 h-4 shrink-0" />
+            <span class="truncate">Preferensi</span>
         </button>
 
         <button @click="activeTab = 'privacy'"
-            :class="activeTab === 'privacy' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/60'"
-            class="flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 cursor-pointer shrink-0">
-            <x-icon name="shield" class="w-4 h-4" />
-            <span>Data & Privasi</span>
+            :class="activeTab === 'privacy' ? 'bg-slate-950 text-[#C6F24D] shadow-xs' : 'bg-white text-slate-700 hover:text-slate-950 hover:bg-slate-50 border border-slate-200/60'"
+            class="py-2.5 px-3 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer active-tap">
+            <x-icon name="shield" class="w-4 h-4 shrink-0" />
+            <span class="truncate">Data & Privasi</span>
         </button>
     </div>
 
