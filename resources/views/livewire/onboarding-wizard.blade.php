@@ -337,15 +337,15 @@
                             
                             <div x-show="activeAccounts.bca" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bca"
                                            @input="formatBalance('bca', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -369,15 +369,15 @@
                             
                             <div x-show="activeAccounts.mandiri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.mandiri"
                                            @input="formatBalance('mandiri', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -401,15 +401,15 @@
                             
                             <div x-show="activeAccounts.bri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bri"
                                            @input="formatBalance('bri', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -433,15 +433,15 @@
                             
                             <div x-show="activeAccounts.bni" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.bni"
                                            @input="formatBalance('bni', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -465,15 +465,15 @@
                             
                             <div x-show="activeAccounts.jago" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.jago"
                                            @input="formatBalance('jago', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -497,15 +497,15 @@
                             
                             <div x-show="activeAccounts.seabank" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.seabank"
                                            @input="formatBalance('seabank', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -529,15 +529,15 @@
                             
                             <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.gopay"
                                            @input="formatBalance('gopay', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -561,15 +561,15 @@
                             
                             <div x-show="activeAccounts.ovo" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.ovo"
                                            @input="formatBalance('ovo', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -593,15 +593,15 @@
                             
                             <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.dana"
                                            @input="formatBalance('dana', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -625,15 +625,15 @@
                             
                             <div x-show="activeAccounts.shopeepay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.shopeepay"
                                            @input="formatBalance('shopeepay', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-11 pr-3 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -657,15 +657,15 @@
                             
                             <div x-show="activeAccounts.cash" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
-                                <div class="relative flex items-center">
-                                    <span class="pointer-events-none absolute left-3.5 text-xs font-bold font-mono text-slate-400 select-none">
+                                <div class="flex items-center w-full h-10 rounded-xl border border-slate-300 bg-white px-3 shadow-2xs focus-within:border-slate-950">
+                                    <span class="text-xs font-bold font-mono text-slate-400 select-none shrink-0 pr-1.5">
                                         Rp
                                     </span>
                                     <input type="text" 
                                            :value="balances.cash"
                                            @input="formatBalance('cash', $event)"
                                            placeholder="0"
-                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
+                                           class="w-full h-full border-0 p-0 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:ring-0 bg-transparent">
                                 </div>
                             </div>
                         </div>
@@ -698,38 +698,38 @@
                             ESTIMASI PENDAPATAN BULANAN
                         </label>
                         
-                        <!-- Strictly Non-Overlapping Currency Input -->
-                        <div class="relative">
-                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm sm:text-base font-bold font-mono text-slate-400 select-none">
+                        <!-- Flex Sibling Integrated Input Container (Zero-Overlap Guaranteed) -->
+                        <div class="flex items-center w-full h-12 sm:h-14 rounded-xl border-2 border-slate-900 bg-white px-4 shadow-2xs focus-within:ring-2 focus-within:ring-slate-900">
+                            <span class="text-base sm:text-lg font-bold font-mono text-slate-400 select-none shrink-0 pr-2">
                                 Rp
                             </span>
                             <input type="text" 
                                    :value="rawIncomeInput"
                                    @input="onIncomeInput($event)"
                                    placeholder="0"
-                                   class="w-full h-12 sm:h-14 rounded-xl border-2 border-slate-900 bg-white pl-14 pr-4 text-base sm:text-lg font-black font-mono text-[#0F172A] focus:outline-none focus:border-slate-950 focus:ring-0 shadow-2xs">
+                                   class="w-full h-full border-0 p-0 text-base sm:text-lg font-black font-mono text-[#0F172A] focus:outline-none focus:ring-0 bg-transparent">
                         </div>
 
-                        <!-- Quick Chips -->
-                        <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                        <!-- Quick Chips with High Contrast -->
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
                             <button type="button" @click="setIncome(3000000)"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 3000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 3000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A] font-black shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
                                 Rp 3 Jt
                             </button>
                             <button type="button" @click="setIncome(5000000)"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 5000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 5000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A] font-black shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
                                 Rp 5 Jt
                             </button>
                             <button type="button" @click="setIncome(10000000)"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 10000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 10000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A] font-black shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
                                 Rp 10 Jt
                             </button>
                             <button type="button" @click="setIncome(20000000)"
-                                    class="px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all border cursor-pointer"
-                                    :class="monthlyIncome === 20000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A]' : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'">
+                                    class="px-3 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border cursor-pointer"
+                                    :class="monthlyIncome === 20000000 ? 'bg-[#0F172A] text-[#C6F24D] border-[#0F172A] font-black shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300'">
                                 Rp 20 Jt
                             </button>
                         </div>
@@ -742,56 +742,62 @@
                             <span class="font-mono text-[#0F172A] font-extrabold" x-text="'Rp ' + Number(monthlyIncome).toLocaleString('id-ID')"></span>
                         </div>
 
-                        <!-- Segmented Progress Bar -->
-                        <div class="w-full h-2.5 rounded-full overflow-hidden flex bg-slate-100 border border-slate-200">
-                            <div class="bg-blue-600 h-full transition-all duration-300" style="width: 50%;"></div>
-                            <div class="bg-purple-600 h-full transition-all duration-300" style="width: 30%;"></div>
-                            <div class="bg-[#A4D928] h-full transition-all duration-300" style="width: 20%;"></div>
+                        <!-- Segmented Progress Bar with Explicit Inline Colors -->
+                        <div class="w-full h-3 rounded-full overflow-hidden flex bg-slate-100 border border-slate-200 shadow-inner">
+                            <div class="h-full" style="width: 50%; background-color: #2563EB;"></div>
+                            <div class="h-full" style="width: 30%; background-color: #9333EA;"></div>
+                            <div class="h-full" style="width: 20%; background-color: #84CC16;"></div>
                         </div>
 
-                        <!-- 3 Detail Allocation Cards -->
+                        <!-- 3 Detail Allocation Cards Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                             
                             <!-- 50% Kebutuhan -->
-                            <div class="p-3 rounded-xl bg-blue-50/60 border border-blue-200/80">
-                                <div class="flex items-center justify-between mb-1">
+                            <div class="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/90 flex flex-col justify-between gap-1.5">
+                                <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-1.5">
-                                        <x-icon name="house" class="w-3.5 h-3.5 text-blue-700" strokeWidth="2" />
-                                        <span class="text-[10px] font-bold uppercase text-blue-700">Kebutuhan</span>
+                                        <x-icon name="house" class="w-4 h-4 text-blue-700" strokeWidth="2" />
+                                        <span class="text-[11px] font-bold uppercase text-blue-700 tracking-wider">Kebutuhan</span>
                                     </div>
-                                    <span class="text-[10px] font-mono font-black text-blue-900 bg-blue-100 px-1.5 py-0.5 rounded">50%</span>
+                                    <span class="text-[10px] font-mono font-black text-blue-900 bg-blue-100 px-2 py-0.5 rounded-md">50%</span>
                                 </div>
-                                <div class="text-sm font-black font-mono text-[#0F172A]"
-                                     x-text="'Rp ' + needsAmount.toLocaleString('id-ID')"></div>
-                                <span class="text-[10px] text-slate-500 block mt-0.5">Makan, listrik, sewa</span>
+                                <div>
+                                    <div class="text-base font-black font-mono text-[#0F172A]"
+                                         x-text="'Rp ' + needsAmount.toLocaleString('id-ID')"></div>
+                                    <span class="text-[10px] text-slate-500 block mt-0.5">Makan, listrik, sewa</span>
+                                </div>
                             </div>
 
                             <!-- 30% Keinginan -->
-                            <div class="p-3 rounded-xl bg-purple-50/60 border border-purple-200/80">
-                                <div class="flex items-center justify-between mb-1">
+                            <div class="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200/90 flex flex-col justify-between gap-1.5">
+                                <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-1.5">
-                                        <x-icon name="sparkles" class="w-3.5 h-3.5 text-purple-700" strokeWidth="2" />
-                                        <span class="text-[10px] font-bold uppercase text-purple-700">Keinginan</span>
+                                        <x-icon name="sparkles" class="w-4 h-4 text-purple-700" strokeWidth="2" />
+                                        <span class="text-[11px] font-bold uppercase text-purple-700 tracking-wider">Keinginan</span>
                                     </div>
-                                    <span class="text-[10px] font-mono font-black text-purple-900 bg-purple-100 px-1.5 py-0.5 rounded">30%</span>
+                                    <span class="text-[10px] font-mono font-black text-purple-900 bg-purple-100 px-2 py-0.5 rounded-md">30%</span>
                                 </div>
-                                <div class="text-sm font-black font-mono text-[#0F172A]"
-                                     x-text="'Rp ' + wantsAmount.toLocaleString('id-ID')"></div>
-                                <span class="text-[10px] text-slate-500 block mt-0.5">Hiburan, belanja & hobi</span>
+                                <div>
+                                    <div class="text-base font-black font-mono text-[#0F172A]"
+                                         x-text="'Rp ' + wantsAmount.toLocaleString('id-ID')"></div>
+                                    <span class="text-[10px] text-slate-500 block mt-0.5">Hiburan, belanja & hobi</span>
+                                </div>
                             </div>
 
                             <!-- 20% Tabungan -->
-                            <div class="p-3 rounded-xl bg-[#F7FFD9] border border-lime-300">
-                                <div class="flex items-center justify-between mb-1">
+                            <div class="p-3.5 rounded-2xl bg-[#F7FFD9] border border-lime-300 flex flex-col justify-between gap-1.5">
+                                <div class="flex items-center justify-between">
                                     <div class="flex items-center gap-1.5">
-                                        <x-icon name="piggy-bank" class="w-3.5 h-3.5 text-emerald-800" strokeWidth="2" />
-                                        <span class="text-[10px] font-bold uppercase text-emerald-800">Tabungan</span>
+                                        <x-icon name="piggy-bank" class="w-4 h-4 text-emerald-800" strokeWidth="2" />
+                                        <span class="text-[11px] font-bold uppercase text-emerald-800 tracking-wider">Tabungan</span>
                                     </div>
-                                    <span class="text-[10px] font-mono font-black text-emerald-950 bg-lime-200 px-1.5 py-0.5 rounded">20%</span>
+                                    <span class="text-[10px] font-mono font-black text-emerald-950 bg-lime-200 px-2 py-0.5 rounded-md">20%</span>
                                 </div>
-                                <div class="text-sm font-black font-mono text-[#0F172A]"
-                                     x-text="'Rp ' + savingsAmount.toLocaleString('id-ID')"></div>
-                                <span class="text-[10px] text-slate-500 block mt-0.5">Dana darurat & investasi</span>
+                                <div>
+                                    <div class="text-base font-black font-mono text-[#0F172A]"
+                                         x-text="'Rp ' + savingsAmount.toLocaleString('id-ID')"></div>
+                                    <span class="text-[10px] text-slate-500 block mt-0.5">Dana darurat & investasi</span>
+                                </div>
                             </div>
 
                         </div>
