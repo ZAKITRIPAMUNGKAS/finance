@@ -17,83 +17,83 @@
              }, 500);
          }
      }"
-     class="w-full flex-1 flex flex-col justify-between max-w-md mx-auto relative anim-page-enter">
+     class="w-full flex-1 flex flex-col justify-between h-full relative anim-page-enter">
     
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  FLOATING ANIMATED ORNAMENTS (NEO-FINTECH AESTHETIC)       -->
+    <!--  FLOATING ANIMATED ORNAMENTS (NON-INTRUSIVE POSITIONS)     -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
         <!-- Ornament 1: Sparkles Top Left -->
-        <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-5 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-10deg] anim-float-1">
+        <div class="absolute top-2 -left-3 sm:-left-6 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-12deg] anim-float-1">
             <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
             <span class="text-[9px] font-black tracking-wider">NEW</span>
         </div>
 
         <!-- Ornament 2: Safe Shield Top Right -->
-        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-5 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[8deg] flex items-center gap-1.5 anim-float-2">
+        <div class="absolute top-2 -right-3 sm:-right-6 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[10deg] flex items-center gap-1.5 anim-float-2">
             <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
             <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
         </div>
 
-        <!-- Ornament 3: Checkmark Coin Middle Left -->
-        <div class="absolute top-1/2 -left-4 sm:-left-6 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[12deg] anim-float-3">
+        <!-- Ornament 3: Checkmark Coin Bottom Left -->
+        <div class="absolute bottom-20 -left-3 sm:-left-6 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3">
             <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
         </div>
 
         <!-- Ornament 4: Cashless Badge Bottom Right -->
-        <div class="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-4 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-6deg] flex items-center gap-1 anim-float-1">
+        <div class="absolute bottom-20 -right-3 sm:-right-6 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-8deg] flex items-center gap-1 anim-float-1">
             <x-icon name="credit-card" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
             <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">CASH</span>
         </div>
     </div>
 
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
-    <header class="flex items-center justify-between pb-2 sm:pb-4 shrink-0">
+    <header class="flex items-center justify-between pt-1 pb-3 shrink-0">
         <!-- Back to Login Button -->
         <a href="{{ route('login') }}" 
-           class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-700 transition-all shadow-2xs">
+           class="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 flex items-center justify-center text-slate-700 transition-all shadow-2xs">
             <x-icon name="arrow-left" class="w-4 h-4 text-slate-900" strokeWidth="2.5" />
         </a>
 
         <!-- Brand Center -->
-        <a href="{{ url('/') }}" class="flex items-center gap-2 group">
-            <img src="{{ asset('images/logo.svg') }}" class="w-7 h-7 sm:w-8 sm:h-8 object-contain group-hover:scale-105 transition-transform" alt="PortoFinance Logo">
+        <a href="{{ url('/') }}" class="flex items-center gap-2.5 group">
+            <img src="{{ asset('images/logo.svg') }}" class="w-8 h-8 object-contain group-hover:scale-105 transition-transform" alt="PortoFinance Logo">
             <div class="leading-tight text-left">
-                <span class="font-black text-xs sm:text-sm text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
+                <span class="font-black text-sm text-slate-950 tracking-tight block">Porto<span class="text-teal-700">Finance</span></span>
                 <span class="text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 block -mt-0.5">Financial OS</span>
             </div>
         </a>
 
         <!-- Spacer for Symmetry -->
-        <div class="w-9 sm:w-10"></div>
+        <div class="w-10"></div>
     </header>
 
     <!-- ── MAIN GREETING & FORM ──────────────────────────────── -->
-    <main class="space-y-3.5 my-auto py-1">
+    <main class="space-y-4 sm:space-y-5 my-auto py-2">
         
         <!-- Header Greeting -->
-        <div class="text-center space-y-0.5">
-            <h1 class="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight leading-tight">
-                Buat Akun Baru ✨
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight leading-tight">
+                Buat Akun Baru
             </h1>
-            <p class="text-xs sm:text-sm font-medium text-slate-500 max-w-xs mx-auto leading-relaxed">
+            <p class="text-xs sm:text-sm font-medium text-slate-500 max-w-xs sm:max-w-sm mx-auto leading-relaxed">
                 Mulai kelola keuangan & cash flow Anda secara rapi dan profesional.
             </p>
         </div>
 
         <!-- Global Auth Error Feedback Banner -->
         @if ($errors->any())
-        <div class="p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2.5 text-xs text-rose-700 font-bold anim-shake shadow-xs">
+        <div class="p-3.5 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-2.5 text-xs text-rose-700 font-bold anim-shake shadow-xs">
             <x-icon name="alert-circle" class="w-4 h-4 text-rose-500 shrink-0" strokeWidth="2.5" />
             <span>{{ $errors->first() }}</span>
         </div>
         @endif
 
         <!-- Google OAuth Instant Register Button -->
-        <div class="pt-0.5">
+        <div>
             <a href="{{ route('google.redirect') }}" 
                @click="sessionStorage.setItem('pf_just_logged_in', 'true')"
-               class="w-full py-2.5 sm:py-3 px-4 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 font-bold text-xs sm:text-sm border-2 border-slate-200 hover:border-slate-400 shadow-2xs transition-all flex items-center justify-center gap-3 cursor-pointer">
+               class="w-full py-3 sm:py-3.5 px-4 rounded-2xl bg-white hover:bg-slate-50 active:scale-[0.98] text-slate-900 font-bold text-xs sm:text-sm border-2 border-slate-200 hover:border-slate-400 shadow-2xs transition-all flex items-center justify-center gap-3 cursor-pointer">
                 <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24">
                     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -113,20 +113,20 @@
         </div>
 
         <!-- Register Form -->
-        <form wire:submit="register" @submit="sessionStorage.setItem('pf_just_logged_in', 'true')" class="space-y-3" :class="isShaking ? 'anim-shake' : ''">
+        <form wire:submit="register" @submit="sessionStorage.setItem('pf_just_logged_in', 'true')" class="space-y-3.5" :class="isShaking ? 'anim-shake' : ''">
             
             <!-- Full Name Input -->
-            <div class="space-y-1">
+            <div class="space-y-1.5">
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Nama Lengkap</label>
                 <div class="relative">
-                    <span class="absolute left-3.5 top-2.5 sm:top-3 text-slate-400">
+                    <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
                         <x-icon name="user" class="w-4 h-4" strokeWidth="2" />
                     </span>
                     <input type="text" 
                            wire:model="name" 
                            placeholder="Nama Anda" 
                            autocomplete="name"
-                           class="w-full pl-10 pr-4 py-2 sm:py-2.5 rounded-2xl bg-white border @error('name') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                           class="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-2xl bg-white border @error('name') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                 </div>
                 @error('name') 
                     <span class="text-[11px] text-rose-500 font-bold px-2 block">{{ $message }}</span> 
@@ -134,17 +134,17 @@
             </div>
 
             <!-- Email Address Input -->
-            <div class="space-y-1">
+            <div class="space-y-1.5">
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Email</label>
                 <div class="relative">
-                    <span class="absolute left-3.5 top-2.5 sm:top-3 text-slate-400">
+                    <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
                         <x-icon name="mail" class="w-4 h-4" strokeWidth="2" />
                     </span>
                     <input type="email" 
                            wire:model="email" 
                            placeholder="nama@email.com" 
                            autocomplete="email"
-                           class="w-full pl-10 pr-4 py-2 sm:py-2.5 rounded-2xl bg-white border @error('email') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                           class="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-2xl bg-white border @error('email') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                 </div>
                 @error('email') 
                     <span class="text-[11px] text-rose-500 font-bold px-2 block">{{ $message }}</span> 
@@ -154,21 +154,21 @@
             <!-- Password Inputs (Responsive Grid layout) -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
                 <!-- Create Password -->
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Kata Sandi</label>
                     <div class="relative">
-                        <span class="absolute left-3.5 top-2.5 sm:top-3 text-slate-400">
+                        <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
                             <x-icon name="lock" class="w-4 h-4" strokeWidth="2" />
                         </span>
                         <input :type="showPass ? 'text' : 'password'" 
                                wire:model="password" 
                                placeholder="Min. 6 karakter" 
                                autocomplete="new-password"
-                               class="w-full pl-10 pr-9 py-2 sm:py-2.5 rounded-2xl bg-white border @error('password') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                               class="w-full pl-10 pr-9 py-2.5 sm:py-3 rounded-2xl bg-white border @error('password') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                         
                         <button type="button" 
                                 @click="showPass = !showPass" 
-                                class="absolute right-3 top-2 sm:top-2.5 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
+                                class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
                                 title="Tampilkan / Sembunyikan Kata Sandi">
                             <template x-if="!showPass">
                                 <x-icon name="eye" class="w-3.5 h-3.5" strokeWidth="2" />
@@ -181,21 +181,21 @@
                 </div>
 
                 <!-- Confirm Password -->
-                <div class="space-y-1">
+                <div class="space-y-1.5">
                     <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Ulangi Sandi</label>
                     <div class="relative">
-                        <span class="absolute left-3.5 top-2.5 sm:top-3 text-slate-400">
+                        <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
                             <x-icon name="shield-check" class="w-4 h-4" strokeWidth="2" />
                         </span>
                         <input :type="showConfirmPass ? 'text' : 'password'" 
                                wire:model="password_confirmation" 
                                placeholder="Ulangi kata sandi" 
                                autocomplete="new-password"
-                               class="w-full pl-10 pr-9 py-2 sm:py-2.5 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                               class="w-full pl-10 pr-9 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                         
                         <button type="button" 
                                 @click="showConfirmPass = !showConfirmPass" 
-                                class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
+                                class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
                                 title="Tampilkan / Sembunyikan Konfirmasi Sandi">
                             <template x-if="!showConfirmPass">
                                 <x-icon name="eye" class="w-3.5 h-3.5" strokeWidth="2" />
@@ -212,10 +212,10 @@
             @enderror
 
             <!-- Submit Registration Button -->
-            <div class="pt-1.5">
+            <div class="pt-2">
                 <button type="submit" 
                         wire:loading.attr="disabled"
-                        class="w-full py-3.5 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-[0.98] text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-2 border-slate-950">
+                        class="w-full py-4 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-[0.98] text-slate-950 font-black text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer border-2 border-slate-950">
                     <span wire:loading.remove class="flex items-center gap-2">
                         <span>Daftar Akun Baru</span>
                         <x-icon name="arrow-right" class="w-4 h-4" strokeWidth="2.5" />
@@ -234,7 +234,7 @@
     </main>
 
     <!-- ── FOOTER LOGIN LINK ─────────────────────────────────── -->
-    <footer class="pt-2 pb-1 text-center border-t border-slate-100 shrink-0">
+    <footer class="pt-3 pb-2 text-center border-t border-slate-100 shrink-0">
         <p class="text-xs text-slate-500 font-medium">
             Sudah punya akun? 
             <a href="{{ route('login') }}"
