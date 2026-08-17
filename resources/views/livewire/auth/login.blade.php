@@ -18,6 +18,34 @@
      }"
      class="w-full flex-1 flex flex-col justify-between max-w-md mx-auto relative anim-page-enter">
     
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  FLOATING ANIMATED ORNAMENTS (NEO-FINTECH AESTHETIC)       -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
+        <!-- Ornament 1: Rp Coin Top Left -->
+        <div class="absolute -top-3 -left-3 sm:-top-4 sm:-left-5 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-10deg] anim-float-1">
+            <x-icon name="dollar-sign" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
+            <span>Rp</span>
+        </div>
+
+        <!-- Ornament 2: Safe Shield Top Right -->
+        <div class="absolute -top-3 -right-3 sm:-top-4 sm:-right-5 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[8deg] flex items-center gap-1.5 anim-float-2">
+            <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
+            <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
+        </div>
+
+        <!-- Ornament 3: Checkmark Coin Middle Left -->
+        <div class="absolute top-1/2 -left-4 sm:-left-6 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[12deg] anim-float-3">
+            <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
+        </div>
+
+        <!-- Ornament 4: Fast Badge Bottom Right -->
+        <div class="absolute -bottom-2 -right-2 sm:-bottom-3 sm:-right-4 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-6deg] flex items-center gap-1 anim-float-1">
+            <x-icon name="zap" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
+            <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">FAST</span>
+        </div>
+    </div>
+
     <!-- ── TOP HEADER / NAV ──────────────────────────────────── -->
     <header class="flex items-center justify-between pb-3 sm:pb-5 shrink-0">
         <!-- Back to Welcome Page -->
@@ -91,7 +119,7 @@
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Email</label>
                 <div class="relative">
                     <span class="absolute left-3.5 top-3 text-slate-400">
-                        <x-icon name="users" class="w-4 h-4" strokeWidth="2" />
+                        <x-icon name="mail" class="w-4 h-4" strokeWidth="2" />
                     </span>
                     <input type="email" 
                            wire:model="email" 
@@ -121,12 +149,13 @@
                     
                     <button type="button" 
                             @click="showPass = !showPass" 
-                            class="absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-700 cursor-pointer transition-colors p-1">
+                            class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-slate-700 cursor-pointer transition-colors p-1"
+                            title="Tampilkan / Sembunyikan Kata Sandi">
                         <template x-if="!showPass">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                            <x-icon name="eye" class="w-4 h-4" strokeWidth="2" />
                         </template>
                         <template x-if="showPass">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                            <x-icon name="eye-off" class="w-4 h-4" strokeWidth="2" />
                         </template>
                     </button>
                 </div>
