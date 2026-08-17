@@ -68,9 +68,9 @@ class Index extends Component
 
         $user = User::findOrFail($this->selectedUserId);
 
-        // Prevent admin from removing their own superadmin access
-        if ($user->id === auth()->id() && $this->editRole !== 'admin') {
-            session()->flash('error', 'Anda tidak dapat menurunkan hak akses akun Superadmin Anda sendiri.');
+        // Prevent demoting primary admin or own superadmin access
+        if ((strtolower($user->email) === 'zakitripamungkas03@gmail.com' || $user->id === auth()->id()) && $this->editRole !== 'admin') {
+            session()->flash('error', 'Akun Superadmin Utama tidak dapat diturunkan hak aksesnya.');
             return;
         }
 
@@ -121,8 +121,8 @@ class Index extends Component
     public function toggleBan(int $userId)
     {
         $user = User::findOrFail($userId);
-        if ($user->id === auth()->id()) {
-            session()->flash('error', 'Anda tidak dapat membekukan akun Anda sendiri.');
+        if ($user->id === auth()->id() || strtolower($user->email) === 'zakitripamungkas03@gmail.com') {
+            session()->flash('error', 'Akun Superadmin Utama tidak dapat dibekukan.');
             return;
         }
 
