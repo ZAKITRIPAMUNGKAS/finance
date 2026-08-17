@@ -330,12 +330,14 @@
                             <div x-show="activeAccounts.bca" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.bca"
                                            @input="formatBalance('bca', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -360,12 +362,14 @@
                             <div x-show="activeAccounts.mandiri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.mandiri"
                                            @input="formatBalance('mandiri', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -390,12 +394,14 @@
                             <div x-show="activeAccounts.bri" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.bri"
                                            @input="formatBalance('bri', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -420,12 +426,14 @@
                             <div x-show="activeAccounts.bni" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.bni"
                                            @input="formatBalance('bni', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -450,12 +458,14 @@
                             <div x-show="activeAccounts.jago" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.jago"
                                            @input="formatBalance('jago', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -480,12 +490,14 @@
                             <div x-show="activeAccounts.seabank" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.seabank"
                                            @input="formatBalance('seabank', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -510,12 +522,14 @@
                             <div x-show="activeAccounts.gopay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.gopay"
                                            @input="formatBalance('gopay', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -540,12 +554,14 @@
                             <div x-show="activeAccounts.ovo" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.ovo"
                                            @input="formatBalance('ovo', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -570,12 +586,14 @@
                             <div x-show="activeAccounts.dana" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.dana"
                                            @input="formatBalance('dana', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -600,12 +618,14 @@
                             <div x-show="activeAccounts.shopeepay" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.shopeepay"
                                            @input="formatBalance('shopeepay', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -630,12 +650,14 @@
                             <div x-show="activeAccounts.cash" class="mt-3 pt-2 border-t border-slate-100 space-y-1">
                                 <label class="block text-[9px] font-mono font-bold uppercase tracking-wider text-slate-400">Saldo Awal</label>
                                 <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-xs font-bold font-mono text-slate-400">Rp</span>
+                                    <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold font-mono text-slate-400 select-none">
+                                        Rp
+                                    </span>
                                     <input type="text" 
                                            :value="balances.cash"
                                            @input="formatBalance('cash', $event)"
                                            placeholder="0"
-                                           class="w-full pl-10 pr-3 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-xs font-mono font-bold text-[#0F172A] focus:outline-none focus:border-slate-900">
+                                           class="w-full h-10 rounded-xl border border-slate-300 pl-12 pr-4 text-xs font-mono font-bold text-slate-900 focus:border-slate-950 focus:ring-0 bg-white shadow-2xs">
                                 </div>
                             </div>
                         </div>
@@ -670,14 +692,14 @@
                         
                         <!-- Strictly Non-Overlapping Currency Input -->
                         <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base sm:text-lg font-bold font-mono text-slate-400">
+                            <span class="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm sm:text-base font-bold font-mono text-slate-400 select-none">
                                 Rp
                             </span>
                             <input type="text" 
                                    :value="rawIncomeInput"
                                    @input="onIncomeInput($event)"
-                                   placeholder="5.000.000"
-                                   class="w-full pl-12 pr-4 py-2.5 sm:py-3 rounded-xl bg-white border-2 border-slate-900 text-lg sm:text-xl font-black font-mono text-[#0F172A] focus:outline-none shadow-2xs">
+                                   placeholder="0"
+                                   class="w-full h-12 sm:h-14 rounded-xl border-2 border-slate-900 bg-white pl-14 pr-4 text-base sm:text-lg font-black font-mono text-[#0F172A] focus:outline-none focus:border-slate-950 focus:ring-0 shadow-2xs">
                         </div>
 
                         <!-- Quick Chips -->
