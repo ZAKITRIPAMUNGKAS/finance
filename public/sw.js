@@ -1,6 +1,7 @@
-const CACHE_NAME = 'portofinance-v2';
+const CACHE_NAME = 'portofinance-v3';
 const STATIC_ASSETS = [
     '/favicon.png',
+    '/images/logofinance.png',
     '/images/logo.svg',
     '/manifest.json'
 ];
