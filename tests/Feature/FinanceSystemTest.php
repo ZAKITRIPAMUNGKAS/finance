@@ -291,9 +291,12 @@ class FinanceSystemTest extends TestCase
         $budi = User::where('email', 'budi@example.com')->first();
         $this->assertDatabaseHas('accounts', ['user_id' => $budi->id, 'name' => 'BCA Utama']);
 
-        // 3. Login flow with quick demo
+        // 3. Real Login flow
         Livewire::test(Login::class)
-            ->call('quickDemoLogin');
+            ->set('email', 'budi@example.com')
+            ->set('password', 'secret123')
+            ->call('login')
+            ->assertRedirect(route('dashboard'));
 
         // 4. Settings flow
         Livewire::actingAs($budi);
