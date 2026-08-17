@@ -217,7 +217,7 @@
                     <button type="button" wire:click="openEditModal({{ $sub->id }})"
                         class="p-1.5 text-slate-400 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                         title="Edit Langganan">
-                        <x-icon name="edit-3" class="w-4 h-4" />
+                        <x-icon name="edit" class="w-4 h-4" />
                     </button>
                     <button type="button" wire:click="deleteSubscription({{ $sub->id }})"
                         wire:confirm="Hapus langganan '{{ $sub->name }}'?"
