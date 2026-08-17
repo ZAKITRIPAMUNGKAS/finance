@@ -172,6 +172,26 @@
                 </div>
             </div>
 
+            <!-- Superadmin Section (Exclusive for Admin) -->
+            @if(auth()->check() && auth()->user()->isAdmin())
+            <div>
+                <div class="flex items-center justify-between px-3 mb-2">
+                    <p class="text-[10px] font-mono font-black uppercase tracking-wider text-slate-950">Superadmin</p>
+                    <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-slate-950 text-[#C6F24D] font-mono font-bold">ADMIN</span>
+                </div>
+                <div class="space-y-1">
+                    <a href="{{ route('admin.dashboard') }}" 
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-black transition-all {{ request()->routeIs('admin*') ? 'bg-slate-950 text-[#C6F24D] shadow-sm' : 'text-slate-900 bg-slate-100/80 hover:bg-slate-200' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="shield-check" class="w-4 h-4 text-[#C6F24D]" />
+                            <span>Panel Admin SaaS</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-md bg-[#C6F24D] text-slate-950 font-mono font-bold">Control</span>
+                    </a>
+                </div>
+            </div>
+            @endif
+
             <!-- System & Account Section -->
             <div>
                 <p class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Akun & Sistem</p>
@@ -218,21 +238,33 @@
                     class="w-full flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs shadow-md active-tap transition-all cursor-pointer">
                 <span class="w-5 h-5 rounded-full bg-[#C6F24D] text-slate-950 flex items-center justify-center font-black text-xs">+</span>
                 <span>Quick Transaction</span>
-                <kbd class="hidden xl:inline-block px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 rounded text-slate-400 ml-1">Ctrl+K</kbd>
             </button>
         </div>
     </aside>
 
-    <!-- Main View Area -->
-    <div class="flex-1 flex flex-col min-w-0 pb-24 md:pb-0 overflow-hidden bg-[#F8F9FA]">
-               <!-- Top Navbar (Clean Premium FinTech Style) -->
-        <header class="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/70 px-4 sm:px-6 lg:px-8 flex items-center justify-between sticky top-0 z-30 shadow-[0_1px_6px_rgba(0,0,0,0.02)]">
+    <!-- Main Content Area Wrapper -->
+    <div class="flex-1 flex flex-col min-w-0 bg-[#F8F9FA] relative">
+        
+        <!-- Impersonation Active Banner -->
+        @if(session()->has('admin_impersonator_id'))
+        <div class="bg-amber-500 text-slate-950 px-4 py-2 text-xs font-bold flex items-center justify-between shadow-md z-50">
+            <div class="flex items-center gap-2">
+                <x-icon name="alert-triangle" class="w-4 h-4 text-slate-950 shrink-0" />
+                <span>Mode Bantuan Teknis: Anda sedang masuk sebagai <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->email }}).</span>
+            </div>
+            <a href="{{ route('admin.leave-impersonation') }}" class="px-3 py-1 rounded-xl bg-slate-950 text-white hover:bg-slate-800 text-[11px] font-black transition-all cursor-pointer shadow-xs">
+                Kembali ke Panel Admin &rarr;
+            </a>
+        </div>
+        @endif
+
+        <!-- Top Header Navigation Bar (Sticky with Blur) -->
+        <header class="sticky top-0 z-30 h-16 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 lg:px-8 flex items-center justify-between shrink-0 shadow-2xs">
             
             @php
                 $currentUser = auth()->user() ?? \App\Models\User::first();
                 $userName = $currentUser->name ?? 'Zaki';
                 $userEmail = $currentUser->email ?? 'zaki@portofinance.test';
-                $userInitial = strtoupper(substr($userName, 0, 1));
             @endphp
 
             <!-- Left: Mobile Toggle & Brand (or Desktop Welcome) -->
@@ -259,6 +291,14 @@
 
             <!-- Right: Available Money Hero Pill, Live Notifications, and Far-Right User Profile -->
             <div class="flex items-center gap-2 sm:gap-2.5">
+                
+                @if(auth()->check() && auth()->user()->isAdmin())
+                <a href="{{ route('admin.dashboard') }}" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-950 text-[#C6F24D] hover:bg-slate-800 text-[11px] font-mono font-black transition-all shadow-xs border border-slate-800 cursor-pointer">
+                    <x-icon name="shield-check" class="w-3.5 h-3.5 text-[#C6F24D]" />
+                    <span>Admin Panel</span>
+                </a>
+                @endif
+
                 {{-- Live Available Money Bar (auto-updates on transaction-saved) --}}
                 <div id="tour-available-money">
                     <livewire:available-money-bar />
@@ -308,15 +348,24 @@
                                 </div>
                             </div>
                             <div class="mt-2 pt-2 border-t border-slate-200/60 flex items-center justify-between">
-                                <span class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400">Role</span>
-                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-[#C6F24D] text-slate-950">
-                                    FREELANCER PRO
+                                <span class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400">Paket Akun</span>
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-black {{ $currentUser->isAdmin() ? 'bg-slate-950 text-[#C6F24D]' : ($currentUser->isLifetime() ? 'bg-purple-100 text-purple-900' : ($currentUser->isPro() ? 'bg-emerald-100 text-emerald-900' : ($currentUser->isTrial() ? 'bg-amber-100 text-amber-900' : 'bg-slate-200 text-slate-700'))) }}">
+                                    {{ $currentUser->tier_label }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- Menu Links -->
                         <div class="space-y-1 text-xs">
+                            @if(auth()->check() && auth()->user()->isAdmin())
+                            <a href="{{ route('admin.dashboard') }}" 
+                               @click="userMenuOpen = false"
+                               class="flex items-center gap-2.5 px-3 py-2 rounded-xl font-black text-slate-950 bg-[#C6F24D]/30 hover:bg-[#C6F24D]/50 transition-colors">
+                                <x-icon name="shield-check" class="w-4 h-4 text-slate-950" />
+                                <span>Panel Superadmin</span>
+                            </a>
+                            @endif
+
                             <a href="{{ route('settings') }}" 
                                @click="userMenuOpen = false"
                                class="flex items-center gap-2.5 px-3 py-2 rounded-xl font-bold text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors">

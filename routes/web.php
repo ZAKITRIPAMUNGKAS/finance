@@ -79,3 +79,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // 5. Public Invoice Share Link (For Clients)
 Route::get('/i/{hash}', [\App\Http\Controllers\InvoiceController::class, 'publicView'])->name('invoices.public');
+
+// 6. Superadmin Command Center Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
+    Route::get('/users', \App\Livewire\Admin\Users\Index::class)->name('users');
+});
+
+// Leave Impersonation Route
+Route::get('/admin/leave-impersonation', function () {
+    if (session()->has('admin_impersonator_id')) {
+        $adminId = session()->pull('admin_impersonator_id');
+        $admin = \App\Models\User::find($adminId);
+        if ($admin && $admin->isAdmin()) {
+            Auth::login($admin);
+            return redirect()->route('admin.users')->with('success', 'Kembali ke sesi Superadmin.');
+        }
+    }
+    return redirect()->route('dashboard');
+})->middleware('auth')->name('admin.leave-impersonation');
+

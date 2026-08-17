@@ -19,6 +19,13 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_id',
         'email_verified_at',
         'onboarding_completed',
+        'role',
+        'subscription_tier',
+        'trial_ends_at',
+        'subscription_ends_at',
+        'is_banned',
+        'banned_reason',
+        'last_login_at',
     ];
 
     protected $hidden = [
@@ -30,9 +37,76 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'trial_ends_at' => 'datetime',
+            'subscription_ends_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
             'onboarding_completed' => 'boolean',
+            'is_banned' => 'boolean',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($user) {
+            if (empty($user->subscription_tier)) {
+                $user->subscription_tier = 'trial';
+            }
+            if (empty($user->trial_ends_at) && $user->subscription_tier === 'trial') {
+                $user->trial_ends_at = now()->addDays(14);
+            }
+            if (empty($user->role)) {
+                $user->role = 'user';
+            }
+        });
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isLifetime(): bool
+    {
+        return $this->subscription_tier === 'lifetime';
+    }
+
+    public function isTrial(): bool
+    {
+        return $this->subscription_tier === 'trial' && ($this->trial_ends_at === null || $this->trial_ends_at->isFuture());
+    }
+
+    public function isPro(): bool
+    {
+        if ($this->isAdmin() || $this->isLifetime()) {
+            return true;
+        }
+        if ($this->subscription_tier === 'pro' && ($this->subscription_ends_at === null || $this->subscription_ends_at->isFuture())) {
+            return true;
+        }
+        return $this->isTrial();
+    }
+
+    public function isFree(): bool
+    {
+        return !$this->isPro() && !$this->isLifetime() && !$this->isTrial();
+    }
+
+    public function getRemainingTrialDaysAttribute(): int
+    {
+        if (!$this->trial_ends_at || $this->trial_ends_at->isPast()) {
+            return 0;
+        }
+        return (int) now()->diffInDays($this->trial_ends_at, false) + 1;
+    }
+
+    public function getTierLabelAttribute(): string
+    {
+        if ($this->isAdmin()) return 'Superadmin';
+        if ($this->isLifetime()) return 'Lifetime VIP';
+        if ($this->subscription_tier === 'pro' && ($this->subscription_ends_at === null || $this->subscription_ends_at->isFuture())) return 'Pro Member';
+        if ($this->isTrial()) return 'Free Trial (' . $this->remaining_trial_days . ' hari)';
+        return 'Free Starter';
     }
 
     public function accounts(): HasMany
