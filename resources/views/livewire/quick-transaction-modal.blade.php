@@ -27,12 +27,23 @@
             <!-- Header -->
             <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between shrink-0">
                 <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-[#C6F24D] text-slate-950 flex items-center justify-center font-bold shadow-xs">
-                        <x-icon name="plus" class="w-4 h-4" strokeWidth="2.5" />
+                    <div class="w-8 h-8 rounded-xl {{ $type === 'income' ? 'bg-[#C6F24D] text-slate-950' : ($type === 'expense' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700') }} flex items-center justify-center font-bold shadow-xs">
+                        @if($type === 'income')
+                            <x-icon name="arrow-down-left" class="w-4 h-4 text-slate-950" strokeWidth="2.5" />
+                        @elseif($type === 'expense')
+                            <x-icon name="arrow-up-right" class="w-4 h-4 text-rose-700" strokeWidth="2.5" />
+                        @else
+                            <x-icon name="arrow-right-left" class="w-4 h-4 text-blue-700" strokeWidth="2.5" />
+                        @endif
                     </div>
                     <div>
-                        <h3 class="text-sm font-extrabold text-slate-950 tracking-tight">Catat Transaksi</h3>
-                        <p class="text-[10px] text-slate-400 font-medium">Bicara (Voice), Scan Struk, atau Input Manual</p>
+                        <h3 class="text-sm font-extrabold text-slate-950 tracking-tight">
+                            @if($type === 'income') Catat Pemasukan / Honor Proyek
+                            @elseif($type === 'expense') Catat Pengeluaran Harian
+                            @else Catat Mutasi Transfer
+                            @endif
+                        </h3>
+                        <p class="text-[10px] text-slate-400 font-medium">Bicara Suara (Voice), Scan Foto / Bukti, atau Input Manual</p>
                     </div>
                 </div>
                 <button wire:click="closeModal" class="text-slate-400 hover:text-slate-700 p-1.5 rounded-full hover:bg-slate-100 transition-colors cursor-pointer">
@@ -73,7 +84,12 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <div class="w-2 h-2 rounded-full" :class="recordingVoice ? 'bg-rose-500 animate-ping' : 'bg-emerald-500'"></div>
-                                <span class="text-xs font-extrabold text-slate-900">Input Suara (Voice Command)</span>
+                                <span class="text-xs font-extrabold text-slate-900">
+                                    @if($type === 'income') Input Suara Pemasukan (AI Voice)
+                                    @elseif($type === 'expense') Input Suara Pengeluaran (AI Voice)
+                                    @else Input Suara Transfer (AI Voice)
+                                    @endif
+                                </span>
                             </div>
                             <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Bahasa Indonesia</span>
                         </div>
@@ -82,15 +98,41 @@
                         <div>
                             <button type="button" 
                                     @click="toggleVoice()" 
-                                    :class="recordingVoice ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse' : 'bg-slate-950 hover:bg-slate-800 text-white'"
+                                    :class="recordingVoice ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse' : '{{ $type === 'income' ? 'bg-slate-950 hover:bg-slate-800 text-[#C6F24D]' : 'bg-slate-950 hover:bg-slate-800 text-white' }}'"
                                     class="w-full py-2.5 px-4 rounded-xl text-xs font-extrabold flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" :class="recordingVoice ? 'animate-bounce' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
                                     <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
                                     <line x1="12" y1="19" x2="12" y2="22"/>
                                 </svg>
-                                <span x-text="recordingVoice ? 'Mendengarkan... (Klik Selesai)' : '🎙️ Bicara untuk Mencatat'"></span>
+                                <span x-text="recordingVoice ? 'Mendengarkan... (Klik Selesai)' : '🎙️ Bicara untuk Mencatat {{ $type === 'income' ? 'Pemasukan' : ($type === 'expense' ? 'Pengeluaran' : 'Transfer') }}'"></span>
                             </button>
+                        </div>
+
+                        <!-- Quick Voice Template Chips -->
+                        <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+                            <span class="text-[10px] font-mono text-slate-400">Coba:</span>
+                            @if($type === 'income')
+                                <button type="button" wire:click="loadSampleVoice('project')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                    + DP Project 5 Jt (BCA)
+                                </button>
+                                <button type="button" wire:click="loadSampleVoice('pelunasan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                    + Pelunasan 2.5 Jt (Mandiri)
+                                </button>
+                                <button type="button" wire:click="loadSampleVoice('gaji')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                    + Gaji 7.5 Jt
+                                </button>
+                            @elseif($type === 'expense')
+                                <button type="button" wire:click="loadSampleVoice('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                    + Kopi 42 Rb (GoPay)
+                                </button>
+                                <button type="button" wire:click="loadSampleVoice('bensin')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                    + Bensin 50 Rb (Cash)
+                                </button>
+                                <button type="button" wire:click="loadSampleVoice('wifi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                    + Wifi 350 Rb
+                                </button>
+                            @endif
                         </div>
 
                         <!-- Live Voice Transcript / Status Box -->
@@ -108,12 +150,17 @@
                         </div>
                     </div>
 
-                    <!-- SCAN STRUK / PASTE TEXT TOGGLE -->
+                    <!-- SCAN FOTO STRUK / BUKTI TRANSFER TOGGLE -->
                     <div class="pt-1">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-2">
                                 <x-icon name="camera" class="w-3.5 h-3.5 text-slate-700" />
-                                <span class="text-xs font-bold text-slate-900">Scan Foto Struk / Bukti Transfer</span>
+                                <span class="text-xs font-bold text-slate-900">
+                                    @if($type === 'income') Scan Bukti Transfer Klien / Mutasi Masuk
+                                    @elseif($type === 'expense') Scan Foto Struk Belanja / Nota Kasir
+                                    @else Scan Bukti Transfer Antar Rekening
+                                    @endif
+                                </span>
                             </div>
                             <button type="button" 
                                     wire:click="toggleManualTextMode" 
@@ -123,7 +170,7 @@
                         </div>
 
                         @if(!$manualTextMode)
-                        <div>
+                        <div class="space-y-2">
                             <!-- Upload Button -->
                             <label class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 hover:border-slate-400 flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs group">
                                 <input type="file" 
@@ -132,15 +179,42 @@
                                        wire:model="receiptImage" 
                                        class="hidden">
                                 <x-icon name="upload" class="w-3.5 h-3.5 text-slate-600 group-hover:scale-110 transition-transform" />
-                                <span class="text-xs font-bold text-slate-700">Pilih Foto / Gambar Struk</span>
+                                <span class="text-xs font-bold text-slate-700">
+                                    @if($type === 'income') Pilih Foto Bukti Transfer M-Banking / Invoice
+                                    @else Pilih Foto Struk / Gambar Nota Kasir
+                                    @endif
+                                </span>
                             </label>
+
+                            <!-- Quick OCR Samples -->
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-[10px] font-mono text-slate-400">Contoh:</span>
+                                @if($type === 'income')
+                                    <button type="button" wire:click="loadSampleReceipt('transfer_klien')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        📄 Bukti Transfer BCA 7.5 Jt
+                                    </button>
+                                    <button type="button" wire:click="loadSampleReceipt('transfer_mandiri')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        📄 Bukti Transfer Mandiri 2.5 Jt
+                                    </button>
+                                @elseif($type === 'expense')
+                                    <button type="button" wire:click="loadSampleReceipt('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        📄 Struk Kopi Kenangan
+                                    </button>
+                                    <button type="button" wire:click="loadSampleReceipt('indomaret')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        📄 Struk Indomaret
+                                    </button>
+                                    <button type="button" wire:click="loadSampleReceipt('adobe')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        📄 Invoice Adobe
+                                    </button>
+                                @endif
+                            </div>
                         </div>
                         @else
                         <!-- Paste Text Field -->
                         <div class="space-y-2 pt-1">
                             <textarea wire:model="pastedText" 
                                       rows="2" 
-                                      placeholder="Tempel teks struk, SMS banking, atau bukti WA di sini..." 
+                                      placeholder="{{ $type === 'income' ? 'Tempel teks notifikasi SMS Banking / WA transfer masuk, e.g. TRSF DARI BUDI RP 2.500.000...' : 'Tempel teks struk, SMS banking, atau bukti bayar di sini...' }}" 
                                       class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs text-slate-900 placeholder-slate-400 font-mono focus:outline-none focus:border-slate-900"></textarea>
                             <button type="button" 
                                     wire:click="extractFromPastedText" 
@@ -153,7 +227,7 @@
                         <!-- OCR Scanner Animation from Library -->
                         <div x-show="scanning" x-cloak class="mt-2 p-2.5 bg-white border border-slate-200 rounded-xl flex items-center gap-2.5 text-xs font-mono text-slate-700">
                             <x-icon name="loader-2" class="w-4 h-4 animate-spin text-slate-950" />
-                            <span x-text="ocrStatus">Membaca gambar struk...</span>
+                            <span x-text="ocrStatus">Membaca gambar struk / bukti transfer...</span>
                         </div>
                     </div>
 

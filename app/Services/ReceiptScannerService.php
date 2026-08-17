@@ -201,17 +201,25 @@ class ReceiptScannerService
     /**
      * Parse natural spoken voice input (Voice-to-Transaction).
      */
-    public function parseVoiceText(string $spokenText): array
+    public function parseVoiceText(string $spokenText, ?string $fallbackType = null): array
     {
         $safeText = $this->sanitizeUtf8($spokenText);
         $lowerText = mb_strtolower($safeText);
 
-        // 1. Detect Type
-        $type = 'expense';
-        if (preg_match('/(?:pemasukan|terima|dapat|gaji|income|masuk|dp|pelunasan|dibayar|cair)/i', $lowerText)) {
-            $type = 'income';
-        } elseif (preg_match('/(?:transfer|pindah|kirim\s*uang)/i', $lowerText)) {
+        // 1. Detect Type with comprehensive income and transfer keyword support
+        $type = $fallbackType ?: 'expense';
+        $hasIncomeKeywords = (bool) preg_match('/(?:pemasukan|terima|dapat|gaji|income|masuk|dp|down\s*payment|pelunasan|dibayar|cair|honor|fee|omset|klien|client|jasa|lunas|penjualan|transfer\s*dari)\b/ui', $lowerText);
+        $hasExpenseKeywords = (bool) preg_match('/(?:beli|belanja|makan|minum|jajan|bayar\s*makan|bayar\s*tagihan|bayar\s*kos|bayar\s*wifi|bayar\s*listrik|habis|ongkir|expense|pengeluaran)\b/ui', $lowerText);
+        $hasTransferKeywords = (bool) preg_match('/(?:transfer\s*antar|pindah\s*dana|pindah\s*buku|tarik\s*tunai|kirim\s*ke\s*rekening|transfer\s*ke)\b/ui', $lowerText);
+
+        if ($hasTransferKeywords) {
             $type = 'transfer';
+        } elseif ($hasIncomeKeywords) {
+            $type = 'income';
+        } elseif ($fallbackType === 'income' && !$hasExpenseKeywords) {
+            $type = 'income';
+        } elseif ($hasExpenseKeywords) {
+            $type = 'expense';
         }
 
         // 2. Extract Amount (Spoken converter + Regex fallback)
@@ -234,7 +242,7 @@ class ReceiptScannerService
         $cleanDesc = $safeText;
         $stripPatterns = [
             // Command preambles & conversational intros
-            '/\b(?:tolong\s*)?(?:catat(?:kan)?|masukkan|tambah(?:kan)?|input|buat(?:kan)?|tulis(?:kan)?)\s*(?:transaksi|pengeluaran|pemasukan)?\b/ui',
+            '/\b(?:tolong\s*)?(?:catat(?:kan)?|masukkan|tambah(?:kan)?|input|buat(?:kan)?|tulis(?:kan)?)\s*(?:transaksi|pengeluaran|pemasukan|income|expense)?\b/ui',
             '/\b(?:aku|saya|gue|gw)\s*(?:baru\s*saja|baru|lagi|tadi|habis|udah|telah|dapat|terima)?\b/ui',
             '/\b(?:baru\s*saja|tadi\s*pagi|tadi\s*siang|tadi\s*malam|tadi|barusan|kemarin|hari\s*ini|lusa)\b/ui',
             '/\b(?:dapat|terima|cair|pemasukan|pengeluaran|transfer|income|expense)\b/ui',
@@ -242,7 +250,7 @@ class ReceiptScannerService
             // Payment / Transfer destination method phrases: "bayar pakai cash", "masuk bca", "transfer ke mandiri", "via ovo", etc.
             '/\b(?:bayar|dibayar|pembayaran|bayarnya|masuk|ditransfer|kirim|diterima)\s*(?:pake|pakai|lewat|via|menggunakan|dengan|dari|ke)?\s*(?:rekening|akun|bank|dompet|uang)?\s*(?:bca|mandiri|bri|bni|jago|jenius|gopay|ovo|dana|shopeepay|cash|tunai|kontan|qris)\b/ui',
             '/\b(?:pake|pakai|lewat|via|menggunakan|dengan|dari|ke)\s*(?:rekening|akun|bank|dompet|uang)?\s*(?:bca|mandiri|bri|bni|jago|jenius|gopay|ovo|dana|shopeepay|cash|tunai|kontan|qris)\b/ui',
-            '/\b(?:bayar\s*cash|bayar\s*tunai|bayar\s*qris|bayar\s*gopay|bayar\s*ovo|bayar\s*bca|masuk\s*bca|masuk\s*mandiri)\b/ui',
+            '/\b(?:bayar\s*cash|bayar\s*tunai|bayar\s*qris|bayar\s*gopay|bayar\s*ovo|bayar\s*bca|masuk\s*bca|masuk\s*mandiri|masuk\s*bri|masuk\s*bni|masuk\s*jago)\b/ui',
             '/\b(?:cash|tunai|kontan|qris)\b/ui',
 
             // Amount preambles and currency expressions: "habis Rp20.000", "seharga 20rb", "sebesar 50rb", "total 100k", "Rp20.000", "20 ribu"
@@ -279,6 +287,7 @@ class ReceiptScannerService
                 $cleanDesc = preg_replace('/\bDp\b/', 'DP', $cleanDesc);
                 $cleanDesc = preg_replace('/\bPln\b/', 'PLN', $cleanDesc);
                 $cleanDesc = preg_replace('/\bPdam\b/', 'PDAM', $cleanDesc);
+                $cleanDesc = preg_replace('/\bUi\/ux\b/i', 'UI/UX', $cleanDesc);
             }
         }
 
@@ -307,7 +316,7 @@ class ReceiptScannerService
     /**
      * Parse extracted raw text from receipt / invoice / transfer slip.
      */
-    public function parseReceiptText(string $rawText): array
+    public function parseReceiptText(string $rawText, ?string $fallbackType = null): array
     {
         $safeRawText = $this->sanitizeUtf8($rawText);
         $cleanedText = $this->cleanScannedText($safeRawText);
@@ -316,7 +325,7 @@ class ReceiptScannerService
         $lowerText = mb_strtolower($textToParse . "\n" . $safeRawText);
 
         // 1. Detect Transaction Type
-        $type = $this->detectType($lowerText);
+        $type = $this->detectType($lowerText, $fallbackType);
 
         // 2. Clean noise (phone numbers, NPWP, barcode numbers) and extract Amount
         $amount = $this->extractAmount($textToParse);
@@ -331,7 +340,7 @@ class ReceiptScannerService
         // 3. Extract Date
         $date = $this->extractDate($textToParse) ?? $this->extractDate($safeRawText) ?? now()->format('Y-m-d');
 
-        // 4. Extract Merchant / Description
+        // 4. Extract Merchant / Description / Sender
         $description = $this->extractDescription($lines, $lowerText, $type);
 
         // 5. Suggest Category
@@ -359,16 +368,22 @@ class ReceiptScannerService
     /**
      * Detect if transaction is Income, Expense, or Transfer.
      */
-    private function detectType(string $text): string
+    private function detectType(string $text, ?string $fallbackType = null): string
     {
         $incomeKeywords = [
             'transfer masuk', 'dana masuk', 'penerimaan', 'kredit', 'cr', 'income',
             'terima dari', 'invoice paid', 'lunas dibayar klien', 'gaji', 'fee project',
-            'pembayaran masuk', 'top up berhasil ke rekening', 'terima uang', 'dp project', 'dp', 'pemasukan'
+            'pembayaran masuk', 'top up berhasil ke rekening', 'terima uang', 'dp project', 'dp', 'pemasukan',
+            'pengirim:', 'dari:', 'berita:', 'pesan:'
         ];
 
         $transferKeywords = [
             'transfer antar rekening', 'pemindahan dana', 'pindah buku', 'overbooking', 'antar bank sendiri'
+        ];
+
+        $expenseKeywords = [
+            'total belanja', 'struk', 'kasir', 'pos', 'take away', 'dine in', 'subtotal',
+            'kembalian', 'ppn', 'pb1', 'pajak resto', 'spbu', 'pertamina', 'indomaret', 'alfamart', 'kopi kenangan'
         ];
 
         foreach ($transferKeywords as $kw) {
@@ -378,7 +393,20 @@ class ReceiptScannerService
         }
 
         foreach ($incomeKeywords as $kw) {
-            if (str_contains($text, $kw)) {
+            if (str_contains($text, $kw) && !str_contains($text, 'kembalian')) {
+                return 'income';
+            }
+        }
+
+        if ($fallbackType === 'income') {
+            $isExplicitExpense = false;
+            foreach ($expenseKeywords as $ekw) {
+                if (str_contains($text, $ekw)) {
+                    $isExplicitExpense = true;
+                    break;
+                }
+            }
+            if (!$isExplicitExpense) {
                 return 'income';
             }
         }
@@ -605,11 +633,42 @@ class ReceiptScannerService
         }
 
         if ($type === 'income') {
+            // Check for explicit transfer remarks/notes (Berita / Catatan / Keterangan)
+            $remark = null;
+            $sender = null;
+            foreach ($lines as $l) {
+                if (preg_match('/(?:keterangan|berita|catatan|pesan|note)[\s:–-]+([^\n\r]+)/i', $l, $m)) {
+                    $val = trim($m[1]);
+                    if (strlen($val) >= 3) {
+                        $remark = $val;
+                    }
+                }
+                if (preg_match('/(?:pengirim|dari|sender|dari\s*rekening)[\s:–-]+([^\n\r]+)/i', $l, $m)) {
+                    $val = trim($m[1]);
+                    if (strlen($val) >= 3 && !preg_match('/[0-9]{8,}/', $val)) {
+                        $sender = $val;
+                    }
+                }
+            }
+
+            if ($remark && $sender) {
+                return mb_convert_case($remark, MB_CASE_TITLE, "UTF-8") . " (" . mb_convert_case($sender, MB_CASE_TITLE, "UTF-8") . ")";
+            }
+            if ($remark) {
+                return mb_convert_case($remark, MB_CASE_TITLE, "UTF-8");
+            }
+            if ($sender) {
+                return "Transfer dari " . mb_convert_case($sender, MB_CASE_TITLE, "UTF-8");
+            }
+
             if (str_contains($lowerText, 'dp') || str_contains($lowerText, 'down payment')) {
                 return 'DP Pembayaran Project';
             }
             if (str_contains($lowerText, 'pelunasan')) {
                 return 'Pelunasan Fee Project';
+            }
+            if (str_contains($lowerText, 'gaji')) {
+                return 'Gaji / Honor Freelance';
             }
             return 'Penerimaan Dana / Fee Klien';
         }

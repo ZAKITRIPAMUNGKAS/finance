@@ -244,7 +244,7 @@ class QuickTransactionModal extends Component
     {
         $scanner = app(ReceiptScannerService::class);
         $safeSpoken = $scanner->sanitizeUtf8($spokenText);
-        $result = $scanner->parseVoiceText($safeSpoken);
+        $result = $scanner->parseVoiceText($safeSpoken, $this->type);
 
         $this->voiceTranscript = $safeSpoken;
         $this->type = $result['type'];
@@ -281,7 +281,7 @@ class QuickTransactionModal extends Component
     {
         $scanner = app(ReceiptScannerService::class);
         $safeRawText = $scanner->sanitizeUtf8($rawText);
-        $result = $scanner->parseReceiptText($safeRawText);
+        $result = $scanner->parseReceiptText($safeRawText, $this->type);
         $this->rawScannedText = $scanner->sanitizeUtf8(!empty($result['cleaned_text']) ? $result['cleaned_text'] : trim($safeRawText));
 
         $this->type = $result['type'];
@@ -317,10 +317,11 @@ class QuickTransactionModal extends Component
     public function loadSampleReceipt(string $sampleType)
     {
         $samples = [
-            'kopi'           => "KOPI KENANGAN\nJl. Sudirman No. 45 Jakarta\nTanggal: " . now()->format('d/m/Y') . "\n1x Kenangan Mantan Large Rp 24.000\n1x Avocado Coffee Rp 24.000\nTOTAL BAYAR: Rp 48.000\nPembayaran via GoPay Berhasil",
-            'transfer_klien' => "BCA Mobile\nTRANSFER MASUK BERHASIL\nTanggal: " . now()->format('d/m/Y') . "\nDari: PT MAJU BERSAMA KREASI\nJumlah: Rp 7.500.000\nKeterangan: DP Project Video Animasi 3D",
-            'indomaret'      => "INDOMARET POINT\nTanggal: " . now()->format('d/m/Y') . "\n2x Roti Tawar Rp 30.000\n1x Susu UHT 1L Rp 22.000\n1x Minyak Goreng 2L Rp 36.000\nTOTAL: Rp 88.000\nMetode: Mandiri Debit",
-            'adobe'          => "Adobe Systems Inc\nInvoice #AD-98234\nDate: " . now()->format('Y-m-d') . "\nCreative Cloud All Apps Subscription\nAmount: Rp 649.000\nPaid with Visa Card",
+            'kopi'             => "KOPI KENANGAN\nJl. Sudirman No. 45 Jakarta\nTanggal: " . now()->format('d/m/Y') . "\n1x Kenangan Mantan Large Rp 24.000\n1x Avocado Coffee Rp 24.000\nTOTAL BAYAR: Rp 48.000\nPembayaran via GoPay Berhasil",
+            'transfer_klien'   => "BCA Mobile\nTRANSFER MASUK BERHASIL\nTanggal: " . now()->format('d/m/Y') . "\nDari: PT MAJU BERSAMA KREASI\nJumlah: Rp 7.500.000\nKeterangan: DP Project Video Animasi 3D",
+            'transfer_mandiri' => "Livin' by Mandiri\nTransfer Berhasil\nTanggal: " . now()->format('d/m/Y') . "\nPengirim: BUDI SANTOSO\nPenerima: ZAKI TRI PAMUNGKAS\nNominal: Rp 2.500.000\nCatatan: Pelunasan Jasa Desain UI/UX",
+            'indomaret'        => "INDOMARET POINT\nTanggal: " . now()->format('d/m/Y') . "\n2x Roti Tawar Rp 30.000\n1x Susu UHT 1L Rp 22.000\n1x Minyak Goreng 2L Rp 36.000\nTOTAL: Rp 88.000\nMetode: Mandiri Debit",
+            'adobe'            => "Adobe Systems Inc\nInvoice #AD-98234\nDate: " . now()->format('Y-m-d') . "\nCreative Cloud All Apps Subscription\nAmount: Rp 649.000\nPaid with Visa Card",
         ];
 
         if (isset($samples[$sampleType])) {
@@ -334,11 +335,13 @@ class QuickTransactionModal extends Component
     public function loadSampleVoice(string $sampleType)
     {
         $samples = [
-            'kopi'    => "Beli kopi kenangan 42 ribu pake gopay",
-            'project' => "Pemasukan DP project video 5 juta ke rekening BCA",
-            'bensin'  => "Beli bensin pertalite 50 ribu tunai",
-            'wifi'    => "Bayar wifi indihome 350 ribu lewat Mandiri",
-            'warteg'  => "Makan siang di warteg 25 ribu tunai",
+            'kopi'      => "Beli kopi kenangan 42 ribu pake gopay",
+            'project'   => "Pemasukan DP project video 5 juta ke rekening BCA",
+            'pelunasan' => "Pelunasan website 2,5 juta dari Klien Budi masuk Mandiri",
+            'gaji'      => "Gaji freelance 7 juta 500 ribu masuk BCA",
+            'bensin'    => "Beli bensin pertalite 50 ribu tunai",
+            'wifi'      => "Bayar wifi indihome 350 ribu lewat Mandiri",
+            'warteg'    => "Makan siang di warteg 25 ribu tunai",
         ];
 
         if (isset($samples[$sampleType])) {
