@@ -13,14 +13,10 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="PortoFinance">
 
-    <!-- Favicon & PWA Icons -->
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=4">
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}?v=4">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}?v=4">
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('images/logo.png') }}?v=4">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('images/logo.png') }}?v=4">
-    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('images/logo.png') }}?v=4">
-    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}?v=4">
+    <!-- Favicon & PWA Icons (Strictly logo.png) -->
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=5">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}?v=5">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}?v=5">
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

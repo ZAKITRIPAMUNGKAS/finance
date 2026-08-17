@@ -6,8 +6,8 @@
     <title>Invoice {{ $invoice->invoice_number }} - {{ $user->name }}</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo.svg') }}">
-    <link rel="alternate icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=5">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}?v=5">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
