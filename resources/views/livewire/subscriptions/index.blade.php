@@ -279,7 +279,7 @@
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nama Layanan / Tagihan *</label>
-                        <input type="text" wire:model="name" placeholder="e.g. ChatGPT Plus / Indihome 50Mbps"
+                        <input type="text" wire:model.live.debounce.300ms="name" placeholder="e.g. ChatGPT Plus / Netflix / Indihome"
                             class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                         @error('name') <span class="text-xs text-rose-500 font-bold mt-1 block">{{ $message }}</span> @enderror
                     </div>
@@ -335,7 +335,10 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 mb-1">Pos Kategori Anggaran</label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block text-xs font-bold text-slate-700">Pos Kategori Anggaran</label>
+                                <span class="text-[9px] font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">Auto-Detect</span>
+                            </div>
                             <select wire:model="category_id"
                                 class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white cursor-pointer">
                                 <option value="">Pilih Kategori (Opsional)</option>
