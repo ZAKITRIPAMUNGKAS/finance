@@ -8,9 +8,17 @@
              step: 1,
              persona: 'employee_salary',
              activeAccounts: {
-                 bca: true,
-                 gopay: true,
-                 cash: true
+                 bca: false,
+                 mandiri: false,
+                 bri: false,
+                 bni: false,
+                 jago: false,
+                 seabank: false,
+                 gopay: false,
+                 ovo: false,
+                 dana: false,
+                 shopeepay: false,
+                 cash: false
              },
              balances: {
                  bca: '',
@@ -50,10 +58,13 @@
                  this.rawIncomeInput = num > 0 ? num.toLocaleString('id-ID') : '';
              },
 
-             // Balance input formatter
+             // Balance input formatter (automatically activates account if typed)
              formatBalance(key, e) {
                  let num = parseInt(e.target.value.replace(/\D/g, ''), 10) || 0;
                  this.balances[key] = num > 0 ? num.toLocaleString('id-ID') : '';
+                 if (num > 0) {
+                     this.activeAccounts[key] = true;
+                 }
              },
 
              // 50/30/20 Smart Formula
@@ -69,12 +80,6 @@
 
              // Navigation
              next() {
-                 if (this.step === 2) {
-                     let hasActive = Object.values(this.activeAccounts).some(Boolean);
-                     if (!hasActive) {
-                         this.activeAccounts['cash'] = true;
-                     }
-                 }
                  if (this.step < 3) {
                      this.step++;
                  }
@@ -85,17 +90,21 @@
                  }
              },
 
-             // Submit to Livewire
+             // Submit to Livewire (Only send accounts that the user explicitly activated)
              submit() {
                  this.isSubmitting = true;
                  let cleanBalances = {};
-                 for (let k in this.balances) {
-                     cleanBalances[k] = this.balances[k] ? String(this.balances[k]).replace(/\./g, '') : '0';
+                 let selectedActive = {};
+                 for (let k in this.activeAccounts) {
+                     if (this.activeAccounts[k]) {
+                         selectedActive[k] = true;
+                         cleanBalances[k] = this.balances[k] ? String(this.balances[k]).replace(/\./g, '') : '0';
+                     }
                  }
 
                  $wire.saveOnboarding({
                      persona: this.persona,
-                     activeAccounts: this.activeAccounts,
+                     activeAccounts: selectedActive,
                      accountBalances: cleanBalances,
                      monthlyIncome: String(this.monthlyIncome)
                  });
@@ -110,10 +119,10 @@
             <!-- ── PART 1: COMPACT HEADER (STABLE & FIXED TOP) ──────── -->
             <header class="px-5 py-3.5 sm:px-6 sm:py-4 border-b border-slate-100 bg-[#F8FAFC]/80 backdrop-blur-md shrink-0 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-2.5">
-                    <img src="{{ asset('storage/logo/logofinance.png') }}" 
+                    <img src="{{ asset('images/logo.svg') }}" 
                          alt="PortoFinance Logo" 
                          class="h-7 w-auto object-contain shrink-0"
-                         onerror="this.style.display='none'">
+                         onerror="this.src='{{ asset('images/logo.png') }}'">
                     <div>
                         <div class="flex items-center gap-1.5 leading-none">
                             <span class="text-sm sm:text-base font-black tracking-tight text-[#0F172A]">Porto</span>

@@ -45,40 +45,6 @@ class Register extends Component
             'onboarding_completed' => false,
         ]);
 
-        // 1. Create Clean Starter Multi-Accounts with Rp 0 Balance
-        Account::create([
-            'user_id' => $user->id,
-            'name' => 'BCA Utama',
-            'type' => 'bank',
-            'initial_balance' => 0,
-            'current_balance' => 0,
-            'color' => '#003B70',
-            'icon' => 'building-2',
-            'is_active' => true,
-        ]);
-
-        Account::create([
-            'user_id' => $user->id,
-            'name' => 'GoPay',
-            'type' => 'ewallet',
-            'initial_balance' => 0,
-            'current_balance' => 0,
-            'color' => '#00AA13',
-            'icon' => 'smartphone',
-            'is_active' => true,
-        ]);
-
-        Account::create([
-            'user_id' => $user->id,
-            'name' => 'Dompet Tunai',
-            'type' => 'cash',
-            'initial_balance' => 0,
-            'current_balance' => 0,
-            'color' => '#16A34A',
-            'icon' => 'wallet',
-            'is_active' => true,
-        ]);
-
         event(new Registered($user));
         Auth::login($user);
 

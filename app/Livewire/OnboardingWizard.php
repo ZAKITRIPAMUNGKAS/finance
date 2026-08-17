@@ -20,25 +20,21 @@ class OnboardingWizard extends Component
     // Step 1: Persona
     public string $persona = 'employee_salary';
 
-    // Step 2: Selected Accounts & Real Balances
-    public array $activeAccounts = [
-        'bca' => true,
-        'gopay' => true,
-        'cash' => true,
-    ];
+    // Step 2: Selected Accounts & Real Balances (Empty by default, only user choices will be created)
+    public array $activeAccounts = [];
 
     public array $accountBalances = [
-        'bca' => '0',
-        'mandiri' => '0',
-        'bri' => '0',
-        'bni' => '0',
-        'jago' => '0',
-        'seabank' => '0',
-        'gopay' => '0',
-        'ovo' => '0',
-        'dana' => '0',
-        'shopeepay' => '0',
-        'cash' => '0',
+        'bca' => '',
+        'mandiri' => '',
+        'bri' => '',
+        'bni' => '',
+        'jago' => '',
+        'seabank' => '',
+        'gopay' => '',
+        'ovo' => '',
+        'dana' => '',
+        'shopeepay' => '',
+        'cash' => '',
     ];
 
     public array $accountNumbers = [
@@ -84,7 +80,7 @@ class OnboardingWizard extends Component
 
     public function toggleAccount(string $key)
     {
-        if (isset($this->activeAccounts[$key])) {
+        if (isset($this->activeAccounts[$key]) && $this->activeAccounts[$key]) {
             unset($this->activeAccounts[$key]);
         } else {
             $this->activeAccounts[$key] = true;
@@ -98,12 +94,6 @@ class OnboardingWizard extends Component
 
     public function nextStep()
     {
-        if ($this->step === 2) {
-            // Ensure at least 1 account is active
-            if (empty($this->activeAccounts)) {
-                $this->activeAccounts['cash'] = true;
-            }
-        }
         $this->step++;
     }
 
@@ -154,9 +144,15 @@ class OnboardingWizard extends Component
             'cash' => ['name' => 'Dompet Tunai', 'type' => 'cash', 'color' => '#F59E0B', 'icon' => 'banknote'],
         ];
 
-        // 1. Save or Update Accounts
-        foreach ($this->activeAccounts as $key => $isActive) {
-            if (!$isActive || !isset($catalog[$key])) {
+        // Filter ONLY explicitly chosen accounts
+        $selectedKeys = collect($this->activeAccounts)
+            ->filter(fn($val) => (bool) $val)
+            ->keys()
+            ->toArray();
+
+        // 1. Save or Update ONLY Selected Accounts
+        foreach ($selectedKeys as $key) {
+            if (!isset($catalog[$key])) {
                 continue;
             }
 
@@ -185,11 +181,10 @@ class OnboardingWizard extends Component
             );
         }
 
-        // 2. Clean up inactive default accounts if they have 0 balance & no transactions
-        $selectedNames = collect($this->activeAccounts)->keys()->map(fn($k) => $catalog[$k]['name'] ?? null)->filter()->toArray();
+        // 2. Clean up any accounts that were NOT selected by the user (and have no transactions)
+        $selectedNames = collect($selectedKeys)->map(fn($k) => $catalog[$k]['name'] ?? null)->filter()->toArray();
         Account::where('user_id', $user->id)
             ->whereNotIn('name', $selectedNames)
-            ->where('current_balance', 0)
             ->doesntHave('transactions')
             ->delete();
 

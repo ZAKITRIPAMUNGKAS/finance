@@ -71,40 +71,6 @@ class GoogleController extends Controller
                 'onboarding_completed' => false,
             ]);
 
-            // Initialize Clean Starter Accounts (Rp 0 Balance)
-            Account::create([
-                'user_id' => $user->id,
-                'name' => 'BCA Utama',
-                'type' => 'bank',
-                'initial_balance' => 0,
-                'current_balance' => 0,
-                'color' => '#003B70',
-                'icon' => 'building-2',
-                'is_active' => true,
-            ]);
-
-            Account::create([
-                'user_id' => $user->id,
-                'name' => 'GoPay',
-                'type' => 'ewallet',
-                'initial_balance' => 0,
-                'current_balance' => 0,
-                'color' => '#00AA13',
-                'icon' => 'smartphone',
-                'is_active' => true,
-            ]);
-
-            Account::create([
-                'user_id' => $user->id,
-                'name' => 'Dompet Tunai',
-                'type' => 'cash',
-                'initial_balance' => 0,
-                'current_balance' => 0,
-                'color' => '#F59E0B',
-                'icon' => 'banknote',
-                'is_active' => true,
-            ]);
-
             // Initialize Budget Allocation Profile
             $budgetService->seedInitialBudgetConfiguration($user->id);
         }
