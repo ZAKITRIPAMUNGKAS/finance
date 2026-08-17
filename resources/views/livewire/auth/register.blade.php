@@ -20,28 +20,28 @@
      class="w-full flex-1 flex flex-col justify-between h-full relative anim-page-enter">
     
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  FLOATING ANIMATED ORNAMENTS (NON-INTRUSIVE POSITIONS)     -->
+    <!--  FLOATING ANIMATED ORNAMENTS (PROPERLY SPREAD OUT)         -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <div class="absolute inset-0 pointer-events-none overflow-visible -z-10 select-none" aria-hidden="true">
-        <!-- Ornament 1: Sparkles Top Left -->
-        <div class="absolute top-2 -left-3 sm:-left-6 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-12deg] anim-float-1">
+        <!-- Ornament 1: Sparkles (Top Left - Below Header) -->
+        <div class="absolute top-16 -left-2 sm:-left-8 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center gap-1 font-black font-mono text-[11px] rotate-[-12deg] anim-float-1 scale-90 sm:scale-100">
             <x-icon name="sparkles" class="w-3.5 h-3.5 text-slate-950" strokeWidth="2.5" />
             <span class="text-[9px] font-black tracking-wider">NEW</span>
         </div>
 
-        <!-- Ornament 2: Safe Shield Top Right -->
-        <div class="absolute top-2 -right-3 sm:-right-6 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[10deg] flex items-center gap-1.5 anim-float-2">
+        <!-- Ornament 2: Safe Shield (Top Right - Floating) -->
+        <div class="absolute top-20 -right-2 sm:-right-8 px-2.5 py-1 rounded-xl bg-white border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[10deg] flex items-center gap-1.5 anim-float-2 scale-90 sm:scale-100">
             <x-icon name="shield-check" class="w-3.5 h-3.5 text-emerald-600" strokeWidth="2.5" />
             <span class="text-[9px] font-black font-mono text-slate-900 tracking-wider">SAFE</span>
         </div>
 
-        <!-- Ornament 3: Checkmark Coin Bottom Left -->
-        <div class="absolute bottom-20 -left-3 sm:-left-6 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3">
+        <!-- Ornament 3: Checkmark Coin (Mid/Bottom Left) -->
+        <div class="absolute bottom-32 -left-2 sm:-left-7 w-7 h-7 rounded-full bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] flex items-center justify-center rotate-[15deg] anim-float-3 scale-90 sm:scale-100">
             <x-icon name="check" class="w-3.5 h-3.5 text-slate-950" strokeWidth="3" />
         </div>
 
-        <!-- Ornament 4: Cashless Badge Bottom Right -->
-        <div class="absolute bottom-20 -right-3 sm:-right-6 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-8deg] flex items-center gap-1 anim-float-1">
+        <!-- Ornament 4: Cashless Badge (Bottom Right - Near Footer) -->
+        <div class="absolute bottom-12 -right-2 sm:-right-7 px-2 py-0.5 rounded-lg bg-[#C6F24D] border-2 border-slate-950 shadow-[2px_2px_0px_#000] rotate-[-8deg] flex items-center gap-1 anim-float-1 scale-90 sm:scale-100">
             <x-icon name="credit-card" class="w-3 h-3 text-slate-950" strokeWidth="2.5" />
             <span class="text-[8px] font-black font-mono text-slate-900 tracking-wider">CASH</span>
         </div>
@@ -118,8 +118,8 @@
             <!-- Full Name Input -->
             <div class="space-y-1.5">
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Nama Lengkap</label>
-                <div class="relative">
-                    <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <x-icon name="user" class="w-4 h-4" strokeWidth="2" />
                     </span>
                     <input type="text" 
@@ -136,8 +136,8 @@
             <!-- Email Address Input -->
             <div class="space-y-1.5">
                 <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Email</label>
-                <div class="relative">
-                    <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                         <x-icon name="mail" class="w-4 h-4" strokeWidth="2" />
                     </span>
                     <input type="email" 
@@ -156,26 +156,22 @@
                 <!-- Create Password -->
                 <div class="space-y-1.5">
                     <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Kata Sandi</label>
-                    <div class="relative">
-                        <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
+                    <div class="relative w-full">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <x-icon name="lock" class="w-4 h-4" strokeWidth="2" />
                         </span>
                         <input :type="showPass ? 'text' : 'password'" 
                                wire:model="password" 
                                placeholder="Min. 6 karakter" 
                                autocomplete="new-password"
-                               class="w-full pl-10 pr-9 py-2.5 sm:py-3 rounded-2xl bg-white border @error('password') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                               class="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-2xl bg-white border @error('password') border-rose-400 bg-rose-50/20 @else border-slate-200 @enderror text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                         
                         <button type="button" 
                                 @click="showPass = !showPass" 
-                                class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer p-1"
                                 title="Tampilkan / Sembunyikan Kata Sandi">
-                            <template x-if="!showPass">
-                                <x-icon name="eye" class="w-3.5 h-3.5" strokeWidth="2" />
-                            </template>
-                            <template x-if="showPass">
-                                <x-icon name="eye-off" class="w-3.5 h-3.5" strokeWidth="2" />
-                            </template>
+                            <x-icon x-show="!showPass" name="eye" class="w-4 h-4" strokeWidth="2" />
+                            <x-icon x-show="showPass" x-cloak name="eye-off" class="w-4 h-4" strokeWidth="2" />
                         </button>
                     </div>
                 </div>
@@ -183,26 +179,22 @@
                 <!-- Confirm Password -->
                 <div class="space-y-1.5">
                     <label class="block text-xs font-extrabold uppercase tracking-wider text-slate-700 ml-1">Ulangi Sandi</label>
-                    <div class="relative">
-                        <span class="absolute left-3.5 top-3 sm:top-3.5 text-slate-400">
+                    <div class="relative w-full">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <x-icon name="shield-check" class="w-4 h-4" strokeWidth="2" />
                         </span>
                         <input :type="showConfirmPass ? 'text' : 'password'" 
                                wire:model="password_confirmation" 
-                               placeholder="Ulangi kata sandi" 
+                               placeholder="Ulangi sandi" 
                                autocomplete="new-password"
-                               class="w-full pl-10 pr-9 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
+                               class="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-2xl bg-white border border-slate-200 text-xs sm:text-sm font-bold text-slate-950 focus:outline-none focus:border-slate-950 focus:ring-1 focus:ring-slate-950 shadow-2xs transition-all placeholder:text-slate-400 placeholder:font-normal">
                         
                         <button type="button" 
                                 @click="showConfirmPass = !showConfirmPass" 
-                                class="absolute right-3 top-2.5 sm:top-3 text-slate-400 hover:text-slate-700 cursor-pointer p-0.5"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-700 cursor-pointer p-1"
                                 title="Tampilkan / Sembunyikan Konfirmasi Sandi">
-                            <template x-if="!showConfirmPass">
-                                <x-icon name="eye" class="w-3.5 h-3.5" strokeWidth="2" />
-                            </template>
-                            <template x-if="showConfirmPass">
-                                <x-icon name="eye-off" class="w-3.5 h-3.5" strokeWidth="2" />
-                            </template>
+                            <x-icon x-show="!showConfirmPass" name="eye" class="w-4 h-4" strokeWidth="2" />
+                            <x-icon x-show="showConfirmPass" x-cloak name="eye-off" class="w-4 h-4" strokeWidth="2" />
                         </button>
                     </div>
                 </div>
