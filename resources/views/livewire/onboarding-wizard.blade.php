@@ -803,14 +803,18 @@
                         </div>
                     </div>
 
-                    <!-- Smart Recommendation Box -->
-                    <div class="p-3.5 rounded-xl bg-[#0F172A] text-white space-y-1 shadow-sm">
-                        <div class="flex items-center gap-1.5">
-                            <x-icon name="sparkles" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2" />
-                            <h4 class="text-[10px] font-mono font-black text-[#C6F24D] uppercase tracking-wider">Rekomendasi PortoFinance</h4>
+                    <!-- Smart Recommendation Box (Solid Navy with Vibrant Lime Accents) -->
+                    <div class="p-4 rounded-2xl bg-[#0F172A] border border-slate-800 text-white space-y-2 shadow-sm" style="background-color: #0F172A; color: #FFFFFF;">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 rounded-lg bg-lime-400/20 flex items-center justify-center text-[#C6F24D] shrink-0">
+                                <x-icon name="sparkles" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.2" />
+                            </div>
+                            <h4 class="text-[11px] font-mono font-bold text-[#C6F24D] uppercase tracking-wider">
+                                Rekomendasi PortoFinance
+                            </h4>
                         </div>
-                        <p class="text-[11px] text-slate-300 leading-relaxed">
-                            Dengan pemasukan <span class="font-bold text-white font-mono" x-text="'Rp ' + Number(monthlyIncome).toLocaleString('id-ID')"></span>/bulan, sistem otomatis mengatur alokasi idealmu. Kamu bisa menyesuaikannya kapan saja.
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Dengan estimasi pemasukan <span class="font-bold font-mono text-[#C6F24D] bg-slate-800/90 px-1.5 py-0.5 rounded border border-slate-700" x-text="'Rp ' + (monthlyIncome > 0 ? Number(monthlyIncome).toLocaleString('id-ID') : '0')"></span> per bulan, sistem otomatis membagi alokasi anggaran idealmu. Kamu bisa menyesuaikannya kapan saja di menu anggaran.
                         </p>
                     </div>
 
@@ -834,14 +838,16 @@
                 <div>
                     <!-- Step 1 & 2: Lanjutkan -->
                     <button type="button" x-show="step < 3" @click="next()"
-                            class="px-5 py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-[#C6F24D] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all active:scale-95 flex items-center gap-1.5 border border-[#0F172A]">
+                            class="px-5 py-2.5 rounded-xl bg-[#0F172A] hover:bg-slate-800 text-[#C6F24D] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all active:scale-95 flex items-center gap-1.5 border border-[#0F172A]"
+                            style="background-color: #0F172A; color: #C6F24D; border-color: #0F172A;">
                         <span>Lanjutkan</span>
                         <x-icon name="arrow-right" class="w-3.5 h-3.5 text-[#C6F24D]" strokeWidth="2.2" />
                     </button>
 
                     <!-- Step 3: Mulai PortoFinance -->
                     <button type="button" x-show="step === 3" @click="submit()" :disabled="isSubmitting"
-                            class="px-6 py-2.5 rounded-xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-95 border-2 border-[#0F172A] text-[#0F172A] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all flex items-center gap-2">
+                            class="px-6 py-2.5 rounded-xl bg-[#C6F24D] hover:bg-[#B5E63B] active:scale-95 border-2 border-[#0F172A] text-[#0F172A] font-black text-xs sm:text-sm cursor-pointer shadow-sm transition-all flex items-center gap-2"
+                            style="background-color: #C6F24D; color: #0F172A; border-color: #0F172A;">
                         <span x-show="!isSubmitting" class="flex items-center gap-1.5">
                             <span>Mulai PortoFinance</span>
                             <x-icon name="arrow-right" class="w-3.5 h-3.5 text-[#0F172A]" strokeWidth="2.5" />
