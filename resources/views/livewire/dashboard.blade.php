@@ -1,4 +1,17 @@
-<div class="space-y-6">
+<div class="space-y-6" x-data="{ isReady: false }" x-init="setTimeout(() => isReady = true, 260)">
+
+    <!-- SKELETON LOADER STATE (SHOWN FIRST ON LOAD) -->
+    <div x-show="!isReady" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        <x-dashboard-skeleton />
+    </div>
+
+    <!-- ACTUAL DASHBOARD CONTENT (REVEALED SMOOTHLY) -->
+    <div x-show="isReady" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 translate-y-2 scale-[0.99]"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         class="space-y-6"
+         x-cloak>
 
     <!-- HERO SECTION: CARD & QUICK ACTIONS (Clean Modern FinTech Style) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
@@ -550,4 +563,5 @@
             };
         }
     </script>
+    </div>
 </div>
