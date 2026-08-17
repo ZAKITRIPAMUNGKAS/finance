@@ -52,48 +52,54 @@
         <!-- RIGHT: 4 CIRCULAR ACTIONS & QUICK STATS (5 COLS) -->
         <div class="lg:col-span-5 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm flex flex-col justify-between space-y-5">
             <div>
-                <span class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-3">Aksi Cepat</span>
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-slate-400">Aksi Cepat Finansial</span>
+                    <span class="text-[10px] font-mono font-bold text-slate-400">1-Click Fast Action</span>
+                </div>
                 
-                <!-- 5 Quick Action Buttons (including Voice) -->
-                <div class="grid grid-cols-5 gap-1 sm:gap-2 text-center">
-                    <button wire:click="$dispatch('open-quick-voice')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
-                        <div class="w-11 sm:w-13 h-11 sm:h-13 rounded-2xl bg-rose-50 group-hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all shadow-sm group-hover:scale-105">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 sm:w-6 h-5 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                                <line x1="12" y1="19" x2="12" y2="22"/>
-                            </svg>
-                        </div>
-                        <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-800 group-hover:text-rose-600">Voice</span>
-                    </button>
-
-                    <button wire:click="$dispatch('open-quick-expense')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
-                        <div class="w-11 sm:w-13 h-11 sm:h-13 rounded-2xl bg-slate-100 group-hover:bg-slate-200 text-slate-800 flex items-center justify-center transition-colors shadow-sm">
-                            <x-icon name="arrow-up-right" class="w-5 sm:w-6 h-5 sm:h-6" />
-                        </div>
-                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-slate-950">Expense</span>
-                    </button>
-
+                <!-- 5 Quick Action Buttons aligned with System Ecosystem -->
+                <div class="grid grid-cols-5 gap-1.5 sm:gap-2.5 text-center">
+                    
+                    <!-- 1. Income (Featured) -->
                     <button wire:click="$dispatch('open-quick-income')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
-                        <div class="w-11 sm:w-13 h-11 sm:h-13 rounded-2xl bg-[#C6F24D] text-slate-950 flex items-center justify-center transition-transform group-hover:scale-105 shadow-sm">
-                            <x-icon name="arrow-down-left" class="w-5 sm:w-6 h-5 sm:h-6" strokeWidth="2.5" />
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-[#C6F24D] hover:bg-[#B5E63B] text-slate-950 flex items-center justify-center transition-all shadow-xs group-hover:scale-105">
+                            <x-icon name="arrow-down-left" class="w-5 h-5 text-slate-950" strokeWidth="2.5" />
                         </div>
-                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-900">Income</span>
+                        <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-950 group-hover:text-black truncate w-full">Income</span>
                     </button>
 
+                    <!-- 2. Expense -->
+                    <button wire:click="$dispatch('open-quick-expense')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-slate-100 group-hover:bg-rose-50 text-slate-700 group-hover:text-rose-600 flex items-center justify-center transition-all shadow-2xs group-hover:scale-105">
+                            <x-icon name="arrow-up-right" class="w-5 h-5" strokeWidth="2.2" />
+                        </div>
+                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-rose-600 truncate w-full">Expense</span>
+                    </button>
+
+                    <!-- 3. Transfer -->
                     <button wire:click="$dispatch('open-quick-transfer')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
-                        <div class="w-11 sm:w-13 h-11 sm:h-13 rounded-2xl bg-slate-100 group-hover:bg-indigo-50 text-slate-800 group-hover:text-indigo-600 flex items-center justify-center transition-colors shadow-sm">
-                            <x-icon name="arrow-right-left" class="w-5 sm:w-6 h-5 sm:h-6" />
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-slate-100 group-hover:bg-blue-50 text-slate-700 group-hover:text-blue-600 flex items-center justify-center transition-all shadow-2xs group-hover:scale-105">
+                            <x-icon name="arrow-right-left" class="w-5 h-5" strokeWidth="2.2" />
                         </div>
-                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-slate-950">Transfer</span>
+                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-blue-600 truncate w-full">Transfer</span>
                     </button>
 
-                    <a href="{{ route('wishlists') }}" class="flex flex-col items-center gap-1.5 group active-tap">
-                        <div class="w-11 sm:w-13 h-11 sm:h-13 rounded-2xl bg-slate-100 group-hover:bg-lime-50 text-slate-800 group-hover:text-slate-950 flex items-center justify-center transition-colors shadow-sm">
-                            <x-icon name="shopping-bag" class="w-5 sm:w-6 h-5 sm:h-6" />
+                    <!-- 4. Voice AI -->
+                    <button wire:click="$dispatch('open-quick-voice')" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-rose-50 group-hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all shadow-2xs group-hover:scale-105">
+                            <x-icon name="mic" class="w-5 h-5 text-rose-600" strokeWidth="2.2" />
                         </div>
-                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-slate-950">Wishlist</span>
+                        <span class="text-[10px] sm:text-[11px] font-bold text-slate-700 group-hover:text-rose-600 truncate w-full">Voice AI</span>
+                    </button>
+
+                    <!-- 5. AI Copilot -->
+                    <a href="{{ route('ai-copilot') }}" class="flex flex-col items-center gap-1.5 group cursor-pointer active-tap">
+                        <div class="w-11 sm:w-12 h-11 sm:h-12 rounded-2xl bg-slate-950 group-hover:bg-slate-800 text-[#C6F24D] flex items-center justify-center transition-all shadow-xs group-hover:scale-105">
+                            <x-icon name="sparkles" class="w-5 h-5 text-[#C6F24D]" strokeWidth="2.2" />
+                        </div>
+                        <span class="text-[10px] sm:text-[11px] font-extrabold text-slate-900 group-hover:text-slate-950 truncate w-full">AI Copilot</span>
                     </a>
+
                 </div>
             </div>
 
