@@ -99,4 +99,40 @@ class AdminPanelAndSubscriptionTiersTest extends TestCase
         $bannedAccess = $this->actingAs($targetUser)->get('/dashboard');
         $bannedAccess->assertRedirect('/login');
     }
+
+    public function test_admin_can_set_user_financial_persona(): void
+    {
+        $admin = User::factory()->create([
+            'role' => 'admin',
+            'subscription_tier' => 'lifetime',
+            'email_verified_at' => now(),
+        ]);
+
+        $targetUser = User::factory()->create([
+            'role' => 'user',
+            'financial_persona' => 'freelancer',
+            'email_verified_at' => now(),
+        ]);
+
+        $this->actingAs($admin);
+
+        Livewire::test(\App\Livewire\Admin\Users\Index::class)
+            ->call('setPersonaDirect', $targetUser->id, 'student', app(\App\Services\BudgetAllocationService::class))
+            ->assertHasNoErrors();
+
+        $targetUser->refresh();
+        $this->assertEquals('student', $targetUser->financial_persona);
+        $this->assertTrue($targetUser->isStudent());
+
+        // Test editing persona via modal
+        Livewire::test(\App\Livewire\Admin\Users\Index::class)
+            ->call('openEditModal', $targetUser->id)
+            ->set('editPersona', 'merchant')
+            ->call('saveUserChanges', app(\App\Services\BudgetAllocationService::class))
+            ->assertHasNoErrors();
+
+        $targetUser->refresh();
+        $this->assertEquals('merchant', $targetUser->financial_persona);
+        $this->assertTrue($targetUser->isMerchant());
+    }
 }

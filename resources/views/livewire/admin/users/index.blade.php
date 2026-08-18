@@ -47,10 +47,10 @@
     <div class="bg-white border border-slate-200/80 rounded-3xl p-4 sm:p-6 shadow-xs space-y-5">
         
         <!-- SEARCH & FILTER BAR -->
-        <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between pb-2 border-b border-slate-100">
+        <div class="flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between pb-3 border-b border-slate-100">
             
             <!-- Search Input -->
-            <div class="relative w-full lg:w-80">
+            <div class="relative w-full lg:w-72">
                 <input type="text" 
                        wire:model.live.debounce.300ms="search" 
                        placeholder="Cari nama atau email pengguna..." 
@@ -66,10 +66,10 @@
             </div>
 
             <!-- Tier Filter Pills -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 scrollbar-none w-full lg:w-auto -mx-1 px-1" style="-webkit-overflow-scrolling: touch;">
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0 scrollbar-none w-full lg:w-auto -mx-1 px-1" style="-webkit-overflow-scrolling: touch;">
                 <button type="button" wire:click="$set('filterTier', 'all')" 
                         class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shrink-0 cursor-pointer {{ $filterTier === 'all' ? 'bg-slate-950 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
-                    Semua
+                    Semua Paket
                 </button>
                 <button type="button" wire:click="$set('filterTier', 'pro')" 
                         class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition-all shrink-0 cursor-pointer {{ $filterTier === 'pro' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' }}">
@@ -98,12 +98,42 @@
             </div>
         </div>
 
+        <!-- PERSONA FILTER PILLS -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none w-full -mx-1 px-1 text-xs" style="-webkit-overflow-scrolling: touch;">
+            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 shrink-0 mr-1">Filter Profesi:</span>
+            <button type="button" wire:click="$set('filterPersona', 'all')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'all' ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}">
+                Semua
+            </button>
+            <button type="button" wire:click="$set('filterPersona', 'student')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'student' ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-800 hover:bg-emerald-100' }}">
+                🎓 Pelajar & Mahasiswa
+            </button>
+            <button type="button" wire:click="$set('filterPersona', 'employee')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'employee' ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-800 hover:bg-blue-100' }}">
+                💼 Karyawan & Kantoran
+            </button>
+            <button type="button" wire:click="$set('filterPersona', 'merchant')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'merchant' ? 'bg-amber-600 text-white' : 'bg-amber-50 text-amber-800 hover:bg-amber-100' }}">
+                🏪 Pedagang & UMKM
+            </button>
+            <button type="button" wire:click="$set('filterPersona', 'freelancer')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'freelancer' ? 'bg-purple-600 text-white' : 'bg-purple-50 text-purple-800 hover:bg-purple-100' }}">
+                ⚡ Freelancer & Kreator
+            </button>
+            <button type="button" wire:click="$set('filterPersona', 'all_in_one')" 
+                    class="px-2.5 py-1 rounded-lg text-xs font-bold transition-all shrink-0 cursor-pointer {{ $filterPersona === 'all_in_one' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+                🌟 All-in-One
+            </button>
+        </div>
+
         <!-- DESKTOP TABLE VIEW (md:block) -->
         <div class="hidden md:block overflow-x-auto rounded-2xl border border-slate-200/70">
             <table class="w-full text-left text-xs">
                 <thead>
                     <tr class="bg-slate-50/80 text-[10px] font-mono font-bold uppercase text-slate-500 border-b border-slate-200/70">
                         <th class="py-3.5 px-4 font-black">Pengguna</th>
+                        <th class="py-3.5 px-3 font-black">Profesi</th>
                         <th class="py-3.5 px-3 font-black">Role</th>
                         <th class="py-3.5 px-3 font-black">Paket / Status</th>
                         <th class="py-3.5 px-3 font-black">Aktivitas Data</th>
@@ -131,6 +161,36 @@
                                     <div class="text-[11px] font-mono text-slate-400 truncate">{{ $user->email }}</div>
                                 </div>
                             </div>
+                        </td>
+
+                        <!-- Persona / Profesi -->
+                        <td class="py-3.5 px-3">
+                            @if($user->isStudent())
+                                <span class="px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-800 font-extrabold text-[11px] inline-flex items-center gap-1 border border-emerald-200">
+                                    <x-icon name="graduation-cap" class="w-3 h-3 text-emerald-700" />
+                                    <span>Pelajar</span>
+                                </span>
+                            @elseif($user->isEmployee())
+                                <span class="px-2.5 py-1 rounded-xl bg-blue-50 text-blue-800 font-extrabold text-[11px] inline-flex items-center gap-1 border border-blue-200">
+                                    <x-icon name="briefcase" class="w-3 h-3 text-blue-700" />
+                                    <span>Karyawan</span>
+                                </span>
+                            @elseif($user->isMerchant())
+                                <span class="px-2.5 py-1 rounded-xl bg-amber-50 text-amber-800 font-extrabold text-[11px] inline-flex items-center gap-1 border border-amber-200">
+                                    <x-icon name="shopping-bag" class="w-3 h-3 text-amber-700" />
+                                    <span>Pedagang</span>
+                                </span>
+                            @elseif($user->financial_persona === 'all')
+                                <span class="px-2.5 py-1 rounded-xl bg-slate-100 text-slate-800 font-extrabold text-[11px] inline-flex items-center gap-1 border border-slate-200">
+                                    <x-icon name="star" class="w-3 h-3 text-amber-500" />
+                                    <span>All-in-One</span>
+                                </span>
+                            @else
+                                <span class="px-2.5 py-1 rounded-xl bg-purple-50 text-purple-800 font-extrabold text-[11px] inline-flex items-center gap-1 border border-purple-200">
+                                    <x-icon name="laptop" class="w-3 h-3 text-purple-700" />
+                                    <span>Freelancer</span>
+                                </span>
+                            @endif
                         </td>
 
                         <!-- Role -->
@@ -208,7 +268,7 @@
                                         wire:click="openEditModal({{ $user->id }})" 
                                         class="px-3 py-1.5 rounded-xl bg-slate-950 text-white hover:bg-slate-800 text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer active-tap">
                                     <x-icon name="edit-3" class="w-3.5 h-3.5" />
-                                    <span>Ubah Paket</span>
+                                    <span>Ubah Paket & Role</span>
                                 </button>
 
                                 <!-- Impersonate / Login As -->
@@ -237,7 +297,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="py-12 text-center text-slate-400 text-xs font-medium">
+                        <td colspan="7" class="py-12 text-center text-slate-400 text-xs font-medium">
                             <div class="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center mx-auto mb-2 text-slate-400">
                                 <x-icon name="search" class="w-6 h-6" />
                             </div>
@@ -265,7 +325,7 @@
                     </div>
                 </div>
 
-                <!-- Card Badges: Role, Tier, Status (Clean Row) -->
+                <!-- Card Badges: Role, Persona, Tier, Status (Clean Row) -->
                 <div class="flex items-center gap-1.5 flex-wrap">
                     @if($user->isAdmin())
                         <span class="px-2 py-0.5 rounded-lg bg-slate-950 text-[#C6F24D] text-[10px] font-mono font-black border border-slate-800 inline-flex items-center gap-1">
@@ -276,24 +336,39 @@
                         <span class="px-2 py-0.5 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-mono font-bold">USER</span>
                     @endif
 
+                    <!-- Persona Badge Mobile -->
+                    @if($user->isStudent())
+                        <span class="px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 text-[10px] font-bold">🎓 Pelajar</span>
+                    @elseif($user->isEmployee())
+                        <span class="px-2 py-0.5 rounded-lg bg-blue-100 text-blue-800 text-[10px] font-bold">💼 Karyawan</span>
+                    @elseif($user->isMerchant())
+                        <span class="px-2 py-0.5 rounded-lg bg-amber-100 text-amber-800 text-[10px] font-bold">🏪 Pedagang</span>
+                    @elseif($user->financial_persona === 'all')
+                        <span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-800 text-[10px] font-bold">🌟 All-in-One</span>
+                    @else
+                        <span class="px-2 py-0.5 rounded-lg bg-purple-100 text-purple-800 text-[10px] font-bold">⚡ Freelancer</span>
+                    @endif
+
                     @if($user->isLifetime())
                         <span class="px-2.5 py-0.5 rounded-lg bg-purple-100 text-purple-900 font-extrabold text-[11px] inline-flex items-center gap-1">
-                            👑 Lifetime VIP
+                            <x-icon name="crown" class="w-3 h-3 text-purple-700" />
+                            <span>Lifetime</span>
                         </span>
                     @elseif($user->subscription_tier === 'pro' && ($user->subscription_ends_at === null || $user->subscription_ends_at->isFuture()))
                         <span class="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-900 font-extrabold text-[11px] inline-flex items-center gap-1">
-                            ⭐ PRO Member
+                            <x-icon name="award" class="w-3 h-3 text-emerald-700" />
+                            <span>PRO</span>
                         </span>
                     @elseif($user->isTrial())
-                        <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[11px] inline-flex items-center gap-1">
-                            🎁 Trial ({{ $user->remaining_trial_days }}h)
+                        <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-900 font-extrabold text-[11px]">
+                            Trial ({{ $user->remaining_trial_days }}h)
                         </span>
                     @else
-                        <span class="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 font-bold text-[11px]">Free Starter</span>
+                        <span class="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-700 text-[10px] font-mono font-bold">Free</span>
                     @endif
 
                     @if($user->is_banned)
-                        <span class="px-2 py-0.5 rounded-lg bg-rose-100 text-rose-700 text-[10px] font-mono font-black">BANNED</span>
+                        <span class="px-2 py-0.5 rounded-lg bg-rose-600 text-white text-[10px] font-mono font-black">BANNED</span>
                     @endif
                 </div>
 
@@ -314,7 +389,7 @@
                             wire:click="openEditModal({{ $user->id }})" 
                             class="flex-1 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white text-xs font-black flex items-center justify-center gap-1.5 cursor-pointer active-tap shadow-xs">
                         <x-icon name="edit-3" class="w-3.5 h-3.5" />
-                        <span>Ubah Paket</span>
+                        <span>Ubah Paket & Role</span>
                     </button>
 
                     @if($user->id !== auth()->id())
@@ -370,7 +445,7 @@
                 <!-- 1. Subscription Tier -->
                 <div class="space-y-1.5">
                     <label class="text-xs font-bold text-slate-700">Tingkatan Paket (Tier)</label>
-                    <select wire:model.live="editTier" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950">
+                    <select wire:model.live="editTier" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
                         <option value="trial">🎁 Free Trial (Masa Percobaan)</option>
                         <option value="free">🌱 Free Starter (Paket Gratis Terbatas)</option>
                         <option value="pro">⭐ PRO Member (Langganan Berbayar)</option>
@@ -378,7 +453,19 @@
                     </select>
                 </div>
 
-                <!-- 2. Extend Days (If Pro or Trial) -->
+                <!-- 2. Financial Persona Selection -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-700">Profil & Alat Profesi (Financial Persona)</label>
+                    <select wire:model="editPersona" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
+                        <option value="student">🎓 Pelajar & Mahasiswa (Batas Jajan Harian & Split Bill)</option>
+                        <option value="employee">💼 Karyawan & Kantoran (Alokasi 50/30/20 & Langganan)</option>
+                        <option value="merchant">🏪 Pedagang & UMKM (Kas Toko & Kalkulator Margin)</option>
+                        <option value="freelancer">⚡ Freelancer & Kreator (Proyek, DP & Invoice WA)</option>
+                        <option value="all">🌟 All-in-One (Semua Fitur Aktif)</option>
+                    </select>
+                </div>
+
+                <!-- 3. Extend Days (If Pro or Trial) -->
                 @if(in_array($editTier, ['pro', 'trial']))
                 <div class="space-y-1.5">
                     <label class="text-xs font-bold text-slate-700">Durasi Masa Aktif</label>
@@ -391,16 +478,16 @@
                 </div>
                 @endif
 
-                <!-- 3. Role Selection -->
+                <!-- 4. Role Selection -->
                 <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-slate-700">Peran Sistem (Role)</label>
-                    <select wire:model="editRole" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950">
+                    <label class="text-xs font-bold text-slate-700">Hak Akses Sistem (System Role)</label>
+                    <select wire:model="editRole" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:border-slate-950 cursor-pointer">
                         <option value="user">User Biasa</option>
                         <option value="admin">Superadministrator (Akses Penuh Panel Admin)</option>
                     </select>
                 </div>
 
-                <!-- 4. Ban / Suspend Toggle -->
+                <!-- 5. Ban / Suspend Toggle -->
                 @if(strtolower($editEmail) !== 'zakitripamungkas03@gmail.com')
                 <div class="pt-2 border-t border-slate-100 space-y-2">
                     <label class="flex items-center gap-2 cursor-pointer">

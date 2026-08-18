@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Users;
 
 use App\Models\User;
+use App\Services\BudgetAllocationService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -15,13 +16,15 @@ class Index extends Component
 
     public string $search = '';
     public string $filterTier = 'all'; // all, trial, free, pro, lifetime, banned, admin
+    public string $filterPersona = 'all'; // all, student, employee, merchant, freelancer, all_in_one
 
-    // Modal state for changing user tier / details
+    // Modal state for changing user tier / details / persona
     public bool $showEditModal = false;
     public ?int $selectedUserId = null;
     public string $editName = '';
     public string $editEmail = '';
     public string $editRole = 'user';
+    public string $editPersona = 'freelancer';
     public string $editTier = 'trial';
     public ?int $extendDays = 30;
     public bool $editIsBanned = false;
@@ -30,6 +33,7 @@ class Index extends Component
     protected $queryString = [
         'search' => ['except' => ''],
         'filterTier' => ['except' => 'all'],
+        'filterPersona' => ['except' => 'all'],
     ];
 
     public function updatingSearch()
@@ -42,6 +46,11 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function updatingFilterPersona()
+    {
+        $this->resetPage();
+    }
+
     public function openEditModal(int $userId)
     {
         $user = User::findOrFail($userId);
@@ -49,6 +58,7 @@ class Index extends Component
         $this->editName = $user->name;
         $this->editEmail = $user->email;
         $this->editRole = $user->role;
+        $this->editPersona = $user->financial_persona ?? 'freelancer';
         $this->editTier = $user->subscription_tier;
         $this->editIsBanned = (bool) $user->is_banned;
         $this->editBannedReason = $user->banned_reason ?? '';
@@ -59,10 +69,10 @@ class Index extends Component
     public function closeEditModal()
     {
         $this->showEditModal = false;
-        $this->reset(['selectedUserId', 'editName', 'editEmail', 'editRole', 'editTier', 'editIsBanned', 'editBannedReason', 'extendDays']);
+        $this->reset(['selectedUserId', 'editName', 'editEmail', 'editRole', 'editPersona', 'editTier', 'editIsBanned', 'editBannedReason', 'extendDays']);
     }
 
-    public function saveUserChanges()
+    public function saveUserChanges(BudgetAllocationService $budgetService)
     {
         if (!$this->selectedUserId) return;
 
@@ -74,7 +84,10 @@ class Index extends Component
             return;
         }
 
+        $oldPersona = $user->financial_persona;
+
         $user->role = $this->editRole;
+        $user->financial_persona = $this->editPersona;
         $user->subscription_tier = $this->editTier;
         $user->is_banned = $this->editIsBanned;
         $user->banned_reason = $this->editIsBanned ? ($this->editBannedReason ?: 'Pelanggaran ketentuan penggunaan.') : null;
@@ -93,8 +106,32 @@ class Index extends Component
 
         $user->save();
 
+        if ($oldPersona !== $this->editPersona) {
+            $budgetService->applyPersonaPreset($user->id, $this->editPersona);
+        }
+
         $this->closeEditModal();
-        session()->flash('success', "Data paket dan status pengguna {$user->name} berhasil diperbarui.");
+        session()->flash('success', "Data peran, paket, dan profil profesi {$user->name} berhasil diperbarui.");
+    }
+
+    public function setPersonaDirect(int $userId, string $persona, BudgetAllocationService $budgetService)
+    {
+        $user = User::findOrFail($userId);
+        $user->financial_persona = $persona;
+        $user->save();
+
+        $budgetService->applyPersonaPreset($user->id, $persona);
+
+        $labels = [
+            'student' => 'Pelajar & Mahasiswa',
+            'employee' => 'Karyawan & Kantoran',
+            'merchant' => 'Pedagang & UMKM',
+            'freelancer' => 'Freelancer & Kreator',
+            'all' => 'All-in-One',
+        ];
+        $label = $labels[$persona] ?? ucfirst($persona);
+
+        session()->flash('success', "Profil profesi {$user->name} berhasil diubah ke {$label}.");
     }
 
     public function setTierDirect(int $userId, string $tier, ?int $days = null)
@@ -161,6 +198,10 @@ class Index extends Component
                 $q->where('name', 'like', '%' . trim($this->search) . '%')
                   ->orWhere('email', 'like', '%' . trim($this->search) . '%');
             });
+        }
+
+        if ($this->filterPersona !== 'all') {
+            $query->where('financial_persona', $this->filterPersona);
         }
 
         if ($this->filterTier === 'pro') {
