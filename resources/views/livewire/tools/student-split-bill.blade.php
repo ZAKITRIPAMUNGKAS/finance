@@ -60,16 +60,69 @@
                     </div>
 
                     <!-- Highlight Card Result -->
-                    <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-center justify-between">
+                    <div class="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between shadow-xs">
                         <div>
-                            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-800 block">Bagian per Orang:</span>
-                            <span class="text-xl sm:text-2xl font-black font-mono text-emerald-950 block mt-0.5">
+                            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">Bagian per Orang:</span>
+                            <span class="text-xl sm:text-2xl font-black font-mono text-[#C6F24D] block mt-0.5">
                                 Rp {{ number_format($this->perPersonAmount, 0, ',', '.') }}
                             </span>
                         </div>
                         <div class="text-right">
-                            <span class="text-[10px] font-medium text-emerald-700 block">Total {{ $totalPeople }} Orang</span>
-                            <span class="text-[11px] font-bold text-emerald-900">Rata & Adil ✨</span>
+                            <span class="text-[10px] font-medium text-slate-400 block">Total {{ $totalPeople }} Orang</span>
+                            <span class="text-[11px] font-bold text-emerald-400">Rata & Adil ✨</span>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════════════════ -->
+                    <!--  ANTI-CANGGUNG WA CHAT GENERATOR & TONE SELECTOR        -->
+                    <!-- ═══════════════════════════════════════════════════════ -->
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                        <div>
+                            <label class="block text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                💬 Pilih Gaya Pesan WhatsApp (Anti-Canggung / Gak Enakan):
+                            </label>
+                            <div class="grid grid-cols-3 gap-1.5">
+                                <button type="button" wire:click="$set('tone', 'friendly')" 
+                                    class="p-2 rounded-xl text-left border text-xs font-bold transition-all cursor-pointer {{ $tone === 'friendly' ? 'bg-slate-950 text-[#C6F24D] border-slate-950 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100' }}">
+                                    <div class="text-sm mb-0.5">😆</div>
+                                    <div class="leading-tight text-[11px]">Santai & Akrab</div>
+                                    <div class="text-[9px] font-normal text-slate-400 mt-0.5">Biar gak boncos</div>
+                                </button>
+                                <button type="button" wire:click="$set('tone', 'recap')" 
+                                    class="p-2 rounded-xl text-left border text-xs font-bold transition-all cursor-pointer {{ $tone === 'recap' ? 'bg-slate-950 text-[#C6F24D] border-slate-950 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100' }}">
+                                    <div class="text-sm mb-0.5">📊</div>
+                                    <div class="leading-tight text-[11px]">Rapih Catatan</div>
+                                    <div class="text-[9px] font-normal text-slate-400 mt-0.5">Alasan rekap bulanan</div>
+                                </button>
+                                <button type="button" wire:click="$set('tone', 'talang')" 
+                                    class="p-2 rounded-xl text-left border text-xs font-bold transition-all cursor-pointer {{ $tone === 'talang' ? 'bg-slate-950 text-[#C6F24D] border-slate-950 shadow-xs' : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100' }}">
+                                    <div class="text-sm mb-0.5">🧾</div>
+                                    <div class="leading-tight text-[11px]">Talang Kasir</div>
+                                    <div class="text-[9px] font-normal text-slate-400 mt-0.5">Bon udah ditalangi</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 mb-1">Rekening / E-Wallet Tujuan (Opsional Disertakan di Chat):</label>
+                            <input type="text" wire:model.live.debounce.300ms="accountInfo" placeholder="e.g. BCA 8210984123 (a.n Zaki) / GoPay 08123456789" 
+                                class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium text-slate-900 focus:ring-2 focus:ring-slate-950">
+                        </div>
+
+                        <!-- Live Message Preview Box -->
+                        <div class="pt-1">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-500">Preview Pesan Ramah:</span>
+                                <button type="button" 
+                                    x-data="{ copied: false }" 
+                                    @click="navigator.clipboard.writeText($wire.previewMessage); copied = true; setTimeout(() => copied = false, 2000)"
+                                    class="text-[10px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1 cursor-pointer">
+                                    <span x-text="copied ? 'Tersalin! ✓' : 'Salin Teks 📋'"></span>
+                                </button>
+                            </div>
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs text-slate-700 whitespace-pre-line font-sans leading-relaxed text-[11px]">
+                                {{ $this->previewMessage }}
+                            </div>
                         </div>
                     </div>
 
@@ -96,7 +149,7 @@
                                     @else
                                         <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-extrabold">Belum</span>
                                         <a href="https://wa.me/?text={{ $this->getWhatsAppShareText($m['name']) }}" target="_blank" class="px-2.5 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold flex items-center gap-1 transition-all shadow-2xs">
-                                            <span>WA</span>
+                                            <span>Kirim WA</span>
                                             <x-icon name="send" class="w-3 h-3" />
                                         </a>
                                     @endif

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Tools;
 
+use App\Models\Account;
 use Livewire\Component;
 
 class StudentSplitBill extends Component
@@ -11,6 +12,8 @@ class StudentSplitBill extends Component
     public string $totalAmount = '120000';
     public int $totalPeople = 4;
     public string $taxPercentage = '0';
+    public string $tone = 'friendly'; // friendly, recap, talang
+    public string $accountInfo = '';
     public array $members = [];
 
     protected $listeners = [
@@ -22,6 +25,15 @@ class StudentSplitBill extends Component
         $this->isOpen = true;
         if (empty($this->members)) {
             $this->initMembers();
+        }
+
+        if (empty($this->accountInfo) && auth()->check()) {
+            $primaryAcc = Account::where('user_id', auth()->id())
+                ->where('is_active', true)
+                ->first();
+            if ($primaryAcc) {
+                $this->accountInfo = "{$primaryAcc->name} " . ($primaryAcc->account_number ?: '');
+            }
         }
     }
 
@@ -63,8 +75,25 @@ class StudentSplitBill extends Component
     public function getWhatsAppShareText(string $memberName): string
     {
         $nominal = number_format($this->perPersonAmount, 0, ',', '.');
-        $text = "Halo {$memberName}! 👋\n\nIni rincian patungan *{$this->billName}*:\n💰 Nominal kamu: *Rp {$nominal}*\n\nBisa langsung transfer/kirim e-wallet ya. Terima kasih banyak! ✨";
+        $accText = !empty(trim($this->accountInfo)) ? "\n💳 Kirim ke: *" . trim($this->accountInfo) . "*" : "";
+
+        if ($this->tone === 'recap') {
+            // Nada 2: Alasan lagi rapihin pencatatan keuangan (sangat sopan & formal-santai)
+            $text = "Hai {$memberName}! 👋\n\nNiatnya mau sekalian rapihin catatan pengeluaran, ini rincian patungan kita pas *{$this->billName}* yaa:\n💰 Bagianmu: *Rp {$nominal}*{$accText}\n\nNanti kalau lagi senggang boleh langsung transfer/e-wallet yaa biar sama-sama enak & rapi. Makasih banyak yaa! 😊✨";
+        } elseif ($this->tone === 'talang') {
+            // Nada 3: Alasan sudah ditalangi di kasir (natural & to the point)
+            $text = "Halo {$memberName}! 🙏\n\nTadi tagihan *{$this->billName}* udah kutalangi lunas duluan di kasir yaa. Ini rincian per orangnya:\n💰 Bagianmu: *Rp {$nominal}*{$accText}\n\nPas sempat nanti bisa langsung kirim/ganti ke rekening di atas yaa biar pas. Makasih banyak udah seru-seruan bareng! 🙌✨";
+        } else {
+            // Nada 1 (Default): Super Friendly, Akrab, & Santai (Anti-Gak Enakan)
+            $text = "Halo {$memberName}! ✨\n\nSeru banget tadi pas *{$this->billName}*! Btw mau ngabarin rincian patungan kita tadi, bagianmu *Rp {$nominal}* yaa.{$accText}\n\nKalo lagi senggang boleh dioper santai yaa biar dompetku gak boncos hehe 😆. Makasih banyak yaa! 🙏💫";
+        }
+
         return urlencode($text);
+    }
+
+    public function getPreviewMessageProperty(): string
+    {
+        return urldecode($this->getWhatsAppShareText('Budi'));
     }
 
     public function render()
