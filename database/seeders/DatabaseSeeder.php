@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         // 2. Create Starter Multi-Accounts with Rp 0 Balance (Real clean slate)
         Account::create([
             'user_id' => $user->id,
-            'name' => 'BCA Utama',
+            'name' => 'BCA',
             'type' => 'bank',
             'account_number' => '8210984123',
             'current_balance' => 0,

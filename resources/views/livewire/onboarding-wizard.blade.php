@@ -334,7 +334,7 @@
                                 <div class="flex items-center gap-2.5">
                                     <x-account-logo name="BCA" type="bank" />
                                     <div>
-                                        <h4 class="text-xs font-bold text-[#0F172A]">BCA Utama</h4>
+                                        <h4 class="text-xs font-bold text-[#0F172A]">BCA</h4>
                                         <span class="text-[10px] text-slate-400">Bank Transfer</span>
                                     </div>
                                 </div>

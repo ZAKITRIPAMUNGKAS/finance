@@ -30,7 +30,7 @@ class ReceiptScannerTest extends TestCase
         // Seed accounts & categories
         $this->bca = Account::create([
             'user_id' => $this->user->id,
-            'name' => 'BCA Utama',
+            'name' => 'BCA',
             'type' => 'bank',
             'account_number' => '1234567890',
             'current_balance' => 10000000,

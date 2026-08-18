@@ -131,7 +131,7 @@ class OnboardingWizard extends Component
 
         // Account Catalog definitions with official names & types
         $catalog = [
-            'bca' => ['name' => 'BCA Utama', 'type' => 'bank', 'color' => '#003B70', 'icon' => 'building-2'],
+            'bca' => ['name' => 'BCA', 'type' => 'bank', 'color' => '#003B70', 'icon' => 'building-2'],
             'mandiri' => ['name' => 'Bank Mandiri', 'type' => 'bank', 'color' => '#002D62', 'icon' => 'landmark'],
             'bri' => ['name' => 'Bank BRI', 'type' => 'bank', 'color' => '#00529C', 'icon' => 'building-2'],
             'bni' => ['name' => 'Bank BNI', 'type' => 'bank', 'color' => '#F15A24', 'icon' => 'landmark'],

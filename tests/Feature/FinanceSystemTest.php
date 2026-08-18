@@ -38,7 +38,7 @@ class FinanceSystemTest extends TestCase
     public function test_transaction_observer_adjusts_account_balance_correctly()
     {
         $accountA = Account::create([
-            'name' => 'BCA Utama',
+            'name' => 'BCA',
             'type' => 'bank',
             'initial_balance' => 5000000,
             'current_balance' => 5000000,
