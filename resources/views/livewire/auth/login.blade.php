@@ -6,58 +6,64 @@
      class="w-full flex-1 flex flex-col justify-between h-full relative">
 
     <!-- ═══════════════════════════════════════════════════════════ -->
-    <!--  UNIFIED THEME FULLSCREEN LOADING OVERLAY (PORTOFINANCE)    -->
+    <!--  CLEAN WHITE & LIME/GREEN THEME FULLSCREEN LOADING OVERLAY   -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <!-- 1. Form Submission Loading -->
     <div wire:loading.flex 
          wire:target="login"
          style="display: none;"
-         class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex-col items-center justify-center p-6 text-center select-none">
+         class="fixed inset-0 z-50 bg-white/95 backdrop-blur-md flex-col items-center justify-center p-6 text-center select-none">
         
         <div class="relative z-10 max-w-sm w-full space-y-4 flex flex-col items-center">
-            <img src="{{ asset('images/logo.svg') }}" 
-                 style="width: 52px; height: 52px; max-width: 52px; max-height: 52px;" 
-                 class="object-contain animate-pulse drop-shadow-xl shrink-0" 
-                 alt="PortoFinance Logo">
+            <div class="relative flex items-center justify-center" style="width: 80px; height: 80px;">
+                <div class="absolute inset-0 rounded-full bg-[#C6F24D]/40 blur-xl"></div>
+                <img src="{{ asset('images/logo.svg') }}" 
+                     style="width: 56px; height: 56px; max-width: 56px; max-height: 56px;" 
+                     class="object-contain animate-pulse drop-shadow-sm shrink-0 relative" 
+                     alt="PortoFinance Logo">
+            </div>
 
             <div class="space-y-1 text-center">
-                <h3 class="text-lg font-black text-white tracking-tight">
+                <h3 class="text-lg font-black text-slate-950 tracking-tight">
                     Memverifikasi Akun...
                 </h3>
-                <p class="text-xs text-slate-300">
+                <p class="text-xs text-slate-500 font-medium">
                     Menghubungkan ke workspace keuangan Anda.
                 </p>
             </div>
 
-            <div class="w-44 h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-teal-400 via-[#C6F24D] to-[#A4D928] rounded-full animate-pulse w-full"></div>
+            <div class="w-44 h-1.5 rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-teal-500 via-[#C6F24D] to-teal-500 rounded-full animate-pulse w-full"></div>
             </div>
         </div>
     </div>
 
-    <!-- 2. Google OAuth Redirect Loading (Unified with Porto Theme) -->
+    <!-- 2. Google OAuth Redirect Loading (Clean White & Green Theme) -->
     <div x-show="isGoogleLoading" 
          x-cloak
          style="display: none;"
-         class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-lg flex flex-col items-center justify-center p-6 text-center select-none">
+         class="fixed inset-0 z-50 bg-white/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center select-none">
         
         <div class="relative z-10 max-w-sm w-full space-y-4 flex flex-col items-center">
-            <img src="{{ asset('images/logo.svg') }}" 
-                 style="width: 52px; height: 52px; max-width: 52px; max-height: 52px;" 
-                 class="object-contain animate-pulse drop-shadow-xl shrink-0" 
-                 alt="PortoFinance Logo">
+            <div class="relative flex items-center justify-center" style="width: 80px; height: 80px;">
+                <div class="absolute inset-0 rounded-full bg-[#C6F24D]/40 blur-xl"></div>
+                <img src="{{ asset('images/logo.svg') }}" 
+                     style="width: 56px; height: 56px; max-width: 56px; max-height: 56px;" 
+                     class="object-contain animate-pulse drop-shadow-sm shrink-0 relative" 
+                     alt="PortoFinance Logo">
+            </div>
 
             <div class="space-y-1 text-center">
-                <h3 class="text-lg font-black text-white tracking-tight">
+                <h3 class="text-lg font-black text-slate-950 tracking-tight">
                     Menghubungkan Google OAuth...
                 </h3>
-                <p class="text-xs text-slate-300">
+                <p class="text-xs text-slate-500 font-medium">
                     Mengarahkan ke akun Google Anda secara aman.
                 </p>
             </div>
 
-            <div class="w-44 h-1.5 rounded-full bg-slate-800 border border-slate-700 overflow-hidden">
-                <div class="h-full bg-gradient-to-r from-teal-400 via-[#C6F24D] to-[#A4D928] rounded-full animate-pulse w-full"></div>
+            <div class="w-44 h-1.5 rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-teal-500 via-[#C6F24D] to-teal-500 rounded-full animate-pulse w-full"></div>
             </div>
         </div>
     </div>
