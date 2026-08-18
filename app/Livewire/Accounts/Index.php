@@ -62,7 +62,7 @@ class Index extends Component
         $this->name = $account->name;
         $this->type = $account->type;
         $this->account_number = $account->account_number;
-        $this->initial_balance = (string) $account->initial_balance;
+        $this->initial_balance = number_format((float) $account->current_balance, 0, ',', '.');
         $this->color = $account->color;
         $this->notes = $account->notes;
         $this->isModalOpen = true;
@@ -79,12 +79,21 @@ class Index extends Component
             return;
         }
 
+        // Clean any dots, spaces, commas, or "Rp" from input
+        $cleanBalance = (float) preg_replace('/[^\d]/', '', (string) $this->initial_balance);
+        $this->initial_balance = (string) $cleanBalance;
+
         $this->validate([
             'name' => 'required|string|max:255',
             'type' => 'required|in:bank,ewallet,cash,investment,other',
             'account_number' => 'nullable|string|max:100',
             'initial_balance' => 'required|numeric|min:0',
             'color' => 'nullable|string',
+        ], [
+            'name.required' => 'Nama akun / e-wallet wajib diisi.',
+            'initial_balance.required' => 'Saldo akun wajib diisi.',
+            'initial_balance.numeric' => 'Format nominal saldo tidak valid.',
+            'initial_balance.min' => 'Saldo tidak boleh kurang dari 0.',
         ]);
 
         $safeColor = $this->color ?: '#0F172A';
@@ -95,8 +104,14 @@ class Index extends Component
                 'name' => $this->name,
                 'type' => $this->type,
                 'account_number' => $this->account_number,
+                'current_balance' => $cleanBalance,
+                'initial_balance' => ($account->transactions()->count() === 0) ? $cleanBalance : $account->initial_balance,
                 'color' => $safeColor,
                 'notes' => $this->notes,
+            ]);
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Akun ' . $this->name . ' berhasil diperbarui!'
             ]);
         } else {
             Account::create([
@@ -104,11 +119,15 @@ class Index extends Component
                 'name' => $this->name,
                 'type' => $this->type,
                 'account_number' => $this->account_number,
-                'initial_balance' => $this->initial_balance,
-                'current_balance' => $this->initial_balance,
+                'initial_balance' => $cleanBalance,
+                'current_balance' => $cleanBalance,
                 'color' => $safeColor,
                 'notes' => $this->notes,
                 'is_active' => true,
+            ]);
+            $this->dispatch('notify', [
+                'type' => 'success',
+                'message' => 'Akun baru ' . $this->name . ' berhasil disimpan!'
             ]);
         }
 
@@ -129,11 +148,21 @@ class Index extends Component
     public function executeTransfer()
     {
         $userId = auth()->id();
+        
+        $cleanAmount = (float) preg_replace('/[^\d]/', '', (string) $this->transfer_amount);
+        $this->transfer_amount = (string) $cleanAmount;
+
         $this->validate([
             'from_account_id' => 'required|exists:accounts,id',
             'to_account_id' => 'required|exists:accounts,id|different:from_account_id',
             'transfer_amount' => 'required|numeric|min:1',
             'transfer_date' => 'required|date',
+        ], [
+            'from_account_id.required' => 'Rekening sumber wajib dipilih.',
+            'to_account_id.required' => 'Rekening tujuan wajib dipilih.',
+            'to_account_id.different' => 'Rekening tujuan harus berbeda dari rekening sumber.',
+            'transfer_amount.required' => 'Nominal transfer wajib diisi.',
+            'transfer_amount.min' => 'Nominal transfer minimal Rp 1.',
         ]);
 
         $from = Account::where('user_id', $userId)->findOrFail($this->from_account_id);
@@ -144,13 +173,17 @@ class Index extends Component
             'account_id' => $from->id,
             'destination_account_id' => $to->id,
             'type' => 'transfer',
-            'amount' => $this->transfer_amount,
+            'amount' => $cleanAmount,
             'date' => $this->transfer_date,
             'description' => 'Transfer dari ' . $from->name . ' ke ' . $to->name,
             'notes' => $this->transfer_note,
         ]);
 
         $this->isTransferModalOpen = false;
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Transfer Rp ' . number_format($cleanAmount, 0, ',', '.') . ' berhasil dicatat!'
+        ]);
         $this->dispatch('refresh-data');
     }
 

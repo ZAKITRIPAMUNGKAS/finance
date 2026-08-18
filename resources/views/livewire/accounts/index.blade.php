@@ -88,7 +88,14 @@
     <!--  MODAL 1: ADD / EDIT ACCOUNT (CLEAN NEAT COMPACT LAYOUT)    -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <template x-teleport="body">
-        <div x-data="{ open: @entangle('isModalOpen') }" x-show="open" 
+        <div x-data="{ 
+                open: @entangle('isModalOpen'),
+                formatNominal(val) {
+                    let num = (val || '').toString().replace(/\D/g, '');
+                    return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+                }
+            }" 
+            x-show="open" 
             x-transition.opacity.duration.200ms
             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" 
             x-cloak>
@@ -116,7 +123,7 @@
                 </button>
             </div>
 
-            <form wire:submit.prevent="saveAccount" class="p-5 space-y-4 overflow-y-auto">
+            <form wire:submit.prevent="saveAccount" class="p-5 pb-8 sm:pb-5 space-y-4 overflow-y-auto">
                 
                 <!-- 1. COMPACT PRESET SELECTOR (GRID 6 COLS ON DESKTOP, 4 ON MOBILE) -->
                 @if(!$accountId)
@@ -235,7 +242,7 @@
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nama Akun *</label>
-                        <input type="text" wire:model.live.debounce.150ms="name" placeholder="e.g. BCA Utama / GoPay / Mandiri Bisnis" 
+                        <input type="text" wire:model.live.debounce.150ms="name" placeholder="e.g. BCA Utama / GoPay / ShopeePay" 
                             class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                         @error('name') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
@@ -257,9 +264,13 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">Saldo Awal (Rp) *</label>
-                        <input type="number" wire:model.defer="initial_balance" placeholder="0" 
-                            class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        <label class="block text-xs font-bold text-slate-700 mb-1">{{ $accountId ? 'Saldo Akun Saat Ini (Rp) *' : 'Saldo Awal (Rp) *' }}</label>
+                        <input type="text" 
+                               inputmode="numeric"
+                               wire:model.defer="initial_balance" 
+                               x-on:input="$event.target.value = formatNominal($event.target.value)"
+                               placeholder="0" 
+                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-mono font-bold text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
                         @error('initial_balance') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -279,7 +290,13 @@
                     
                     <div class="flex items-center gap-2">
                         <button type="button" wire:click="$set('isModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-slate-800 transition-all">Simpan Akun</button>
+                        <button type="submit" 
+                                wire:loading.attr="disabled"
+                                wire:target="saveAccount"
+                                class="px-5 py-2.5 rounded-xl bg-slate-950 text-[#C6F24D] text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove wire:target="saveAccount">{{ $accountId ? 'Simpan Perubahan' : 'Simpan Akun' }}</span>
+                            <span wire:loading wire:target="saveAccount">Menyimpan...</span>
+                        </button>
                     </div>
                 </div>
             </form>
@@ -291,7 +308,14 @@
     <!--  MODAL 2: TRANSFER ANTAR REKENING                           -->
     <!-- ═══════════════════════════════════════════════════════════ -->
     <template x-teleport="body">
-        <div x-data="{ open: @entangle('isTransferModalOpen') }" x-show="open" 
+        <div x-data="{ 
+                open: @entangle('isTransferModalOpen'),
+                formatNominal(val) {
+                    let num = (val || '').toString().replace(/\D/g, '');
+                    return num ? new Intl.NumberFormat('id-ID').format(num) : '';
+                }
+            }" 
+            x-show="open" 
             x-transition.opacity.duration.200ms
             class="fixed inset-0 z-[60] overflow-y-auto bg-slate-950/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4" x-cloak>
             <div @click.outside="$wire.set('isTransferModalOpen', false)" class="relative w-full max-w-md bg-white border-t sm:border border-slate-200 rounded-t-[28px] sm:rounded-3xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col animate-in slide-in-from-bottom-6 sm:slide-in-from-bottom-2 duration-200">
@@ -329,13 +353,20 @@
 
                     <div>
                         <label class="block text-xs font-bold text-slate-700 mb-1">Nominal Transfer (Rp) *</label>
-                        <input type="number" wire:model.defer="transfer_amount" placeholder="500000" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        <input type="text" 
+                               inputmode="numeric"
+                               wire:model.defer="transfer_amount" 
+                               x-on:input="$event.target.value = formatNominal($event.target.value)"
+                               placeholder="500.000" 
+                               class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-base font-bold font-mono text-slate-900 focus:ring-2 focus:ring-slate-950 focus:bg-white transition-all">
+                        @error('transfer_amount') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                     </div>
 
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal</label>
                             <input type="date" wire:model.defer="transfer_date" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-slate-950">
+                            @error('transfer_date') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
@@ -345,7 +376,13 @@
 
                     <div class="pt-3 border-t border-slate-100 flex justify-end gap-2 shrink-0">
                         <button type="button" wire:click="$set('isTransferModalOpen', false)" class="px-4 py-2 text-xs font-bold text-slate-500 hover:text-slate-900 cursor-pointer">Batal</button>
-                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-[#C6F24D] text-slate-950 text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-[#b8e640] transition-all">Kirim Transfer</button>
+                        <button type="submit" 
+                                wire:loading.attr="disabled"
+                                wire:target="executeTransfer"
+                                class="px-5 py-2.5 rounded-xl bg-[#C6F24D] text-slate-950 text-xs font-black shadow-sm active-tap cursor-pointer hover:bg-[#b8e640] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove wire:target="executeTransfer">Kirim Transfer</span>
+                            <span wire:loading wire:target="executeTransfer">Mengirim...</span>
+                        </button>
                     </div>
                 </form>
             </div>
