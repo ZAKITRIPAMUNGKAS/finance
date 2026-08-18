@@ -20,6 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at',
         'onboarding_completed',
         'role',
+        'financial_persona',
         'subscription_tier',
         'trial_ends_at',
         'subscription_ends_at',
@@ -217,5 +218,66 @@ class User extends Authenticatable implements MustVerifyEmail
     public function financialGoals(): HasMany
     {
         return $this->hasMany(FinancialGoal::class);
+    }
+
+    public function isStudent(): bool
+    {
+        return in_array($this->financial_persona, ['student', 'pelajar_mahasiswa']);
+    }
+
+    public function isEmployee(): bool
+    {
+        return in_array($this->financial_persona, ['employee', 'employee_salary']);
+    }
+
+    public function isMerchant(): bool
+    {
+        return in_array($this->financial_persona, ['merchant', 'umkm_business']);
+    }
+
+    public function isFreelancer(): bool
+    {
+        return in_array($this->financial_persona, ['freelancer', 'creative_media', 'hybrid_sidehustle', 'all', '']) || $this->financial_persona === null;
+    }
+
+    public function getPersonaDetails(): array
+    {
+        return match ($this->financial_persona) {
+            'student', 'pelajar_mahasiswa' => [
+                'name' => 'Pelajar & Mahasiswa',
+                'badge' => '🎓 Mahasiswa & Pelajar',
+                'description' => 'Fokus uang saku, biaya kos, patungan, dan tabungan gadget/kuliah.',
+                'icon' => 'graduation-cap',
+                'color' => '#10B981',
+            ],
+            'employee', 'employee_salary' => [
+                'name' => 'Karyawan & Kantoran',
+                'badge' => '💼 Karyawan Kantoran',
+                'description' => 'Fokus alokasi gaji 50/30/20, audit langganan, dan dana darurat.',
+                'icon' => 'briefcase',
+                'color' => '#3B82F6',
+            ],
+            'merchant', 'umkm_business' => [
+                'name' => 'Pedagang & UMKM / Olshop',
+                'badge' => '🏪 Pedagang & UMKM',
+                'description' => 'Fokus kas toko, kalkulasi harga jual HPP + margin, dan laba usaha.',
+                'icon' => 'shopping-bag',
+                'color' => '#F59E0B',
+            ],
+            'all' => [
+                'name' => 'All-in-One (Lengkap)',
+                'badge' => '🌟 Mode Lengkap',
+                'description' => 'Akses seluruh modul & fitur tanpa batasan.',
+                'icon' => 'sparkles',
+                'color' => '#8B5CF6',
+            ],
+            default => [
+                'name' => 'Freelancer & Kreator',
+                'badge' => '⚡ Freelancer & Kreator',
+                'description' => 'Fokus proyek klien, milestone DP/lunas, invoice WA, dan rate card.',
+                'icon' => 'laptop',
+                'color' => '#C6F24D',
+            ],
+        };
     }
 }

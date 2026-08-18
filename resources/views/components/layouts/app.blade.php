@@ -131,7 +131,8 @@
                 </div>
             </div>
 
-            <!-- Business Section -->
+            <!-- Business Section (Adaptive by Persona) -->
+            @if(auth()->user()?->isFreelancer() || auth()->user()?->financial_persona === 'all')
             <div>
                 <p class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Freelance Business</p>
                 <div class="space-y-1">
@@ -154,6 +155,21 @@
                     </a>
                 </div>
             </div>
+            @elseif(auth()->user()?->isMerchant())
+            <div>
+                <p class="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2">Kas & Bisnis Toko</p>
+                <div class="space-y-1">
+                    <a href="{{ route('clients') }}" 
+                       class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('clients*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="receipt" class="w-4 h-4" />
+                            <span>Nota & Piutang Pelanggan</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">UMKM</span>
+                    </a>
+                </div>
+            </div>
+            @endif
 
             <!-- AI Intelligence & Planning Section -->
             <div>
@@ -455,10 +471,27 @@
                 <span class="text-[9px] font-bold">Wishlist</span>
             </a>
             
+            @if(auth()->user()?->isStudent())
+            <a href="{{ route('budgets') }}" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all {{ request()->routeIs('budgets*') ? 'text-[#C6F24D] font-bold' : 'text-slate-400 hover:text-slate-200' }}">
+                <x-icon name="pie-chart" class="w-5 h-5" />
+                <span class="text-[9px] font-bold">Budget</span>
+            </a>
+            @elseif(auth()->user()?->isEmployee())
+            <a href="{{ route('subscriptions') }}" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all {{ request()->routeIs('subscriptions*') ? 'text-[#C6F24D] font-bold' : 'text-slate-400 hover:text-slate-200' }}">
+                <x-icon name="repeat" class="w-5 h-5" />
+                <span class="text-[9px] font-bold">Langganan</span>
+            </a>
+            @elseif(auth()->user()?->isMerchant())
+            <a href="{{ route('clients') }}" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all {{ request()->routeIs('clients*') ? 'text-[#C6F24D] font-bold' : 'text-slate-400 hover:text-slate-200' }}">
+                <x-icon name="receipt" class="w-5 h-5" />
+                <span class="text-[9px] font-bold">Nota</span>
+            </a>
+            @else
             <a href="{{ route('projects') }}" id="tour-nav-projects-mobile" class="flex flex-col items-center gap-1 py-1 px-3 rounded-2xl transition-all {{ request()->routeIs('projects*') ? 'text-[#C6F24D] font-bold' : 'text-slate-400 hover:text-slate-200' }}">
                 <x-icon name="briefcase" class="w-5 h-5" />
                 <span class="text-[9px] font-bold">Project</span>
             </a>
+            @endif
         </nav>
     </div>
 

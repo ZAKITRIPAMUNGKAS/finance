@@ -136,6 +136,112 @@
         </div>
     </div>
 
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--  ADAPTIVE FINANCIAL PERSONA INTELLIGENCE BANNER             -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    @if($user?->isStudent())
+    <div class="bg-gradient-to-r from-emerald-500/10 via-emerald-500/5 to-transparent border border-emerald-500/20 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+        <div class="flex items-start sm:items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-sm">
+                <x-icon name="graduation-cap" class="w-6 h-6 text-slate-950" strokeWidth="2.5" />
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        Mode Pelajar & Mahasiswa
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">Sisa {{ $remainingDays }} hari bulan ini</span>
+                </div>
+                <div class="mt-1 flex items-baseline gap-2 flex-wrap">
+                    <span class="text-xs text-slate-600 font-bold">Batas Aman Jajan Hari Ini:</span>
+                    <span class="text-lg sm:text-xl font-black font-mono text-emerald-950">
+                        Rp {{ number_format($safeDailySpend, 0, ',', '.') }} <span class="text-xs font-semibold text-slate-400">/ hari</span>
+                    </span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">
+                    @if($safeDailySpend >= 35000)
+                        🟢 Keuangan aman! Uang saku cukup untuk kebutuhan harian & jajan santai.
+                    @elseif($safeDailySpend >= 15000)
+                        🟡 Waspada boncos. Batasi jajan kopi & prioritaskan makan pokok.
+                    @else
+                        🔴 Mode hemat ketat! Prioritaskan kebutuhan pokok & uang kos.
+                    @endif
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+            <button type="button" wire:click="$dispatch('open-split-bill')" 
+                class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-black flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer active-tap">
+                <x-icon name="users" class="w-4 h-4 text-[#C6F24D]" />
+                <span>Bagi Tagihan (Split Bill)</span>
+            </button>
+        </div>
+    </div>
+    @elseif($user?->isEmployee())
+    <div class="bg-gradient-to-r from-blue-500/10 via-blue-500/5 to-transparent border border-blue-500/20 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+        <div class="flex items-start sm:items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+                <x-icon name="briefcase" class="w-6 h-6 text-white" strokeWidth="2.5" />
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                        Mode Karyawan & Kantoran
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">Alokasi Gaji 50/30/20</span>
+                </div>
+                <div class="mt-1 flex flex-wrap items-center gap-3 text-xs font-bold">
+                    <span class="text-slate-700">🏠 Kebutuhan: <strong class="text-slate-950 font-mono">{{ $needsPct }}%</strong> (target 50%)</span>
+                    <span class="text-slate-700">☕ Lifestyle: <strong class="text-slate-950 font-mono">{{ $lifestylePct }}%</strong> (target 30%)</span>
+                    <span class="text-slate-700">🎯 Tabungan: <strong class="text-slate-950 font-mono">{{ $savingsPct }}%</strong> (target 20%)</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Pantau proporsi pengeluaran agar gaji bulanan terkelola maksimal.</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+            <a href="{{ route('subscriptions') }}" 
+                class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-black flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer active-tap">
+                <x-icon name="repeat" class="w-4 h-4 text-[#C6F24D]" />
+                <span>Audit Langganan Rutin</span>
+            </a>
+        </div>
+    </div>
+    @elseif($user?->isMerchant())
+    <div class="bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/20 rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+        <div class="flex items-start sm:items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shrink-0 shadow-sm">
+                <x-icon name="shopping-bag" class="w-6 h-6 text-slate-950" strokeWidth="2.5" />
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-mono font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                        Mode Pedagang & UMKM
+                    </span>
+                    <span class="text-xs text-slate-400 font-medium">Laba Toko Bulan Ini</span>
+                </div>
+                <div class="mt-1 flex items-baseline gap-2 flex-wrap">
+                    <span class="text-xs text-slate-600 font-bold">Estimasi Laba Bersih:</span>
+                    <span class="text-lg sm:text-xl font-black font-mono {{ $merchantProfit >= 0 ? 'text-emerald-700' : 'text-rose-600' }}">
+                        Rp {{ number_format($merchantProfit, 0, ',', '.') }}
+                    </span>
+                    <span class="text-xs font-bold text-amber-800 font-mono">({{ $merchantMarginPct }}% margin)</span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Omset: Rp {{ number_format($merchantSales, 0, ',', '.') }} | HPP & Biaya Ops: Rp {{ number_format($merchantCost, 0, ',', '.') }}</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+            <button type="button" wire:click="$dispatch('open-merchant-calculator')" 
+                class="w-full sm:w-auto px-4 py-2.5 rounded-2xl bg-slate-950 hover:bg-slate-800 text-[#C6F24D] text-xs font-black flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer active-tap">
+                <x-icon name="calculator" class="w-4 h-4 text-[#C6F24D]" />
+                <span>Kalkulator Margin Harga</span>
+            </button>
+        </div>
+    </div>
+    @endif
+
     <!-- MAIN GRID 2-COL: CASHFLOW CHART & WALLETS -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
@@ -564,4 +670,8 @@
         }
     </script>
     </div>
+
+    <!-- Role-Specific Smart Modals -->
+    <livewire:tools.student-split-bill />
+    <livewire:tools.merchant-pricing-calculator />
 </div>

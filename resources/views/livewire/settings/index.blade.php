@@ -110,6 +110,113 @@
                 </button>
             </div>
         </form>
+
+        <!-- PERSONA SWITCHER SECTION -->
+        <div class="pt-6 border-t border-slate-100 space-y-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <h4 class="text-sm font-black text-slate-900">Mode Finansial & Profesi</h4>
+                    <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[10px] font-mono font-bold">Smart Adaptive</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">Pilih peran Anda agar fitur, dashboard, dan kategori otomatis disesuaikan</p>
+            </div>
+
+            @if (session()->has('persona_success'))
+                <div class="p-3.5 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs font-bold text-emerald-800 flex items-center gap-2">
+                    <x-icon name="check-circle" class="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{{ session('persona_success') }}</span>
+                </div>
+            @endif
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <!-- 1. Pelajar & Mahasiswa -->
+                <button type="button" wire:click="setPersona('student')" 
+                    class="p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 {{ $financial_persona === 'student' ? 'border-emerald-500 bg-emerald-50/60 ring-2 ring-emerald-500/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-bold shadow-2xs">
+                            <x-icon name="graduation-cap" class="w-5 h-5 text-slate-950" strokeWidth="2.5" />
+                        </div>
+                        @if($financial_persona === 'student')
+                            <span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-mono font-black">Aktif</span>
+                        @endif
+                    </div>
+                    <div>
+                        <span class="text-xs font-black text-slate-950 block">🎓 Pelajar & Mahasiswa</span>
+                        <span class="text-[11px] text-slate-500 mt-0.5 block leading-tight">Uang saku harian, batas jajan safe daily, patungan split bill & tabungan gadget.</span>
+                    </div>
+                </button>
+
+                <!-- 2. Karyawan & Kantoran -->
+                <button type="button" wire:click="setPersona('employee')" 
+                    class="p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 {{ $financial_persona === 'employee' ? 'border-blue-500 bg-blue-50/60 ring-2 ring-blue-500/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold shadow-2xs">
+                            <x-icon name="briefcase" class="w-5 h-5 text-white" strokeWidth="2.5" />
+                        </div>
+                        @if($financial_persona === 'employee')
+                            <span class="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-mono font-black">Aktif</span>
+                        @endif
+                    </div>
+                    <div>
+                        <span class="text-xs font-black text-slate-950 block">💼 Karyawan & Kantoran</span>
+                        <span class="text-[11px] text-slate-500 mt-0.5 block leading-tight">Alokasi gaji 50/30/20, audit langganan rutin, investasi & dana darurat.</span>
+                    </div>
+                </button>
+
+                <!-- 3. Pedagang & UMKM -->
+                <button type="button" wire:click="setPersona('merchant')" 
+                    class="p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 {{ $financial_persona === 'merchant' ? 'border-amber-500 bg-amber-50/60 ring-2 ring-amber-500/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-bold shadow-2xs">
+                            <x-icon name="shopping-bag" class="w-5 h-5 text-slate-950" strokeWidth="2.5" />
+                        </div>
+                        @if($financial_persona === 'merchant')
+                            <span class="px-2 py-0.5 rounded-full bg-amber-600 text-white text-[10px] font-mono font-black">Aktif</span>
+                        @endif
+                    </div>
+                    <div>
+                        <span class="text-xs font-black text-slate-950 block">🏪 Pedagang & UMKM / Olshop</span>
+                        <span class="text-[11px] text-slate-500 mt-0.5 block leading-tight">Kas toko, kalkulator margin HPP + biaya marketplace, & laba bersih.</span>
+                    </div>
+                </button>
+
+                <!-- 4. Freelancer & Kreator -->
+                <button type="button" wire:click="setPersona('freelancer')" 
+                    class="p-4 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between gap-3 {{ in_array($financial_persona, ['freelancer', 'creative_media', '']) ? 'border-slate-950 bg-slate-900 text-white ring-2 ring-slate-950/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}">
+                    <div class="flex items-center justify-between">
+                        <div class="w-10 h-10 rounded-xl {{ in_array($financial_persona, ['freelancer', 'creative_media', '']) ? 'bg-[#C6F24D] text-slate-950' : 'bg-slate-100 text-slate-950' }} flex items-center justify-center font-bold shadow-2xs">
+                            <x-icon name="laptop" class="w-5 h-5" strokeWidth="2.5" />
+                        </div>
+                        @if(in_array($financial_persona, ['freelancer', 'creative_media', '']))
+                            <span class="px-2 py-0.5 rounded-full bg-[#C6F24D] text-slate-950 text-[10px] font-mono font-black">Aktif</span>
+                        @endif
+                    </div>
+                    <div>
+                        <span class="text-xs font-black {{ in_array($financial_persona, ['freelancer', 'creative_media', '']) ? 'text-white' : 'text-slate-950' }} block">⚡ Freelancer & Kreator</span>
+                        <span class="text-[11px] {{ in_array($financial_persona, ['freelancer', 'creative_media', '']) ? 'text-slate-300' : 'text-slate-500' }} mt-0.5 block leading-tight">Project milestone, invoice penagihan WA, DP & pelunasan klien.</span>
+                    </div>
+                </button>
+
+                <!-- 5. All-in-One Full Mode -->
+                <div class="sm:col-span-2">
+                    <button type="button" wire:click="setPersona('all')" 
+                        class="w-full p-4 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 {{ $financial_persona === 'all' ? 'border-purple-500 bg-purple-50/60 ring-2 ring-purple-500/20' : 'border-slate-200 hover:border-slate-300 bg-white' }}">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-500 text-white flex items-center justify-center font-bold shadow-2xs shrink-0">
+                                <x-icon name="sparkles" class="w-5 h-5 text-white" strokeWidth="2.5" />
+                            </div>
+                            <div>
+                                <span class="text-xs font-black text-slate-950 block">🌟 Mode Lengkap (All-in-One)</span>
+                                <span class="text-[11px] text-slate-500 block">Tampilkan semua modul, tools, dan fitur tanpa filter.</span>
+                            </div>
+                        </div>
+                        @if($financial_persona === 'all')
+                            <span class="px-2 py-0.5 rounded-full bg-purple-600 text-white text-[10px] font-mono font-black shrink-0">Aktif</span>
+                        @endif
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- TAB 2: KEAMANAN KATA SANDI -->

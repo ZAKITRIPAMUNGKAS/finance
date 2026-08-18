@@ -13,6 +13,7 @@ class Index extends Component
     public string $name = '';
     public string $email = '';
     public ?string $profession = 'Media & IT Freelancer';
+    public string $financial_persona = 'freelancer';
 
     // Password Fields
     public string $current_password = '';
@@ -29,7 +30,28 @@ class Index extends Component
         if ($user) {
             $this->name = $user->name;
             $this->email = $user->email;
+            $this->financial_persona = $user->financial_persona ?: 'freelancer';
         }
+    }
+
+    public function setPersona(string $personaKey, \App\Services\BudgetAllocationService $budgetService)
+    {
+        $user = Auth::user() ?? User::first();
+        if (!$user) return;
+
+        $this->financial_persona = $personaKey;
+        $user->update(['financial_persona' => $personaKey]);
+
+        // Automatically apply relevant budget & category presets
+        $budgetService->applyPersonaPreset($user->id, $personaKey, 'stable', 'investment');
+
+        $details = $user->getPersonaDetails();
+        session()->flash('persona_success', 'Mode Finansial berhasil disesuaikan ke ' . $details['name'] . '!');
+        $this->dispatch('notify', [
+            'type' => 'success',
+            'message' => 'Mode Finansial berhasil diaktifkan: ' . $details['name']
+        ]);
+        $this->dispatch('refresh-data');
     }
 
     public function updateProfile()

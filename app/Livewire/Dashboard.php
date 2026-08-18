@@ -138,6 +138,37 @@ class Dashboard extends Component
             ->filter(fn($c) => ($c->transactions_sum_amount ?? 0) > 0)
             ->sortByDesc('transactions_sum_amount');
 
+        // 11. Role-Specific Metric Calculations
+        $user = auth()->user();
+        $daysInMonth = Carbon::now()->daysInMonth;
+        $dayOfMonth = Carbon::now()->day;
+        $remainingDays = max(1, $daysInMonth - $dayOfMonth + 1);
+
+        // Student Safe Daily Spend: (Uang Tersedia) / Sisa Hari
+        $safeDailySpend = max(0, round($availableMoney / $remainingDays));
+
+        // Employee 50/30/20 Breakdown
+        $effectiveIncome = $monthlyIncome > 0 ? $monthlyIncome : max(1, $monthlyExpense);
+        $needsExpense = $categoryBreakdown->filter(fn($c) => in_array(strtolower($c->name), ['makan', 'makan & belanja dapur', 'sewa kos', 'sewa/cicilan', 'listrik', 'transport', 'transportasi']))->sum('transactions_sum_amount');
+        $lifestyleExpense = $categoryBreakdown->filter(fn($c) => in_array(strtolower($c->name), ['lifestyle', 'nongkrong', 'hobi', 'hiburan', 'jajan']))->sum('transactions_sum_amount');
+        $savingsAllocated = $wishlistLocked;
+
+        $needsPct = round(($needsExpense / $effectiveIncome) * 100);
+        $lifestylePct = round(($lifestyleExpense / $effectiveIncome) * 100);
+        $savingsPct = round(($savingsAllocated / $effectiveIncome) * 100);
+
+        // Merchant Business Cashflow
+        $merchantSales = (float) Transaction::where('user_id', $userId)
+            ->where('type', 'income')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        $merchantCost = (float) Transaction::where('user_id', $userId)
+            ->where('type', 'expense')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->sum('amount');
+        $merchantProfit = $merchantSales - $merchantCost;
+        $merchantMarginPct = $merchantSales > 0 ? round(($merchantProfit / $merchantSales) * 100, 1) : 0;
+
         return view('livewire.dashboard', compact(
             'totalBalance',
             'wishlistLocked',
@@ -156,7 +187,19 @@ class Dashboard extends Component
             'chartLabels',
             'incomeData',
             'expenseData',
-            'categoryBreakdown'
+            'categoryBreakdown',
+            'user',
+            'remainingDays',
+            'safeDailySpend',
+            'needsExpense',
+            'lifestyleExpense',
+            'needsPct',
+            'lifestylePct',
+            'savingsPct',
+            'merchantSales',
+            'merchantCost',
+            'merchantProfit',
+            'merchantMarginPct'
         ))->layout('components.layouts.app', [
             'headerTitle' => 'Financial Control Center',
             'headerSubtitle' => 'Ringkasan Cashflow Pribadi, Profit Bisnis & Wishlist Saving'
