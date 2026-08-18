@@ -178,13 +178,32 @@ class Dashboard extends Component
         $needsExpense = (float) Transaction::where('user_id', $userId)
             ->where('type', 'expense')
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->whereHas('category', fn($q) => $q->where('budget_group', 'needs'))
+            ->whereHas('category', function ($q) {
+                $q->where(function ($sub) {
+                    $sub->whereRaw('LOWER(name) LIKE ?', ['%makan%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%kos%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%listrik%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%transport%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%kebutuhan%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%tagihan%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%wifi%']);
+                });
+            })
             ->sum('amount');
 
         $lifestyleExpense = (float) Transaction::where('user_id', $userId)
             ->where('type', 'expense')
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
-            ->whereHas('category', fn($q) => $q->where('budget_group', 'wants'))
+            ->whereHas('category', function ($q) {
+                $q->where(function ($sub) {
+                    $sub->whereRaw('LOWER(name) LIKE ?', ['%jajan%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%nongkrong%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%lifestyle%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%hiburan%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%hobi%'])
+                        ->orWhereRaw('LOWER(name) LIKE ?', ['%kopi%']);
+                });
+            })
             ->sum('amount');
 
         $needsPct = $monthlyIncome > 0 ? min(100, round(($needsExpense / $monthlyIncome) * 100)) : 0;
