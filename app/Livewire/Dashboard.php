@@ -3,10 +3,12 @@
 namespace App\Livewire;
 
 use App\Models\Account;
+use App\Models\Budget;
 use App\Models\Category;
 use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\PurchaseWishlist;
+use App\Models\Subscription;
 use App\Models\Transaction;
 use App\Services\AvailableMoneyService;
 use App\Services\FinancialHealthService;
@@ -72,13 +74,40 @@ class Dashboard extends Component
                 return $w;
             });
 
-        // 6. Active Freelance Projects
+        // 6. Role-Specific Middle Section Data
+        // 6a. Freelance Projects (for Freelancer & All)
         $activeProjects = Project::where('user_id', $userId)
             ->with(['client', 'costs', 'invoices'])
             ->whereIn('status', ['prospect', 'in_progress'])
             ->latest()
             ->take(3)
             ->get();
+
+        // 6b. Active Subscriptions (for Employee)
+        $activeSubscriptions = Subscription::where('user_id', $userId)
+            ->where('status', 'active')
+            ->with('category')
+            ->take(4)
+            ->get();
+
+        // 6c. Student Budget Category Realization (for Student)
+        $studentBudgets = Budget::where('user_id', $userId)
+            ->where('period_month', $now->month)
+            ->where('period_year', $now->year)
+            ->with('category')
+            ->take(4)
+            ->get()
+            ->map(function ($b) use ($userId, $startOfMonth, $endOfMonth) {
+                $spent = (float) Transaction::where('user_id', $userId)
+                    ->where('category_id', $b->category_id)
+                    ->where('type', 'expense')
+                    ->whereBetween('date', [$startOfMonth, $endOfMonth])
+                    ->sum('amount');
+                $b->spent_amount = $spent;
+                $limit = (float) $b->fixed_amount_limit;
+                $b->percentage_used = $limit > 0 ? min(100, round(($spent / $limit) * 100)) : 0;
+                return $b;
+            });
 
         // 7. Unpaid Invoices Summary (Scoped to user's projects)
         $unpaidInvoicesTotal = (float) Invoice::whereHas('project', function ($q) use ($userId) {
@@ -127,45 +156,54 @@ class Dashboard extends Component
                 ->sum('amount');
         }
 
-        // 10. Category Spending Breakdown (Current Month)
-        $categoryBreakdown = Category::where('user_id', $userId)
+        // 10. Category Breakdown for Donut Chart
+        $categoryBreakdown = Transaction::where('user_id', $userId)
             ->where('type', 'expense')
-            ->withSum(['transactions' => function ($q) use ($userId, $startOfMonth, $endOfMonth) {
-                $q->where('user_id', $userId)
-                  ->whereBetween('date', [$startOfMonth, $endOfMonth]);
-            }], 'amount')
-            ->get()
-            ->filter(fn($c) => ($c->transactions_sum_amount ?? 0) > 0)
-            ->sortByDesc('transactions_sum_amount');
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->selectRaw('category_id, sum(amount) as total')
+            ->groupBy('category_id')
+            ->with('category')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
 
-        // 11. Role-Specific Metric Calculations
+        // 11. Role-Adaptive Persona Intelligence Calculations
         $user = auth()->user();
-        $daysInMonth = Carbon::now()->daysInMonth;
-        $dayOfMonth = Carbon::now()->day;
+        $daysInMonth = $now->daysInMonth;
+        $dayOfMonth = $now->day;
         $remainingDays = max(1, $daysInMonth - $dayOfMonth + 1);
+        $safeDailySpend = max(0, $availableMoney / $remainingDays);
 
-        // Student Safe Daily Spend: (Uang Tersedia) / Sisa Hari
-        $safeDailySpend = max(0, round($availableMoney / $remainingDays));
+        // Employee 50/30/20 breakdown
+        $needsExpense = (float) Transaction::where('user_id', $userId)
+            ->where('type', 'expense')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->whereHas('category', fn($q) => $q->where('budget_group', 'needs'))
+            ->sum('amount');
 
-        // Employee 50/30/20 Breakdown
-        $effectiveIncome = $monthlyIncome > 0 ? $monthlyIncome : max(1, $monthlyExpense);
-        $needsExpense = $categoryBreakdown->filter(fn($c) => in_array(strtolower($c->name), ['makan', 'makan & belanja dapur', 'sewa kos', 'sewa/cicilan', 'listrik', 'transport', 'transportasi']))->sum('transactions_sum_amount');
-        $lifestyleExpense = $categoryBreakdown->filter(fn($c) => in_array(strtolower($c->name), ['lifestyle', 'nongkrong', 'hobi', 'hiburan', 'jajan']))->sum('transactions_sum_amount');
-        $savingsAllocated = $wishlistLocked;
+        $lifestyleExpense = (float) Transaction::where('user_id', $userId)
+            ->where('type', 'expense')
+            ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->whereHas('category', fn($q) => $q->where('budget_group', 'wants'))
+            ->sum('amount');
 
-        $needsPct = round(($needsExpense / $effectiveIncome) * 100);
-        $lifestylePct = round(($lifestyleExpense / $effectiveIncome) * 100);
-        $savingsPct = round(($savingsAllocated / $effectiveIncome) * 100);
+        $needsPct = $monthlyIncome > 0 ? min(100, round(($needsExpense / $monthlyIncome) * 100)) : 0;
+        $lifestylePct = $monthlyIncome > 0 ? min(100, round(($lifestyleExpense / $monthlyIncome) * 100)) : 0;
+        $savingsPct = max(0, 100 - ($needsPct + $lifestylePct));
 
-        // Merchant Business Cashflow
+        // Merchant Profit & Margin Calculations
         $merchantSales = (float) Transaction::where('user_id', $userId)
             ->where('type', 'income')
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->whereHas('category', fn($q) => $q->where('is_business', true))
             ->sum('amount');
+
         $merchantCost = (float) Transaction::where('user_id', $userId)
             ->where('type', 'expense')
             ->whereBetween('date', [$startOfMonth, $endOfMonth])
+            ->whereHas('category', fn($q) => $q->where('is_business', true))
             ->sum('amount');
+
         $merchantProfit = $merchantSales - $merchantCost;
         $merchantMarginPct = $merchantSales > 0 ? round(($merchantProfit / $merchantSales) * 100, 1) : 0;
 
@@ -181,6 +219,8 @@ class Dashboard extends Component
             'accounts',
             'activeWishlists',
             'activeProjects',
+            'activeSubscriptions',
+            'studentBudgets',
             'unpaidInvoicesTotal',
             'overdueInvoicesCount',
             'recentTransactions',

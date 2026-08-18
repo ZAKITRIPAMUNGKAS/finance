@@ -392,48 +392,171 @@
         </div>
     </div>
 
-    <!-- FREELANCE BUSINESS & RECENT TRANSACTIONS -->
+    <!-- ROLE ADAPTIVE MIDDLE SECTION & RECENT TRANSACTIONS -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- ACTIVE PROJECTS (7 COLS) -->
-        <div class="lg:col-span-7 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Project Freelance Aktif</h3>
-                    <p class="text-xs text-slate-400">Revenue, biaya operasional & profit margin</p>
+        @if($user?->isStudent())
+            <!-- 1. STUDENT / PELAJAR: ANGGARAN SAKU & REALISASI (7 COLS) -->
+            <div class="lg:col-span-7 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Evaluasi Anggaran & Uang Saku</h3>
+                        <p class="text-xs text-slate-400">Realisasi pengeluaran per kategori saku bulan ini</p>
+                    </div>
+                    <a href="{{ route('budgets') }}" class="text-xs font-bold text-slate-900 hover:text-emerald-700 underline">Atur Budget &rarr;</a>
                 </div>
-                <a href="{{ route('projects') }}" class="text-xs font-bold text-slate-900 hover:text-indigo-600 underline">Semua &rarr;</a>
+
+                <div class="space-y-3">
+                    @forelse($studentBudgets as $b)
+                    <div class="p-3.5 bg-[#F8F9FA] rounded-2xl border border-slate-200/80 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm">🎯</span>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900">{{ $b->category->name ?? 'Kategori' }}</h4>
+                            </div>
+                            <div class="text-right font-mono text-xs">
+                                <span class="font-extrabold text-slate-900">Rp {{ number_format($b->spent_amount, 0, ',', '.') }}</span>
+                                <span class="text-slate-400 text-[10px]"> / Rp {{ number_format($b->fixed_amount_limit, 0, ',', '.') }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Progress Bar -->
+                        <div class="w-full bg-slate-200/80 h-2 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500 {{ $b->percentage_used > 90 ? 'bg-rose-500' : ($b->percentage_used > 70 ? 'bg-amber-400' : 'bg-emerald-500') }}"
+                                 style="width: {{ $b->percentage_used }}%">
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                            <span>Terpakai: {{ $b->percentage_used }}%</span>
+                            <span>{{ $b->percentage_used > 100 ? '⚠️ Melebihi Batas' : 'Sisa: Rp ' . number_format(max(0, $b->fixed_amount_limit - $b->spent_amount), 0, ',', '.') }}</span>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-8 text-center text-xs text-slate-400">
+                        Belum ada batas budget kategori saku bulan ini. <a href="{{ route('budgets') }}" class="text-slate-900 font-bold underline">Set Budget Sekarang &rarr;</a>
+                    </div>
+                    @endforelse
+                </div>
             </div>
 
-            <div class="space-y-3">
-                @forelse($activeProjects as $proj)
-                <div class="p-3.5 bg-[#F8F9FA] rounded-2xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        @elseif($user?->isEmployee())
+            <!-- 2. EMPLOYEE / KARYAWAN: LANGGANAN & TAGIHAN RUTIN (7 COLS) -->
+            <div class="lg:col-span-7 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
                     <div>
-                        <div class="flex items-center gap-2">
-                            <h4 class="font-bold text-xs sm:text-sm text-slate-900">{{ $proj->name }}</h4>
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold {{ $proj->status === 'in_progress' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' }}">
-                                {{ ucfirst(str_replace('_', ' ', $proj->status)) }}
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Langganan & Tagihan Rutin (Subscriptions)</h3>
+                        <p class="text-xs text-slate-400">Recurring expenses otomatis (Netflix, Spotify, Wifi, Listrik)</p>
+                    </div>
+                    <a href="{{ route('subscriptions') }}" class="text-xs font-bold text-slate-900 hover:text-indigo-600 underline">Semua &rarr;</a>
+                </div>
+
+                <div class="space-y-3">
+                    @forelse($activeSubscriptions as $sub)
+                    <div class="p-3.5 bg-[#F8F9FA] rounded-2xl border border-slate-200/80 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold text-sm">
+                                🔁
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900">{{ $sub->name }}</h4>
+                                <span class="text-[11px] text-slate-400 font-mono">Debet tgl {{ $sub->billing_date ?? '1' }} • {{ $sub->category->name ?? 'Tagihan' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="text-right font-mono shrink-0">
+                            <span class="text-xs sm:text-sm font-extrabold text-slate-950 block">Rp {{ number_format($sub->amount, 0, ',', '.') }}</span>
+                            <span class="text-[9px] uppercase font-bold text-rose-500 bg-rose-50 px-1.5 py-0.5 rounded">Rutin Bulanan</span>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-8 text-center text-xs text-slate-400">
+                        Belum ada langganan rutin tercatat. <a href="{{ route('subscriptions') }}" class="text-slate-900 font-bold underline">Tambah Langganan &rarr;</a>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+
+        @elseif($user?->isMerchant())
+            <!-- 3. MERCHANT / PEDAGANG: REKAP KAS & NOTA TOKO (7 COLS) -->
+            <div class="lg:col-span-7 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Nota & Piutang Pelanggan Toko</h3>
+                        <p class="text-xs text-slate-400">Monitoring tagihan penjualan & pesanan pelanggan</p>
+                    </div>
+                    <a href="{{ route('clients') }}" class="text-xs font-bold text-slate-900 hover:text-amber-700 underline">Semua Nota &rarr;</a>
+                </div>
+
+                <div class="space-y-3">
+                    <div class="p-4 bg-amber-50/70 rounded-2xl border border-amber-200/80 flex items-center justify-between">
+                        <div>
+                            <span class="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-800 block">Total Piutang Belum Terbayar:</span>
+                            <span class="text-lg sm:text-xl font-black font-mono text-amber-950 block mt-0.5">
+                                Rp {{ number_format($unpaidInvoicesTotal, 0, ',', '.') }}
                             </span>
                         </div>
-                        <span class="text-[11px] text-slate-500">Klien: {{ $proj->client->name ?? '-' }}</span>
+                        <div class="text-right">
+                            <span class="text-[10px] font-mono font-bold px-2.5 py-1 rounded-full {{ $overdueInvoicesCount > 0 ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800' }}">
+                                {{ $overdueInvoicesCount }} Nota Jatuh Tempo
+                            </span>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-3 font-mono text-right shrink-0">
-                        <div>
-                            <span class="text-[9px] uppercase font-bold text-slate-400 block">Revenue</span>
-                            <span class="text-xs sm:text-sm font-bold text-slate-900">Rp {{ number_format($proj->total_revenue, 0, ',', '.') }}</span>
+                    <div class="grid grid-cols-2 gap-3 pt-1">
+                        <div class="p-3 bg-[#F8F9FA] rounded-xl border border-slate-200/70">
+                            <span class="text-[10px] font-mono text-slate-400 block">Omset Toko Bulan Ini</span>
+                            <span class="text-xs sm:text-sm font-bold text-emerald-700 font-mono">Rp {{ number_format($merchantSales, 0, ',', '.') }}</span>
                         </div>
-                        <div class="border-l border-slate-200 pl-3">
-                            <span class="text-[9px] uppercase font-bold text-slate-400 block">Margin</span>
-                            <span class="text-xs sm:text-sm font-black text-emerald-600">{{ $proj->margin_percentage }}%</span>
+                        <div class="p-3 bg-[#F8F9FA] rounded-xl border border-slate-200/70">
+                            <span class="text-[10px] font-mono text-slate-400 block">Biaya Kulakan / Modal</span>
+                            <span class="text-xs sm:text-sm font-bold text-slate-900 font-mono">Rp {{ number_format($merchantCost, 0, ',', '.') }}</span>
                         </div>
                     </div>
                 </div>
-                @empty
-                <div class="py-6 text-center text-xs text-slate-400">Belum ada project aktif saat ini.</div>
-                @endforelse
             </div>
-        </div>
+
+        @else
+            <!-- 4. FREELANCER / ALL-IN-ONE: ACTIVE PROJECTS (7 COLS) -->
+            <div class="lg:col-span-7 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-900 tracking-tight">Project Freelance Aktif</h3>
+                        <p class="text-xs text-slate-400">Revenue, biaya operasional & profit margin</p>
+                    </div>
+                    <a href="{{ route('projects') }}" class="text-xs font-bold text-slate-900 hover:text-indigo-600 underline">Semua &rarr;</a>
+                </div>
+
+                <div class="space-y-3">
+                    @forelse($activeProjects as $proj)
+                    <div class="p-3.5 bg-[#F8F9FA] rounded-2xl border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="font-bold text-xs sm:text-sm text-slate-900">{{ $proj->name }}</h4>
+                                <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold {{ $proj->status === 'in_progress' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800' }}">
+                                    {{ ucfirst(str_replace('_', ' ', $proj->status)) }}
+                                </span>
+                            </div>
+                            <span class="text-[11px] text-slate-500">Klien: {{ $proj->client->name ?? '-' }}</span>
+                        </div>
+
+                        <div class="flex items-center gap-3 font-mono text-right shrink-0">
+                            <div>
+                                <span class="text-[9px] uppercase font-bold text-slate-400 block">Revenue</span>
+                                <span class="text-xs sm:text-sm font-bold text-slate-900">Rp {{ number_format($proj->total_revenue, 0, ',', '.') }}</span>
+                            </div>
+                            <div class="border-l border-slate-200 pl-3">
+                                <span class="text-[9px] uppercase font-bold text-slate-400 block">Margin</span>
+                                <span class="text-xs sm:text-sm font-black text-emerald-600">{{ $proj->margin_percentage }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="py-8 text-center text-xs text-slate-400">Belum ada project aktif saat ini.</div>
+                    @endforelse
+                </div>
+            </div>
+        @endif
 
         <!-- RECENT ACTIVITY (5 COLS - Matching user reference image) -->
         <div class="lg:col-span-5 bg-white border border-slate-200/70 rounded-3xl p-6 shadow-sm space-y-4">

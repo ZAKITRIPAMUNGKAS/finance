@@ -357,13 +357,25 @@ class QuickTransactionModal extends Component
     public function loadSampleVoice(string $sampleType)
     {
         $samples = [
-            'kopi'      => "Beli kopi kenangan 42 ribu pake gopay",
-            'project'   => "Pemasukan DP project video 5 juta ke rekening BCA",
-            'pelunasan' => "Pelunasan website 2,5 juta dari Klien Budi masuk Mandiri",
-            'gaji'      => "Gaji freelance 7 juta 500 ribu masuk BCA",
-            'bensin'    => "Beli bensin pertalite 50 ribu tunai",
-            'wifi'      => "Bayar wifi indihome 350 ribu lewat Mandiri",
-            'warteg'    => "Makan siang di warteg 25 ribu tunai",
+            'kopi'           => "Beli kopi kenangan 42 ribu pake gopay",
+            'project'        => "Pemasukan DP project video 5 juta ke rekening BCA",
+            'pelunasan'      => "Pelunasan website 2,5 juta dari Klien Budi masuk Mandiri",
+            'gaji'           => "Gaji bulanan 7 juta 500 ribu masuk BCA",
+            'bensin'         => "Beli bensin pertalite 50 ribu tunai",
+            'wifi'           => "Bayar wifi indihome 350 ribu lewat Mandiri",
+            'warteg'         => "Makan siang di warteg 25 ribu tunai",
+            'saku'           => "Uang saku bulanan 1 juta 500 ribu transfer BCA",
+            'parttime'       => "Gaji part time barista 800 ribu masuk GoPay",
+            'beasiswa'       => "Pemasukan beasiswa kuliah 3 juta masuk Mandiri",
+            'bonus'          => "Bonus lembur kantor 1 juta 500 ribu masuk BCA",
+            'thr'            => "THR hari raya 7 juta masuk rekening BCA",
+            'omset'          => "Pemasukan omset penjualan toko 2 juta 500 ribu masuk BCA",
+            'penjualan'      => "Penjualan kasir toko 1 juta 200 ribu tunai",
+            'pelunasan_nota' => "Pelunasan nota pelanggan 800 ribu masuk BCA",
+            'jajan'          => "Jajan bakso dan es teh 25 ribu tunai",
+            'kuota'          => "Beli paket data kuota internet 50 ribu pake GoPay",
+            'listrik'        => "Bayar token listrik PLN 250 ribu lewat BCA",
+            'kulakan'        => "Belanja kulakan stok barang 1 juta 200 ribu tunai",
         ];
 
         if (isset($samples[$sampleType])) {

@@ -74,15 +74,34 @@ class FinancialPersonaAdaptiveTest extends TestCase
 
         Livewire::actingAs($studentUser)
             ->test(\App\Livewire\Dashboard::class)
-            ->assertSee('Mode Pelajar')
-            ->assertSee('Batas Aman Jajan Hari Ini');
+            ->assertSee('Mode Pelajar', false)
+            ->assertSee('Batas Aman Jajan Hari Ini', false)
+            ->assertSee('Evaluasi Anggaran', false)
+            ->assertDontSee('Project Freelance Aktif');
+
+        $employeeUser = User::factory()->create(['financial_persona' => 'employee']);
+
+        Livewire::actingAs($employeeUser)
+            ->test(\App\Livewire\Dashboard::class)
+            ->assertSee('Mode Karyawan', false)
+            ->assertSee('Alokasi Gaji 50/30/20', false)
+            ->assertSee('Langganan & Tagihan Rutin', false)
+            ->assertDontSee('Project Freelance Aktif');
 
         $merchantUser = User::factory()->create(['financial_persona' => 'merchant']);
 
         Livewire::actingAs($merchantUser)
             ->test(\App\Livewire\Dashboard::class)
-            ->assertSee('Mode Pedagang')
-            ->assertSee('Estimasi Laba Bersih');
+            ->assertSee('Mode Pedagang', false)
+            ->assertSee('Estimasi Laba Bersih', false)
+            ->assertSee('Nota & Piutang Pelanggan Toko', false)
+            ->assertDontSee('Project Freelance Aktif');
+
+        $freelancerUser = User::factory()->create(['financial_persona' => 'freelancer']);
+
+        Livewire::actingAs($freelancerUser)
+            ->test(\App\Livewire\Dashboard::class)
+            ->assertSee('Project Freelance Aktif', false);
     }
 
     public function test_onboarding_wizard_sets_persona_and_initializes_system_tour(): void

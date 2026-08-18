@@ -113,25 +113,89 @@
                         <div class="flex items-center gap-1.5 flex-wrap pt-0.5">
                             <span class="text-[10px] font-mono text-slate-400">Coba:</span>
                             @if($type === 'income')
-                                <button type="button" wire:click="loadSampleVoice('project')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
-                                    + DP Project 5 Jt (BCA)
-                                </button>
-                                <button type="button" wire:click="loadSampleVoice('pelunasan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
-                                    + Pelunasan 2.5 Jt (Mandiri)
-                                </button>
-                                <button type="button" wire:click="loadSampleVoice('gaji')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
-                                    + Gaji 7.5 Jt
-                                </button>
+                                @if(auth()->user()?->isStudent())
+                                    <button type="button" wire:click="loadSampleVoice('saku')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Uang Saku 1.5 Jt (BCA)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('parttime')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Part-time 800 Rb
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('beasiswa')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Beasiswa 3 Jt
+                                    </button>
+                                @elseif(auth()->user()?->isEmployee())
+                                    <button type="button" wire:click="loadSampleVoice('gaji')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Gaji Kantor 7.5 Jt (BCA)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('bonus')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Bonus Lembur 1.5 Jt
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('thr')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + THR 7 Jt
+                                    </button>
+                                @elseif(auth()->user()?->isMerchant())
+                                    <button type="button" wire:click="loadSampleVoice('omset')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Omset Toko 2.5 Jt (BCA)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('penjualan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Penjualan Kasir 1.2 Jt
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('pelunasan_nota')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Pelunasan Nota 800 Rb
+                                    </button>
+                                @else
+                                    <button type="button" wire:click="loadSampleVoice('project')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + DP Project 5 Jt (BCA)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('pelunasan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Pelunasan 2.5 Jt (Mandiri)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('gaji')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 hover:bg-emerald-100 border border-emerald-200 transition-colors cursor-pointer">
+                                        + Gaji 7.5 Jt
+                                    </button>
+                                @endif
                             @elseif($type === 'expense')
-                                <button type="button" wire:click="loadSampleVoice('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
-                                    + Kopi 42 Rb (GoPay)
-                                </button>
-                                <button type="button" wire:click="loadSampleVoice('bensin')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
-                                    + Bensin 50 Rb (Cash)
-                                </button>
-                                <button type="button" wire:click="loadSampleVoice('wifi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
-                                    + Wifi 350 Rb
-                                </button>
+                                @if(auth()->user()?->isStudent())
+                                    <button type="button" wire:click="loadSampleVoice('jajan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Jajan Bakso 25 Rb (Cash)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('kuota')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Beli Kuota 50 Rb (GoPay)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Es Kopi 18 Rb
+                                    </button>
+                                @elseif(auth()->user()?->isEmployee())
+                                    <button type="button" wire:click="loadSampleVoice('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Kopi Kenangan 42 Rb (GoPay)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('bensin')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Bensin 50 Rb (Cash)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('listrik')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Listrik PLN 250 Rb
+                                    </button>
+                                @elseif(auth()->user()?->isMerchant())
+                                    <button type="button" wire:click="loadSampleVoice('kulakan')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Kulakan Stok 1.2 Jt (Cash)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('bensin')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Bensin Kirim Barang 50 Rb
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('listrik')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Listrik Toko 250 Rb
+                                    </button>
+                                @else
+                                    <button type="button" wire:click="loadSampleVoice('kopi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Kopi 42 Rb (GoPay)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('bensin')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Bensin 50 Rb (Cash)
+                                    </button>
+                                    <button type="button" wire:click="loadSampleVoice('wifi')" class="text-[10px] font-bold px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors cursor-pointer">
+                                        + Wifi 350 Rb
+                                    </button>
+                                @endif
                             @endif
                         </div>
 
@@ -389,7 +453,8 @@
                     </div>
 
                     @if($type !== 'transfer')
-                    <!-- Category & Project Relation -->
+                    <!-- Category & Project Relation (Adaptive by Persona) -->
+                    @if(auth()->user()?->isFreelancer() || auth()->user()?->financial_persona === 'all')
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
@@ -430,6 +495,35 @@
                             </select>
                         </div>
                     </div>
+                    @else
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Transaksi</label>
+                        <select wire:model="category_id" 
+                                class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 focus:bg-white transition-all">
+                            <option value="">Pilih Kategori...</option>
+                            @php
+                                $bizCategories = $categories->where('is_business', true);
+                                $personalCategories = $categories->where('is_business', false);
+                            @endphp
+
+                            @if($bizCategories->count() > 0)
+                                <optgroup label="── Kategori Usaha / Bisnis ──">
+                                    @foreach($bizCategories as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+
+                            @if($personalCategories->count() > 0)
+                                <optgroup label="── Kategori Pengeluaran ──">
+                                    @foreach($personalCategories as $cat)
+                                        <option value="{{ $cat->id }}">{{ $cat->name }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endif
+                        </select>
+                    </div>
+                    @endif
                     @endif
 
                     <!-- Submit Button -->
