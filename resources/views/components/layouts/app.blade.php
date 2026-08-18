@@ -79,7 +79,19 @@
                 <img src="{{ asset('images/logo.svg') }}" class="w-9 h-9 rounded-xl object-contain shadow-sm group-hover:scale-105 transition-transform" alt="PortoFinance Logo">
                 <div class="leading-none">
                     <span class="font-extrabold text-base tracking-tight text-slate-900 block">Porto<span class="text-teal-600">Finance</span></span>
-                    <span class="text-[9px] uppercase font-extrabold tracking-wider text-slate-400">Freelancer OS</span>
+                    <span class="text-[9px] uppercase font-extrabold tracking-wider text-slate-400">
+                        @if(auth()->user()?->isStudent())
+                            Student OS
+                        @elseif(auth()->user()?->isEmployee())
+                            Employee OS
+                        @elseif(auth()->user()?->isMerchant())
+                            Merchant OS
+                        @elseif(auth()->user()?->isFreelancer())
+                            Freelancer OS
+                        @else
+                            All-in-One OS
+                        @endif
+                    </span>
                 </div>
             </a>
             <button @click="mobileSidebarOpen = false" class="md:hidden text-slate-400 hover:text-slate-700 p-1 rounded-lg">
@@ -118,8 +130,19 @@
                     <a href="{{ route('budgets') }}" 
                        class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('budgets*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
                         <x-icon name="pie-chart" class="w-4 h-4" />
-                        <span>Percentage Budget</span>
+                        <span>
+                            @if(auth()->user()?->isStudent())
+                                Budget Uang Saku
+                            @elseif(auth()->user()?->isEmployee())
+                                Alokasi Gaji 50/30/20
+                            @elseif(auth()->user()?->isMerchant())
+                                Alokasi Dana Toko
+                            @else
+                                Percentage Budget
+                            @endif
+                        </span>
                     </a>
+                    @if(!auth()->user()?->isStudent())
                     <a href="{{ route('subscriptions') }}" 
                        class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('subscriptions*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
                         <div class="flex items-center gap-3">
@@ -128,6 +151,7 @@
                         </div>
                         <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold">Burn</span>
                     </a>
+                    @endif
                 </div>
             </div>
 
@@ -178,6 +202,31 @@
                     <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#C6F24D] text-slate-950 font-black uppercase">Smart</span>
                 </div>
                 <div class="space-y-1">
+                    <!-- Role-Specific Tools -->
+                    @if(auth()->user()?->isStudent() || auth()->user()?->financial_persona === 'all')
+                    <button @click="mobileSidebarOpen = false; setTimeout(() => $dispatch('open-split-bill'), 120)" 
+                            type="button" 
+                            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 transition-all cursor-pointer text-left">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="users" class="w-4 h-4 text-emerald-600" />
+                            <span>Bagi Tagihan (Split Bill)</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">Patungan</span>
+                    </button>
+                    @endif
+
+                    @if(auth()->user()?->isMerchant() || auth()->user()?->financial_persona === 'all')
+                    <button @click="mobileSidebarOpen = false; setTimeout(() => $dispatch('open-merchant-calculator'), 120)" 
+                            type="button" 
+                            class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 transition-all cursor-pointer text-left">
+                        <div class="flex items-center gap-3">
+                            <x-icon name="shopping-bag" class="w-4 h-4 text-amber-600" />
+                            <span>Kalkulator Margin HPP</span>
+                        </div>
+                        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold">UMKM</span>
+                    </button>
+                    @endif
+
                     <a href="{{ route('ai-copilot') }}" 
                        class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all {{ request()->routeIs('ai-copilot*') ? 'bg-[#C6F24D] text-slate-950 shadow-sm' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70' }}">
                         <div class="flex items-center gap-3">
@@ -306,7 +355,19 @@
 
                 <!-- Desktop Greeting / Title -->
                 <div class="hidden md:flex items-center gap-2">
-                    <span class="text-xs font-bold text-slate-400">Freelancer Workspace &bull;</span>
+                    <span class="text-xs font-bold text-slate-400">
+                        @if(auth()->user()?->isStudent())
+                            Pelajar & Mahasiswa Workspace &bull;
+                        @elseif(auth()->user()?->isEmployee())
+                            Karyawan & Kantoran Workspace &bull;
+                        @elseif(auth()->user()?->isMerchant())
+                            Toko & UMKM Workspace &bull;
+                        @elseif(auth()->user()?->isFreelancer())
+                            Freelancer & Kreator Workspace &bull;
+                        @else
+                            Personal Finance Workspace &bull;
+                        @endif
+                    </span>
                     <span class="text-sm font-extrabold text-slate-900">Halo, {{ explode(' ', $userName)[0] }}! 👋</span>
                 </div>
             </div>
