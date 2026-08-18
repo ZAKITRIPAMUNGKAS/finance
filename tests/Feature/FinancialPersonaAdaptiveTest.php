@@ -84,4 +84,28 @@ class FinancialPersonaAdaptiveTest extends TestCase
             ->assertSee('Mode Pedagang')
             ->assertSee('Estimasi Laba Bersih');
     }
+
+    public function test_onboarding_wizard_sets_persona_and_initializes_system_tour(): void
+    {
+        $user = User::factory()->create([
+            'onboarding_completed' => false,
+            'financial_persona' => 'freelancer',
+        ]);
+
+        Livewire::actingAs($user)
+            ->test(\App\Livewire\OnboardingWizard::class)
+            ->call('saveOnboarding', [
+                'persona' => 'student_creator',
+                'activeAccounts' => ['bca' => true, 'gopay' => true],
+                'accountBalances' => ['bca' => '1500000', 'gopay' => '250000'],
+                'monthlyIncome' => '3000000',
+            ], app(BudgetAllocationService::class))
+            ->assertRedirect(route('dashboard'))
+            ->assertSessionHas('trigger_tour_after_onboarding', true);
+
+        $user->refresh();
+        $this->assertTrue($user->onboarding_completed);
+        $this->assertEquals('student', $user->financial_persona);
+        $this->assertTrue($user->isStudent());
+    }
 }

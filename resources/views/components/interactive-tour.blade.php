@@ -1,3 +1,32 @@
+@php
+    $tourUser = auth()->user();
+    if ($tourUser?->isStudent()) {
+        $step3Title = 'Mode Pelajar & Split Bill 🎓';
+        $step3Badge = 'Langkah 03 / 05 &bull; Safe Spend & Patungan';
+        $step3Desc = 'Pantau batas jajan harianmu agar uang saku tidak boncos, serta gunakan Bagi Tagihan (Split Bill) untuk patungan makan/kos via WhatsApp!';
+        $step3Desktop = '#tour-nav-budgets';
+        $step3Mobile = '#tour-nav-budgets-mobile';
+    } elseif ($tourUser?->isMerchant()) {
+        $step3Title = 'Kas Toko & Kalkulator Margin 🏪';
+        $step3Badge = 'Langkah 03 / 05 &bull; Laba & Harga Jual';
+        $step3Desc = 'Pantau omset penjualan, estimasi laba bersih toko, dan gunakan Kalkulator Margin untuk menghitung harga jual optimal setelah fee marketplace!';
+        $step3Desktop = '#tour-nav-projects';
+        $step3Mobile = '#tour-nav-projects-mobile';
+    } elseif ($tourUser?->isEmployee()) {
+        $step3Title = 'Alokasi Gaji 50/30/20 & Langganan 💼';
+        $step3Badge = 'Langkah 03 / 05 &bull; Budgeting & Rutinitas';
+        $step3Desc = 'Pantau pembagian gaji bulanan untuk kebutuhan pokok, lifestyle, tabungan, serta audit tagihan langganan rutinmu agar tidak boros!';
+        $step3Desktop = '#tour-nav-subscriptions';
+        $step3Mobile = '#tour-nav-subscriptions-mobile';
+    } else {
+        $step3Title = 'Proyek Freelance & Invoice 💼';
+        $step3Badge = 'Langkah 03 / 05 &bull; Manajemen Bisnis';
+        $step3Desc = 'Kelola DP dan pelunasan invoice klien, pantau modal pengeluaran proyek, dan hitung margin laba bersih tiap pekerjaan freelance-mu.';
+        $step3Desktop = '#tour-nav-projects';
+        $step3Mobile = '#tour-nav-projects-mobile';
+    }
+@endphp
+
 <div x-data="{
         showTour: false,
         currentStep: 1,
@@ -25,11 +54,11 @@
             },
             {
                 id: 'projects',
-                title: 'Proyek Freelance & Invoice 💼',
-                badge: 'Langkah 03 / 05 &bull; Manajemen Bisnis',
-                desc: 'Kelola DP dan pelunasan invoice klien, pantau modal pengeluaran proyek, dan hitung margin laba bersih tiap pekerjaan freelance-mu.',
-                desktopTarget: '#tour-nav-projects',
-                mobileTarget: '#tour-nav-projects-mobile',
+                title: @js($step3Title),
+                badge: @js($step3Badge),
+                desc: @js($step3Desc),
+                desktopTarget: @js($step3Desktop),
+                mobileTarget: @js($step3Mobile),
                 pointerDir: 'left'
             },
             {
@@ -52,12 +81,18 @@
             }
         ],
         init() {
+            const forceTour = {{ session('trigger_tour_after_onboarding') ? 'true' : 'false' }};
             const hasOnboarding = {{ auth()->check() && !auth()->user()->onboarding_completed ? 'false' : 'true' }};
             const completed = localStorage.getItem('portofinance_guided_tour_done');
-            if (hasOnboarding && completed !== 'true') {
+            if (forceTour) {
+                localStorage.removeItem('portofinance_guided_tour_done');
                 setTimeout(() => {
                     this.startTour();
-                }, 600);
+                }, 750);
+            } else if (hasOnboarding && completed !== 'true') {
+                setTimeout(() => {
+                    this.startTour();
+                }, 750);
             }
             window.addEventListener('resize', () => {
                 this.isMobile = window.innerWidth < 768;

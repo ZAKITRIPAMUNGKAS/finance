@@ -188,8 +188,22 @@ class OnboardingWizard extends Component
             ->doesntHave('transactions')
             ->delete();
 
-        // 3. Apply Persona Presets (Income & Expense Categories tailored to role)
-        $budgetService->applyPersonaPreset($user->id, $this->persona, 'stable', 'investment');
+        // 3. Normalize & Apply Persona Presets (Income & Expense Categories tailored to role)
+        $personaMap = [
+            'employee_salary' => 'employee',
+            'salary_employee' => 'employee',
+            'employee' => 'employee',
+            'student_creator' => 'student',
+            'student' => 'student',
+            'merchant_business' => 'merchant',
+            'merchant' => 'merchant',
+            'freelancer_project' => 'freelancer',
+            'freelancer' => 'freelancer',
+            'all' => 'all',
+        ];
+        $targetPersona = $personaMap[$this->persona] ?? 'freelancer';
+
+        $budgetService->applyPersonaPreset($user->id, $targetPersona, 'stable', 'investment');
 
         // 4. Set Baseline Income Floor Snapshot
         $cleanIncome = (float) str_replace(['.', ',', ' '], '', $this->monthlyIncome ?: '5000000');
@@ -212,12 +226,16 @@ class OnboardingWizard extends Component
             ]
         );
 
-        // 5. Mark Onboarding as Completed
-        $user->update(['onboarding_completed' => true]);
+        // 5. Mark Onboarding as Completed & Save Financial Persona
+        $user->update([
+            'financial_persona' => $targetPersona,
+            'onboarding_completed' => true,
+        ]);
 
         $this->isOpen = false;
         $this->dispatch('refresh-data');
-        session()->flash('onboarding_success', 'Selamat datang! Keuangan Anda telah siap dikelola.');
+        session()->flash('trigger_tour_after_onboarding', true);
+        session()->flash('onboarding_success', 'Selamat datang! Sistem keuangan Anda telah disesuaikan.');
 
         return $this->redirect(route('dashboard'), navigate: true);
     }
