@@ -37,12 +37,22 @@
 
     <!-- CONTROLS & FILTER BAR -->
     <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div class="flex items-center gap-2 flex-1">
-            <div class="relative flex-1">
+        <div class="flex flex-wrap items-center gap-2 flex-1">
+            <div class="relative flex-1 min-w-[180px]">
                 <span class="absolute left-3.5 top-2.5 text-slate-400"><x-icon name="search" class="w-4 h-4" /></span>
                 <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari nama project..." 
                     class="w-full bg-[#F8F9FA] border border-slate-200 rounded-xl pl-9.5 pr-3 py-2 text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:border-slate-900 transition-colors">
             </div>
+
+            <select wire:model.live="filterCategory" 
+                class="bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:border-slate-900 shrink-0">
+                <option value="all">Semua Kategori</option>
+                <option value="photo_video">📸 Foto & Video</option>
+                <option value="livestream">📡 Live Streaming</option>
+                <option value="web_dev">💻 Web & App Dev</option>
+                <option value="design">🎨 Desain & Branding</option>
+                <option value="other">📦 Lainnya</option>
+            </select>
             
             <select wire:model.live="filterStatus" 
                 class="bg-[#F8F9FA] border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-700 focus:outline-none focus:border-slate-900 shrink-0">
@@ -50,6 +60,7 @@
                 <option value="in_progress">In Progress</option>
                 <option value="completed">Completed</option>
                 <option value="prospect">Prospect</option>
+                <option value="cancelled">Cancelled</option>
             </select>
         </div>
 
@@ -291,6 +302,20 @@
                         </div>
 
                         <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Project *</label>
+                            <select wire:model.defer="category" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                                <option value="photo_video">📸 Foto & Video</option>
+                                <option value="livestream">📡 Live Streaming</option>
+                                <option value="web_dev">💻 Web & App Dev</option>
+                                <option value="design">🎨 Desain & Branding</option>
+                                <option value="other">📦 Jasa / Layanan Lainnya</option>
+                            </select>
+                            @error('category') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
                             <label class="block text-xs font-bold text-slate-700 mb-1">Nilai Project / Omzet (Rp) *</label>
                             <input type="text" 
                                    inputmode="numeric"
@@ -299,6 +324,16 @@
                                    placeholder="e.g. 5.000.000" 
                                    class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2.5 text-xs font-mono font-bold text-slate-900 focus:outline-none focus:border-slate-900">
                             @error('total_revenue') <span class="text-xs text-rose-500 mt-1 block font-bold">{{ $message }}</span> @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1">{{ $projectId ? 'Status Project' : 'Status Awal' }}</label>
+                            <select wire:model.defer="status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
+                                <option value="prospect">Prospect (Penawaran / Proposal)</option>
+                                <option value="in_progress">In Progress (Sedang Dikerjakan)</option>
+                                <option value="completed">Completed (Selesai)</option>
+                                <option value="cancelled">Cancelled (Dibatalkan)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -314,13 +349,8 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1">{{ $projectId ? 'Status Project' : 'Status Awal' }}</label>
-                        <select wire:model.defer="status" class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-3.5 py-2.5 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900">
-                            <option value="prospect">Prospect (Penawaran / Proposal)</option>
-                            <option value="in_progress">In Progress (Sedang Dikerjakan)</option>
-                            <option value="completed">Completed (Selesai)</option>
-                            <option value="cancelled">Cancelled (Dibatalkan)</option>
-                        </select>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Deskripsi / Catatan Project (Opsional)</label>
+                        <textarea wire:model.defer="description" rows="2" placeholder="Catatan deliverables, link drive, atau requirement klien..." class="w-full bg-[#F8F9FA] border border-slate-200 rounded-2xl px-4 py-2 text-xs font-semibold text-slate-900 focus:outline-none focus:border-slate-900 resize-none"></textarea>
                     </div>
 
                     <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
