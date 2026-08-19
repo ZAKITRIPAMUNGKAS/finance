@@ -40,6 +40,8 @@ class Index extends Component
     public string $cost_amount = '';
     public string $cost_date = '';
     public ?int $cost_category_id = null;
+    public ?int $cost_account_id = null;
+    public bool $deduct_from_account = true;
 
     // Add Invoice Modal
     public bool $isInvoiceModalOpen = false;
@@ -176,8 +178,12 @@ class Index extends Component
         $this->cost_description = '';
         $this->cost_amount = '';
         $this->cost_date = now()->format('Y-m-d');
-        $defaultCat = Category::where('user_id', auth()->id())->where('type', 'expense')->where('is_business', true)->first();
+        $defaultCat = Category::where('user_id', auth()->id())->where('type', 'expense')->where('is_business', true)->first()
+            ?? Category::where('user_id', auth()->id())->where('type', 'expense')->first();
         $this->cost_category_id = $defaultCat?->id;
+        $defaultAccount = Account::where('user_id', auth()->id())->where('is_active', true)->first();
+        $this->cost_account_id = $defaultAccount?->id;
+        $this->deduct_from_account = true;
         $this->isCostModalOpen = true;
     }
 
@@ -190,17 +196,36 @@ class Index extends Component
             'cost_amount' => 'required|numeric|min:1',
             'cost_date' => 'required|date',
             'cost_category_id' => 'nullable|exists:categories,id',
+            'cost_account_id' => 'nullable|exists:accounts,id',
         ]);
 
         $project = Project::where('user_id', auth()->id())->findOrFail($this->costProjectId);
+        $cleanAmount = (float) $this->cost_amount;
 
         ProjectCost::create([
             'project_id' => $project->id,
             'category_id' => $this->cost_category_id,
             'description' => $this->cost_description,
-            'amount' => (float) $this->cost_amount,
+            'amount' => $cleanAmount,
             'date' => $this->cost_date,
         ]);
+
+        // If deduct from account, create a corresponding Transaction so balance is updated and visible in transactions
+        if ($this->cost_account_id) {
+            $account = Account::where('user_id', auth()->id())->find($this->cost_account_id);
+            if ($account) {
+                Transaction::create([
+                    'user_id' => auth()->id(),
+                    'account_id' => $account->id,
+                    'category_id' => $this->cost_category_id,
+                    'project_id' => $project->id,
+                    'type' => 'expense',
+                    'amount' => $cleanAmount,
+                    'date' => $this->cost_date,
+                    'description' => "Biaya Project {$project->name}: {$this->cost_description}",
+                ]);
+            }
+        }
 
         $this->isCostModalOpen = false;
         $this->dispatch('refresh-data');
@@ -272,13 +297,12 @@ class Index extends Component
                     'user_id' => auth()->id(),
                     'account_id' => $account->id,
                     'category_id' => $cat->id,
+                    'project_id' => $project->id,
                     'type' => 'income',
                     'amount' => $cleanAmount,
                     'date' => $this->issue_date,
                     'description' => "Pembayaran Invoice {$this->invoice_number} ({$project->name})",
                 ]);
-
-                $account->increment('balance', $cleanAmount);
             }
         }
 
@@ -317,15 +341,71 @@ class Index extends Component
                 'user_id' => auth()->id(),
                 'account_id' => $account->id,
                 'category_id' => $cat->id,
+                'project_id' => $invoice->project_id,
                 'type' => 'income',
                 'amount' => $invoice->amount,
                 'date' => now()->format('Y-m-d'),
                 'description' => "Pelunasan Invoice {$invoice->invoice_number} ({$invoice->project->name})",
             ]);
-
-            $account->increment('balance', $invoice->amount);
         }
 
+        $this->dispatch('refresh-data');
+    }
+
+    public function markProjectAsPaid(int $projId, ?int $accountId = null)
+    {
+        $userId = auth()->id();
+        $project = Project::where('user_id', $userId)->with('invoices')->findOrFail($projId);
+
+        $account = $accountId 
+            ? Account::where('user_id', $userId)->find($accountId)
+            : Account::where('user_id', $userId)->where('is_active', true)->first();
+
+        // 1. If project has unpaid invoices, mark them as paid
+        $unpaidInvoices = $project->invoices()->where('status', '!=', 'paid')->get();
+        if ($unpaidInvoices->count() > 0) {
+            foreach ($unpaidInvoices as $inv) {
+                $this->markInvoiceAsPaid($inv->id, $account?->id);
+            }
+        } else {
+            // 2. If project has no invoices or remaining balance, record payment
+            $remaining = max(0, $project->total_revenue - $project->paid_invoices_total);
+            $amountToPay = $remaining > 0 ? $remaining : $project->total_revenue;
+
+            if ($amountToPay > 0) {
+                Invoice::create([
+                    'project_id' => $project->id,
+                    'invoice_number' => 'INV-' . date('Ymd') . '-' . rand(100, 999),
+                    'amount' => $amountToPay,
+                    'issue_date' => now()->format('Y-m-d'),
+                    'due_date' => now()->format('Y-m-d'),
+                    'status' => 'paid',
+                    'paid_at' => now(),
+                    'paid_to_account_id' => $account?->id,
+                    'notes' => 'Pelunasan otomatis project ' . $project->name,
+                ]);
+
+                if ($account) {
+                    $cat = Category::firstOrCreate(
+                        ['user_id' => $userId, 'name' => 'Pendapatan Project'],
+                        ['type' => 'income', 'icon' => 'briefcase', 'color' => '#10B981', 'is_business' => true]
+                    );
+
+                    Transaction::create([
+                        'user_id' => $userId,
+                        'account_id' => $account->id,
+                        'category_id' => $cat->id,
+                        'project_id' => $project->id,
+                        'type' => 'income',
+                        'amount' => $amountToPay,
+                        'date' => now()->format('Y-m-d'),
+                        'description' => "Pelunasan Project {$project->name}",
+                    ]);
+                }
+            }
+        }
+
+        $project->update(['status' => 'completed', 'completed_date' => now()]);
         $this->dispatch('refresh-data');
     }
 

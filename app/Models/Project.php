@@ -60,7 +60,10 @@ class Project extends Model
     // Kalkulasi cepat profit & margin
     public function getTotalCostAttribute(): float
     {
-        return (float) $this->costs()->sum('amount');
+        $directCosts = (float) $this->costs()->sum('amount');
+        // Include any transaction recorded as expense for this project that doesn't duplicate direct costs
+        $txCosts = (float) $this->transactions()->where('type', 'expense')->sum('amount');
+        return max($directCosts, $txCosts, $directCosts + 0);
     }
 
     public function getProfitAttribute(): float
@@ -78,11 +81,17 @@ class Project extends Model
 
     public function getPaidInvoicesTotalAttribute(): float
     {
-        return (float) $this->invoices()->where('status', 'paid')->sum('amount');
+        $invPaid = (float) $this->invoices()->where('status', 'paid')->sum('amount');
+        $txPaid = (float) $this->transactions()->where('type', 'income')->sum('amount');
+        return max($invPaid, $txPaid);
     }
 
     public function getOutstandingInvoicesTotalAttribute(): float
     {
-        return (float) $this->invoices()->whereIn('status', ['sent', 'overdue'])->sum('amount');
+        $explicitOutstanding = (float) $this->invoices()->whereIn('status', ['sent', 'overdue'])->sum('amount');
+        if ($explicitOutstanding > 0) {
+            return $explicitOutstanding;
+        }
+        return max(0, $this->total_revenue - $this->paid_invoices_total);
     }
 }
