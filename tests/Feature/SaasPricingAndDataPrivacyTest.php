@@ -63,6 +63,11 @@ class SaasPricingAndDataPrivacyTest extends TestCase
         $this->assertStringContainsString('628123456789', $invoice->whatsapp_share_url);
         $this->assertStringContainsString('INV-2026-001', $invoice->whatsapp_share_url);
 
+        // When invoice is paid: should have thank you and appreciation message
+        $invoice->update(['status' => 'paid', 'paid_at' => now()]);
+        $this->assertStringContainsString(rawurlencode('Terima kasih banyak'), $invoice->whatsapp_share_url);
+        $this->assertStringContainsString(rawurlencode('mempercayakan project'), $invoice->whatsapp_share_url);
+
         // View public invoice: should display watermark for free user
         $response = $this->get($invoice->public_url);
         $response->assertStatus(200);
