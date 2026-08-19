@@ -80,6 +80,28 @@ class Index extends Component
         $this->isProjectModalOpen = true;
     }
 
+    public function openEditProjectModal(int $projId)
+    {
+        $project = Project::where('user_id', auth()->id())->findOrFail($projId);
+        $this->projectId = $project->id;
+        $this->client_id = $project->client_id;
+        $this->name = $project->name;
+        $this->category = $project->category ?? 'photo_video';
+        $this->description = $project->description;
+        $this->total_revenue = number_format($project->total_revenue, 0, ',', '.');
+        $this->start_date = $project->start_date?->format('Y-m-d');
+        $this->deadline = $project->deadline?->format('Y-m-d');
+        $this->status = $project->status ?? 'in_progress';
+        $this->isProjectModalOpen = true;
+    }
+
+    public function deleteProject(int $projId)
+    {
+        $project = Project::where('user_id', auth()->id())->findOrFail($projId);
+        $project->delete();
+        $this->dispatch('refresh-data');
+    }
+
     public function updatedClientId($val)
     {
         if ($val === 'new_client' || $val === 'add_new') {
