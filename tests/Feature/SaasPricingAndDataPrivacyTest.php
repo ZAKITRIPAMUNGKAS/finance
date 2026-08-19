@@ -65,8 +65,8 @@ class SaasPricingAndDataPrivacyTest extends TestCase
 
         // When invoice is paid: should have thank you and appreciation message
         $invoice->update(['status' => 'paid', 'paid_at' => now()]);
-        $this->assertStringContainsString(rawurlencode('Terima kasih banyak'), $invoice->whatsapp_share_url);
-        $this->assertStringContainsString(rawurlencode('mempercayakan project'), $invoice->whatsapp_share_url);
+        $this->assertStringContainsString(urlencode('Terima kasih banyak'), $invoice->whatsapp_share_url);
+        $this->assertStringContainsString(urlencode('mempercayakan project'), $invoice->whatsapp_share_url);
 
         // View public invoice: should display watermark for free user
         $response = $this->get($invoice->public_url);
