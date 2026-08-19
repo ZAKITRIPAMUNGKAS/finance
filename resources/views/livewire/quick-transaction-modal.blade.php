@@ -568,12 +568,25 @@
                 },
 
                 initTesseract() {
-                    if (!window.Tesseract && !document.getElementById('tesseract-script')) {
+                    return new Promise((resolve) => {
+                        if (window.Tesseract) {
+                            resolve();
+                            return;
+                        }
+                        let existing = document.getElementById('tesseract-script');
+                        if (existing) {
+                            // Script tag exists but still loading — wait for it
+                            existing.addEventListener('load', resolve);
+                            existing.addEventListener('error', resolve); // resolve anyway to not block
+                            return;
+                        }
                         const script = document.createElement('script');
                         script.id = 'tesseract-script';
                         script.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js';
+                        script.onload = resolve;
+                        script.onerror = resolve; // resolve anyway; error shown in OCR step
                         document.head.appendChild(script);
-                    }
+                    });
                 },
 
                 initSpeechRecognition() {
@@ -728,12 +741,21 @@
                     img.src = imgData;
                 },
 
-                scanFile(event) {
+                async scanFile(event) {
                     const file = event.target.files[0];
                     if (!file) return;
 
                     this.scanning = true;
-                    this.ocrStatus = 'Membaca gambar struk...';
+                    this.ocrStatus = 'Memuat mesin OCR...';
+
+                    // Wait until Tesseract.js is fully loaded from CDN
+                    await this.initTesseract();
+
+                    if (!window.Tesseract) {
+                        this.ocrStatus = 'Gagal memuat OCR. Cek koneksi internet.';
+                        this.scanning = false;
+                        return;
+                    }
 
                     const reader = new FileReader();
                     reader.onload = (e) => {
@@ -741,30 +763,25 @@
                         this.previewUrl = rawImg;
 
                         this.preprocessImage(rawImg, (processedImg) => {
-                            if (window.Tesseract) {
-                                this.ocrStatus = 'Menganalisis teks struk...';
-                                window.Tesseract.recognize(processedImg, 'eng', {
-                                    logger: m => {
-                                        if (m.status === 'recognizing text') {
-                                            this.ocrStatus = 'Memindai teks (' + Math.round(m.progress * 100) + '%)...';
-                                        }
+                            this.ocrStatus = 'Menganalisis teks struk...';
+                            window.Tesseract.recognize(processedImg, 'eng+ind', {
+                                logger: m => {
+                                    if (m.status === 'recognizing text') {
+                                        this.ocrStatus = 'Memindai teks (' + Math.round(m.progress * 100) + '%)...';
                                     }
-                                }).then(({ data: { text } }) => {
-                                    this.ocrStatus = 'Menerapkan data...';
-                                    if (text && text.trim().length > 2) {
-                                        const cleanText = text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFD]/g, '');
-                                        this.$wire.processScannedText(cleanText);
-                                    }
-                                    this.scanning = false;
-                                }).catch(err => {
-                                    console.error('OCR Error:', err);
-                                    this.scanning = false;
-                                });
-                            } else {
-                                setTimeout(() => {
-                                    this.scanning = false;
-                                }, 1000);
-                            }
+                                }
+                            }).then(({ data: { text } }) => {
+                                this.ocrStatus = 'Menerapkan data...';
+                                if (text && text.trim().length > 2) {
+                                    const cleanText = text.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFD]/g, '');
+                                    this.$wire.processScannedText(cleanText);
+                                }
+                                this.scanning = false;
+                            }).catch(err => {
+                                console.error('OCR Error:', err);
+                                this.ocrStatus = 'Gagal membaca struk: ' + (err.message || 'Error tidak diketahui');
+                                this.scanning = false;
+                            });
                         });
                     };
                     reader.readAsDataURL(file);
